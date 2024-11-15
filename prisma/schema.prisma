@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model nokta_urunler {
+  id            Int       @id @default(autoincrement())
+  UrunKodu      String?   @db.VarChar(256)
+  UrunAdiTR     String?   @db.VarChar(256)
+  UrunAdiEN     String?   @db.VarChar(256)
+  OzelliklerTR  String?   @db.LongText
+  OzelliklerEN  String?   @db.LongText
+  BilgiTR       String?   @db.LongText
+  BilgiEN       String?   @db.LongText
+  KategoriID    Int?
+  MarkaID       Int?
+  SurucuIndir   String?   @db.VarChar(256)
+  Vitrin        Boolean?
+  YeniUrun      Boolean?
+  rdurum        Boolean?
+  ddurum        Boolean?
+  tags          String?   @db.LongText
+  aktif         Boolean?
+  sira          Int?
+  sartname      String?   @db.VarChar(256)
+  sertifika     String?   @db.VarChar(256)
+  datasheet     String?   @db.VarChar(256)
+  manual        String?   @db.VarChar(256)
+  firmware      String?   @db.VarChar(256)
+  stok_giren    Boolean?
+  stok_fazla    Boolean?
+  create_date   DateTime? @db.DateTime(0)
+  modify_date   DateTime? @db.DateTime(0)
+  UygulamalarTr String?   @db.LongText
+  UygulamalarEn String?   @db.LongText
+}
+
+model nokta_urunler_resimler {
+  id     Int     @id
+  BResim String? @db.VarChar(250)
+  KResim String? @db.VarChar(250)
+  UrunID Int?
+  Sira   Int?
+}
+
+model nokta_urunler_yuklemeler {
+  id         Int       @id
+  aciklama   String?   @db.LongText
+  aciklamaEn String?   @db.LongText
+  url_path   String?   @db.VarChar(500)
+  dosya_adi  String?   @db.VarChar(75)
+  order_by   Int?
+  is_active  Boolean?
+  version    String?   @db.VarChar(50)
+  type       String?   @db.VarChar(50)
+  datetime   DateTime? @db.DateTime(0)
+  urun_id    Int?
+  yukleme_id Int?
+}
+
+model nokta_yukleme_dosya_tipleri {
+  id       Int     @id
+  type     String? @db.VarChar(150)
+  img_path String? @db.VarChar(150)
+  baslik   String? @db.VarChar(250)
+}
+
+model nokta_yuklemeler {
+  id         Int      @id
+  baslik     String?  @db.VarChar(250)
+  baslikEn   String?  @db.VarChar(250)
+  dosya_yolu String?  @db.VarChar(250)
+  order_by   Int?
+  is_active  Boolean?
+}
