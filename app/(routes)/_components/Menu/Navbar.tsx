@@ -1,5 +1,6 @@
 'use client'
 
+import { motion, useScroll, useSpring } from 'framer-motion'
 import React, { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
@@ -28,7 +29,21 @@ const navItems = [
   { href: "/hakkimizda", label: "Hakkımızda" },
   { href: "/iletisim", label: "İletişim" },
 ]
+const ScrollProgressBar = () => {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  })
 
+  return (
+    <motion.div
+      className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 origin-left z-50"
+      style={{ scaleX }}
+    />
+  )
+}
 export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -66,7 +81,7 @@ export default function Navbar() {
     <>
       <header className="sticky top-0 z-50 w-full border-b navbgone backdrop-blur">
         <div className="container flex h-16 items-center justify-between">
-          
+        <ScrollProgressBar />
             <div className="w-[205px] flex-shrink-0 mr-4">
               <Logo />
             </div>

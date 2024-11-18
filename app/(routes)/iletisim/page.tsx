@@ -47,7 +47,6 @@ const Iletisim = () => {
       <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-12 mb-8">
         <div className="container mx-auto text-center">
           <h1 className="text-4xl font-bold mb-4">İletişim</h1>
-          <p className="text-lg mb-8">Home -- İletişim</p>
         </div>
       </div>
       <div className="container mx-auto px-4 py-8 max-w-6xl">

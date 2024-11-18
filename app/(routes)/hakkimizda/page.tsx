@@ -21,8 +21,7 @@ const AboutUs = () => {
         transition={{ duration: 1 }}
       >
         <div className="container mx-auto text-center">
-          <h1 className="text-4xl font-bold mb-4">Hakkımızdaa</h1>
-          <p className="text-lg mb-8">Home -- Hakkımızda</p>
+          <h1 className="text-4xl font-bold mb-4">Hakkımızda</h1>
         </div>
       </motion.div>
 

@@ -25,14 +25,6 @@ const ArgeFabrika = () => {
           >
             AR-GE ve Üretim
           </motion.h1>
-          <motion.p
-            className="text-lg mb-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            Home -- AR-GE ve Üretim
-          </motion.p>
         </div>
       </div>
 

@@ -77,3 +77,29 @@ model nokta_yuklemeler {
   order_by   Int?
   is_active  Boolean?
 }
+
+model nokta_kategoriler {
+  id            Int      @id
+  KategoriAdiTr String?  @db.VarChar(250)
+  KategoriAdiEn String?  @db.VarChar(250)
+  sira          Int?
+  resim         String?  @db.VarChar(250)
+  parent_id     Int?
+  old_id        Int?
+  is_active     Boolean?
+  marka_id      Int?
+  img_path      String?  @db.VarChar(250)
+}
+
+model nokta_urun_markalar {
+  id            Int      @id
+  title         String?  @db.VarChar(250)
+  img_path      String?  @db.VarChar(50)
+  bilgi_basligi String?  @db.VarChar(250)
+  bilgi         String?  @db.VarChar(0)
+  old_id        Int?
+  is_active     Boolean?
+  order_by      Int?
+  link_img      String?  @db.VarChar(250)
+  hover_img     String?  @db.VarChar(250)
+}

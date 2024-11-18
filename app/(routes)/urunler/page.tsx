@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { ChevronDown, Grid, List } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Prisma } from '@prisma/client'
+import { useRouter } from 'next/navigation'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -14,22 +13,44 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 import { getProducts } from '@/app/actions/product-actions'
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 type Product = {
-  id: number
-  UrunAdiTR: string | null
-  UrunAdiEN: string | null
-  KategoriID: number | null
-  create_date: Date | null
+  id: string
+  UrunAdiTR?: string | null
+  UrunAdiEN?: string | null
+  brand?: string | null
   images: string[]
+  create_date?: Date
 }
 
 type SortOption = 'newest'
 type ViewMode = 'grid' | 'list'
 
+// Sample categories - replace with your actual categories
+const categories = [
+  { id: 1, name: "Network Devices", count: 120 },
+  { id: 2, name: "Switches", count: 45 },
+  { id: 3, name: "Routers", count: 32 },
+  { id: 4, name: "Access Points", count: 28 },
+  { id: 5, name: "Network Cables", count: 65 },
+  { id: 6, name: "Fiber Optic", count: 42 },
+  { id: 7, name: "Tools", count: 89 },
+  { id: 8, name: "Test Equipment", count: 37 },
+]
+
+function useDebounce(value: string, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay)
+    return () => clearTimeout(handler)
+  }, [value, delay])
+  return debouncedValue
+}
+
 export default function ProductsPage() {
+  const router = useRouter()
   const [products, setProducts] = useState<Product[]>([])
   const [sortOption, setSortOption] = useState<SortOption>('newest')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
@@ -37,6 +58,9 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(0)
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 300)
 
   const observer = useRef<IntersectionObserver | null>(null)
   const lastProductElementRef = useCallback((node: HTMLDivElement | null) => {
@@ -44,7 +68,7 @@ export default function ProductsPage() {
     if (observer.current) observer.current.disconnect()
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMore) {
-        setPage(prevPage => prevPage + 1)
+        setPage(prev => prev + 1)
       }
     })
     if (node) observer.current.observe(node)
@@ -57,20 +81,21 @@ export default function ProductsPage() {
   async function fetchProducts() {
     if (loading || !hasMore) return
     setLoading(true)
-    const fetchedProducts = await getProducts(page * 20, 20)
-    const convertedProducts = fetchedProducts.map(product => ({
-      ...product,
-    }))
-
-    setProducts(prevProducts => [...prevProducts, ...convertedProducts])
-    setLoading(false)
-    setHasMore(fetchedProducts.length === 20)
+    try {
+      const fetchedProducts = await getProducts(page * 20, 20)
+      setProducts(prevProducts => [...prevProducts, ...fetchedProducts])
+      setHasMore(fetchedProducts.length === 20)
+    } catch (error) {
+      console.error("Error fetching products:", error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const filteredProducts = products
     .filter(product => 
-      product.UrunAdiTR?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      product.UrunAdiEN?.toLowerCase().includes(searchTerm.toLowerCase())
+      product.UrunAdiTR?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || 
+      product.UrunAdiEN?.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
     )
     .sort((a, b) => {
       switch (sortOption) {
@@ -82,97 +107,137 @@ export default function ProductsPage() {
     })
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-12 mb-8">
         <div className="container mx-auto text-center">
           <h1 className="text-4xl font-bold mb-4">Discover Amazing Products</h1>
-          <p className="text-xl mb-8">Find the best deals on our wide range of high-quality items</p>
-          <Input
-            type="search"
-            placeholder="Search products..."
-            className="max-w-md mx-auto bg-white text-black"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <p className="text-xl mb-4">Find the best deals on our wide range of high-quality items</p>
         </div>
       </div>
-      <div className="container mx-auto px-4">
-        <main className="flex-1">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-bold">Products</h2>
-            <div className="flex items-center space-x-4">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline">
-                    Sort by <ChevronDown className="ml-2 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setSortOption('newest')}>
-                    Newest
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <div className="flex border rounded-md">
-                <Button
-                  variant={viewMode === 'grid' ? "secondary" : "ghost"}
-                  size="icon"
-                  onClick={() => setViewMode('grid')}
-                >
-                  <Grid className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant={viewMode === 'list' ? "secondary" : "ghost"}
-                  size="icon"
-                  onClick={() => setViewMode('list')}
-                >
-                  <List className="h-4 w-4" />
-                </Button>
-              </div>
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex gap-8">
+          {/* Categories Sidebar */}
+          <div className="hidden md:block w-64 flex-shrink-0">
+            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+              <h2 className="text-lg font-semibold mb-4">Categories</h2>
+              <ScrollArea className="h-[calc(100vh-240px)]">
+                <div className="space-y-2">
+                  {categories.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => setSelectedCategory(category.id)}
+                      className={`w-full text-left px-3 py-2 rounded-md transition-colors duration-200 ${
+                        selectedCategory === category.id
+                          ? 'bg-blue-50 text-blue-600'
+                          : 'hover:bg-gray-100'
+                      }`}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span>{category.name}</span>
+                        <span className="text-sm text-gray-500">{category.count}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
           </div>
-          <AnimatePresence>
-            <motion.div 
-              className={viewMode === 'grid' ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "space-y-6"}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              {filteredProducts.map((product, index) => (
-                <motion.div
-                  key={product.id}
-                  className={`group relative overflow-hidden rounded-lg border bg-background p-4 ${viewMode === 'list' ? 'flex items-center' : ''}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  layout
-                  ref={index === filteredProducts.length - 1 ? lastProductElementRef : null}
-                >
-                  <div className={`aspect-h-1 aspect-w-1 overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 ${viewMode === 'list' ? 'w-40 shrink-0 mr-6' : 'w-full mb-4'}`}>
-                    <Image
-                      src={product.images[0] ? `/product-images/${product.images[0]}` : '/gorsel_hazirlaniyor.jpg'}
-                      alt={product.UrunAdiTR || product.UrunAdiEN || 'Product Image'}
-                      width={300}
-                      height={300}
-                      className="h-full w-full object-cover object-center"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.onerror = null;
-                        target.src = '/gorsel_hazirlaniyor.jpg';
-                      }}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold mb-2">{product.UrunAdiTR || product.UrunAdiEN}</h3>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
-          {loading && <p className="text-center mt-4">Loading more products...</p>}
-          {!hasMore && <p className="text-center mt-4">No more products to load</p>}
-        </main>
+
+          {/* Main Content */}
+          <div className="flex-1">
+            {/* Controls */}
+            <div className="flex justify-end mb-6">
+              <div className="flex items-center gap-4">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="gap-2">
+                      Sort by <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => setSortOption('newest')}>
+                      Newest First
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <div className="flex gap-2">
+                  <Button
+                    variant={viewMode === 'grid' ? 'default' : 'outline'}
+                    size="icon"
+                    onClick={() => setViewMode('grid')}
+                  >
+                    <Grid className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === 'list' ? 'default' : 'outline'}
+                    size="icon"
+                    onClick={() => setViewMode('list')}
+                  >
+                    <List className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <AnimatePresence>
+              <motion.div
+                className={`grid gap-3 sm:gap-6 ${
+                  viewMode === 'grid'
+                    ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                    : 'grid-cols-1'
+                }`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                {filteredProducts.map((product, index) => (
+                  <motion.div
+                    key={`${product.id}-${index}`}
+                    className={`group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer ${
+                      viewMode === 'list' ? 'flex' : ''
+                    }`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    ref={index === filteredProducts.length - 1 ? lastProductElementRef : null}
+                    onClick={() => router.push(`/urun-detay/${product.id}`)}
+                  >
+                    <div className={`relative ${viewMode === 'list' ? 'w-48 h-48' : 'aspect-square w-full'}`}>
+                      <Image
+                        src={product.images[0] ? `/product-images/${product.images[0]}` : '/gorsel_hazirlaniyor.jpg'}
+                        alt={product.UrunAdiTR || product.UrunAdiEN || 'Product Image'}
+                        fill
+                        className="object-contain p-2 transform transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                        onError={({ currentTarget }) => {
+                          currentTarget.onerror = null
+                          currentTarget.src = '/gorsel_hazirlaniyor.jpg'
+                        }}
+                      />
+                    </div>
+                    <div className={`p-3 sm:p-4 border-t border-gray-100 bg-white ${viewMode === 'list' ? 'flex-1' : ''}`}>
+                      <h3 className="font-medium text-gray-900 mb-1 line-clamp-2 hover:text-blue-600 transition-colors duration-200 text-sm sm:text-base">
+                        {product.UrunAdiTR || product.UrunAdiEN || 'Unnamed Product'}
+                      </h3>
+                      {product.brand && (
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">{product.brand}</p>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+            
+            {loading && (
+              <div className="text-center py-4">
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+              </div>
+            )}
+            {!hasMore && !loading && (
+              <p className="text-center text-gray-500 mt-6">No more products to load</p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   )

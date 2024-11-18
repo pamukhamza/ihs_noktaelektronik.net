@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function getProducts(skip: number = 0, take: number = 20) {
+export async function getProducts(skip: number = 0, take: number = 20, selectedCategory: number) {
   try {
     const fetchedProducts = await prisma.nokta_urunler.findMany({
       skip,
