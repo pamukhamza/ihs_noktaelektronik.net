@@ -99,7 +99,7 @@ const Markalar = () => {
         <div className="container mx-auto px-4 pb-16">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {brands.map((brand, index) => (
-              <Link href={`/urunler?brand=${brand.id}`} key={brand.id} className="block">
+              <Link href={`urunler/${brand.title?.toLowerCase()}`} key={brand.id} className="block">
                 <motion.div
                   className="rounded-lg"
                   variants={cardVariants}
@@ -111,9 +111,11 @@ const Markalar = () => {
                 >
                   <motion.div
                     className="bg-white p-4 rounded-lg shadow-lg flex items-center justify-center h-32"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{
                       duration: 0.4,
-                      delay: index * 0.1,
+                      delay: index * 0.1 +0.2,
                     }}
                   >
                     <Image
@@ -122,7 +124,8 @@ const Markalar = () => {
                       width={200}
                       height={120}
                       className="object-contain transition-all duration-300"
-                      priority={index < 10}
+                      priority={index < 5}
+                      loading={index < 5 ? "eager" : "lazy"}
                     />
                   </motion.div>
                 </motion.div>

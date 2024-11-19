@@ -1,8 +1,4 @@
 1. Ürün Detay tasarımı ve idye göre veri özellikleri gelecek
-2. Ürünler sayfası tasarımı
-    - Ürün alanında marka gözükecek
-    - Sol tarafta kategoriler olacak
-    - Ürün detaya gönderecek 
-3. Yazılım sayfası tasarımı komple yapılacaklar
-4. Markalar veritabanına çekilecek ve markalar sayfası çalışır hale gelecek 
-5. İndex tasarımı netleşecek ve veriler gelecek 
+2. Yazılım sayfası tasarımı komple yapılacaklar
+3. Markalar veritabanına çekilecek ve markalar sayfası çalışır hale gelecek 
+4. İndex tasarımı netleşecek ve veriler gelecek 

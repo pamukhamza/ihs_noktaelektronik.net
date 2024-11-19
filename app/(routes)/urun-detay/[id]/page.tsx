@@ -3,28 +3,27 @@ import ProductDetail from './ProductDetail'
 import { getProduct } from '@/app/actions/get-product'
 import { Suspense } from 'react'
 import Loading from './loading'
+import { Product } from '@/app/types/product'
 
-interface Props {
+type PageProps = {
   params: {
     id: string
   }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function ProductPage({ params }: Props) {
+export default async function ProductPage({ params }: PageProps) {
   try {
-    const id = String(params?.id)
-    const product = await getProduct(id)
+    const product = await getProduct(params.id)
 
     if (!product) {
       return notFound()
     }
 
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <Suspense fallback={<Loading />}>
-          <ProductDetail product={product} />
-        </Suspense>
-      </div>
+      <Suspense fallback={<Loading />}>
+        <ProductDetail product={product} />
+      </Suspense>
     )
   } catch (error) {
     console.error('Error loading product:', error)

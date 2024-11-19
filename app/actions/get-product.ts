@@ -1,8 +1,9 @@
 import { PrismaClient } from '@prisma/client'
+import { Product } from '../types/product'
 
 const prisma = new PrismaClient()
 
-export async function getProduct(id: string) {
+export async function getProduct(id: string): Promise<Product | null> {
   if (!id) {
     throw new Error('Product ID is required')
   }
@@ -110,12 +111,12 @@ export async function getProduct(id: string) {
           product.UygulamalarEn.split('\n').filter(Boolean) : 
           [],
       downloads: [
-        product.datasheet && { type: 'datasheet', name: 'Data Sheet', url: `/product-files/${product.datasheet}` },
-        product.manual && { type: 'manual', name: 'User Manual', url: `/product-files/${product.manual}` },
-        product.SurucuIndir && { type: 'driver', name: 'Driver', url: `/product-files/${product.SurucuIndir}` },
-        product.firmware && { type: 'firmware', name: 'Firmware', url: `/product-files/${product.firmware}` },
-        product.sertifika && { type: 'certificate', name: 'Certificate', url: `/product-files/${product.sertifika}` }
-      ].filter(Boolean),
+        product.datasheet ? { name: 'Data Sheet', url: `/product-files/${product.datasheet}` } : null,
+        product.manual ? { name: 'User Manual', url: `/product-files/${product.manual}` } : null,
+        product.SurucuIndir ? { name: 'Driver', url: `/product-files/${product.SurucuIndir}` } : null,
+        product.firmware ? { name: 'Firmware', url: `/product-files/${product.firmware}` } : null,
+        product.sertifika ? { name: 'Certificate', url: `/product-files/${product.sertifika}` } : null
+      ].filter((item): item is { name: string; url: string; } => item !== null),
       similarProducts: similarProductsWithImages.map(prod => ({
         ...prod,
         image: prod.image ? `/product-images/${prod.image}` : '/gorsel_hazirlaniyor.jpg'
