@@ -14,9 +14,9 @@ type Product = {
   stockCode: string
   brand: string
   images: string[]
-  generalFeatures: string[]
-  technicalSpecs: { name: string; value: string }[]
-  applications: string[]
+  generalFeatures: string
+  technicalSpecs: string
+  applications: string
   downloads: { name: string; url: string }[]
   similarProducts: {
     id: number
@@ -67,73 +67,59 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
           <p className="text-lg text-gray-600 mb-4">Stok Kodu: {product.stockCode}</p>
           <Badge variant="secondary" className="mb-4">{product.brand}</Badge>
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-5 w-5 text-yellow-400" fill={i < 4 ? "currentColor" : "none"} />
-              ))}
-            </div>
-            <span className="text-sm text-gray-500">(4.0)</span>
-          </div>
           <Button className="w-full mb-4">Teklif İste</Button>
-          <Separator className="my-6" />
-
-          <Tabs defaultValue="features" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="features">Özellikler</TabsTrigger>
-              <TabsTrigger value="technical">Teknik</TabsTrigger>
-              <TabsTrigger value="applications">Uygulamalar</TabsTrigger>
-              <TabsTrigger value="downloads">İndirmeler</TabsTrigger>
-            </TabsList>
-            <TabsContent value="features">
-              <Card className="p-4">
-                <ul className="list-disc list-inside space-y-2">
-                  {product.generalFeatures.map((feature, index) => (
-                    <li key={index} className="text-gray-600">{feature}</li>
-                  ))}
-                </ul>
-              </Card>
-            </TabsContent>
-            <TabsContent value="technical">
-              <Card className="p-4">
-                <div className="space-y-2">
-                  {product.technicalSpecs.map((spec, index) => (
-                    <div key={index} className="grid grid-cols-2 gap-4">
-                      <span className="font-medium">{spec.name}:</span>
-                      <span className="text-gray-600">{spec.value}</span>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </TabsContent>
-            <TabsContent value="applications">
-              <Card className="p-4">
-                <ul className="list-disc list-inside space-y-2">
-                  {product.applications.map((application, index) => (
-                    <li key={index} className="text-gray-600">{application}</li>
-                  ))}
-                </ul>
-              </Card>
-            </TabsContent>
-            <TabsContent value="downloads">
-              <Card className="p-4">
-                <div className="space-y-2">
-                  {product.downloads.map((download, index) => (
-                    <Link
-                      key={index}
-                      href={download.url}
-                      className="block p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                    >
-                      {download.name}
-                    </Link>
-                  ))}
-                </div>
-              </Card>
-            </TabsContent>
-          </Tabs>
         </div>
       </div>
+            
+      <Tabs defaultValue="features" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="features">Özellikler</TabsTrigger>
+          <TabsTrigger value="technical">Teknik</TabsTrigger>
+          <TabsTrigger value="applications">Uygulamalar</TabsTrigger>
+          <TabsTrigger value="downloads">İndirmeler</TabsTrigger>
+        </TabsList>
 
+
+        <TabsContent value="features">
+          <Card className="p-4">
+            <div 
+              className="prose" 
+              dangerouslySetInnerHTML={{ __html: product.generalFeatures }} 
+            />
+          </Card>
+        </TabsContent>
+        <TabsContent value="technical">
+          <Card className="p-4">
+            <div 
+              className="prose" 
+              dangerouslySetInnerHTML={{ __html: product.technicalSpecs }} 
+            />
+          </Card>
+        </TabsContent>
+        <TabsContent value="applications">
+          <Card className="p-4">
+            <div 
+              className="prose" 
+              dangerouslySetInnerHTML={{ __html: product.applications }} 
+            />
+          </Card>
+        </TabsContent>
+        <TabsContent value="downloads">
+          <Card className="p-4">
+            <div className="space-y-2">
+              {product.downloads.map((download, index) => (
+                <Link
+                  key={index}
+                  href={download.url}
+                  className="block p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  {download.name}
+                </Link>
+              ))}
+            </div>
+          </Card>
+        </TabsContent>
+      </Tabs>
       {/* Similar Products */}
       {product.similarProducts.length > 0 && (
         <div className="mt-12">

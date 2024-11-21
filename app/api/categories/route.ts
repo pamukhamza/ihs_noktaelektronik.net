@@ -1,0 +1,73 @@
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const parentId = parseInt(searchParams.get('parent_id') || '0');
+
+    const categories = await prisma.nokta_kategoriler.findMany({
+      where: {
+        parent_id: parentId,
+        is_active: true
+      },
+      select: {
+        id: true,
+        KategoriAdiTr: true,
+        seo_link: true,
+        parent_id: true,
+      },
+      orderBy: {
+        KategoriAdiTr: 'asc',
+      },
+    });
+
+    // Ensure seo_link is not null
+    const validCategories = categories.map(cat => ({
+      ...cat,
+      seo_link: cat.seo_link || `category-${cat.id}` // Fallback if seo_link is null
+    }));
+
+    return NextResponse.json({
+      categories: validCategories,
+      success: true,
+    });
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch categories' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const { parent_id } = await request.json();
+    
+    const categories = await prisma.nokta_kategoriler.findMany({
+      where: {
+        parent_id: parent_id
+      },
+      select: {
+        id: true,
+        KategoriAdiTr: true,
+        seo_link: true,
+      },
+      orderBy: {
+        id: 'asc',
+      },
+    });
+
+    return NextResponse.json({
+      categories,
+      success: true,
+    });
+  } catch (error) {
+    console.error('Error fetching subcategories:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch subcategories' },
+      { status: 500 }
+    );
+  }
+}

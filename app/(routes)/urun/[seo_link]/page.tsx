@@ -7,14 +7,14 @@ import { Product } from '@/app/types/product'
 
 type PageProps = {
   params: {
-    id: string
+    seo_link: string
   }
-  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export default async function ProductPage({ params }: PageProps) {
   try {
-    const product = await getProduct(params.id)
+
+    const product = await getProduct(params.seo_link)
 
     if (!product) {
       return notFound()

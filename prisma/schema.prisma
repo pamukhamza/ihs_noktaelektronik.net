@@ -7,17 +7,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model nokta_kategoriler {
+  id            Int      @id
+  KategoriAdiTr String?  @db.VarChar(250)
+  KategoriAdiEn String?  @db.VarChar(250)
+  sira          Int?
+  resim         String?  @db.VarChar(250)
+  parent_id     Int?
+  old_id        Int?
+  is_active     Boolean?
+  marka_id      Int?
+  img_path      String?  @db.VarChar(250)
+  seo_link      String?  @unique(map: "seo_link") @db.VarChar(250)
+}
+
+model nokta_urun_markalar {
+  id            Int             @id
+  title         String?         @db.VarChar(250)
+  img_path      String?         @db.VarChar(50)
+  bilgi_basligi String?         @db.VarChar(250)
+  bilgi         String?         @db.VarChar(0)
+  old_id        Int?
+  is_active     Boolean?
+  order_by      Int?
+  link_img      String?         @db.VarChar(250)
+  hover_img     String?         @db.VarChar(250)
+  urunler       nokta_urunler[] @relation("UrunMarka")
+}
+
 model nokta_urunler {
-  id            Int       @id @default(autoincrement())
-  UrunKodu      String?   @db.VarChar(256)
-  UrunAdiTR     String?   @db.VarChar(256)
-  UrunAdiEN     String?   @db.VarChar(256)
-  OzelliklerTR  String?   @db.LongText
-  OzelliklerEN  String?   @db.LongText
-  BilgiTR       String?   @db.LongText
-  BilgiEN       String?   @db.LongText
+  id            Int                @id @default(autoincrement())
+  UrunKodu      String?            @db.VarChar(256)
+  UrunAdiTR     String?            @db.VarChar(256)
+  UrunAdiEN     String?            @db.VarChar(256)
+  OzelliklerTR  String?            @db.LongText
+  OzelliklerEN  String?            @db.LongText
+  BilgiTR       String?            @db.LongText
+  BilgiEN       String?            @db.LongText
   KategoriID    Int?
   MarkaID       Int?
+  marka         nokta_urun_markalar? @relation("UrunMarka", fields: [MarkaID], references: [id])
   SurucuIndir   String?   @db.VarChar(256)
   Vitrin        Boolean?
   YeniUrun      Boolean?
@@ -37,6 +66,7 @@ model nokta_urunler {
   modify_date   DateTime? @db.DateTime(0)
   UygulamalarTr String?   @db.LongText
   UygulamalarEn String?   @db.LongText
+  seo_link      String?   @unique(map: "seo_link") @db.VarChar(255)
 }
 
 model nokta_urunler_resimler {
@@ -76,30 +106,4 @@ model nokta_yuklemeler {
   dosya_yolu String?  @db.VarChar(250)
   order_by   Int?
   is_active  Boolean?
-}
-
-model nokta_kategoriler {
-  id            Int      @id
-  KategoriAdiTr String?  @db.VarChar(250)
-  KategoriAdiEn String?  @db.VarChar(250)
-  sira          Int?
-  resim         String?  @db.VarChar(250)
-  parent_id     Int?
-  old_id        Int?
-  is_active     Boolean?
-  marka_id      Int?
-  img_path      String?  @db.VarChar(250)
-}
-
-model nokta_urun_markalar {
-  id            Int      @id
-  title         String?  @db.VarChar(250)
-  img_path      String?  @db.VarChar(50)
-  bilgi_basligi String?  @db.VarChar(250)
-  bilgi         String?  @db.VarChar(0)
-  old_id        Int?
-  is_active     Boolean?
-  order_by      Int?
-  link_img      String?  @db.VarChar(250)
-  hover_img     String?  @db.VarChar(250)
 }
