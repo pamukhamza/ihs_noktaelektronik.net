@@ -17,6 +17,7 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 type Brand = {
   id: number;
   title: string | null;
+  seo_link: string | null;
   hover_img: string | null;
   link_img: string | null;
 };
@@ -27,6 +28,7 @@ export async function getBrands() {
       select: {
         id: true,
         title: true,
+        seo_link: true,
         hover_img: true,
         link_img: true,
       },

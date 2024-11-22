@@ -1,4 +1,3 @@
-1. Ürün Detay tasarımı ve idye göre veri özellikleri gelecek
-2. Yazılım sayfası tasarımı komple yapılacaklar
-3. Markalar veritabanına çekilecek ve markalar sayfası çalışır hale gelecek 
-4. İndex tasarımı netleşecek ve veriler gelecek 
+1. Yazılım sayfası tasarımı komple yapılacaklar
+2. İndex tasarımı netleşecek ve veriler gelecek 
+3. search yapılacak

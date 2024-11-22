@@ -1,12 +1,12 @@
 import { PrismaClient } from '@prisma/client'
-import { Product } from '../types/product'
+import { Product, Download, DownloadCategory } from '../types/product'
 
 const prisma = new PrismaClient()
-export async function getProduct(seo_link: string): Promise<Product | null> {
 
+export async function getProduct(seo_link: string): Promise<Product | null> {
   const productSeolink = seo_link
   try {
-    // İlk olarak product'u alıyoruz
+    // Fetch the product
     const product = await prisma.nokta_urunler.findFirst({
       where: { seo_link: productSeolink },
       select: {
@@ -38,7 +38,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
       return null
     }
 
-    // Şimdi images'leri alabiliriz çünkü product artık var
+    // Fetch images
     const images = await prisma.nokta_urunler_resimler.findMany({
       where: { UrunID: product.id },
       select: {
@@ -70,12 +70,93 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
       select: {
         id: true,
         UrunAdiTR: true,
-        UrunAdiEN: true
+        UrunAdiEN: true,
+        seo_link: true
       },
       orderBy: {
         create_date: 'desc'
       }
     })
+
+    // Fetch downloads with category information
+    const downloads = await prisma.nokta_urunler_yuklemeler.findMany({
+      where: { urun_id: product.id },
+      select: {
+        id: true,
+        aciklama: true,
+        aciklamaEn: true,
+        url_path: true,
+        dosya_adi: true,
+        version: true,
+        type: true,
+        datetime: true,
+        yukleme_id: true
+      },
+      orderBy: {
+        order_by: 'asc'
+      }
+    })
+
+    // Fetch download categories (headers)
+    const downloadCategories = await prisma.nokta_yuklemeler.findMany({
+      select: {
+        id: true,
+        baslik: true,
+        baslikEn: true
+      }
+    })
+
+    // Create a map of download categories for easy lookup
+    const categoryMap = new Map(downloadCategories.map(cat => [cat.id, cat]))
+
+    // Group downloads by category
+    const groupedDownloads: DownloadCategory[] = []
+    downloads.forEach(download => {
+      const categoryId = download.yukleme_id
+      const category = categoryId ? categoryMap.get(categoryId) : null
+      const categoryName = category ? (category.baslik || category.baslikEn || 'Unknown') : 'Unknown'
+
+      let categoryGroup = groupedDownloads.find(group => group.name === categoryName)
+      if (!categoryGroup) {
+        categoryGroup = { name: categoryName, items: [] }
+        groupedDownloads.push(categoryGroup)
+      }
+
+      categoryGroup.items.push({
+        id: download.id,
+        name: download.aciklama || download.aciklamaEn || download.dosya_adi || 'Unknown',
+        url: download.url_path ? `/product-files/${download.url_path}` : '#',
+        version: download.version || '',
+        type: download.type || '',
+        date: download.datetime ? download.datetime.toISOString() : null
+      })
+    })
+
+    // Add existing downloads to appropriate categories
+    const addToCategory = (name: string, item: Download) => {
+      let category = groupedDownloads.find(cat => cat.name === name)
+      if (!category) {
+        category = { name, items: [] }
+        groupedDownloads.push(category)
+      }
+      category.items.push(item)
+    }
+
+    if (product.datasheet) {
+      addToCategory('Data Sheet', { id: 0, name: 'Data Sheet', url: `/product-files/${product.datasheet}` })
+    }
+    if (product.manual) {
+      addToCategory('User Manual', { id: 0, name: 'User Manual', url: `/product-files/${product.manual}` })
+    }
+    if (product.SurucuIndir) {
+      addToCategory('Driver', { id: 0, name: 'Driver', url: `/product-files/${product.SurucuIndir}` })
+    }
+    if (product.firmware) {
+      addToCategory('Firmware', { id: 0, name: 'Firmware', url: `/product-files/${product.firmware}` })
+    }
+    if (product.sertifika) {
+      addToCategory('Certificate', { id: 0, name: 'Certificate', url: `/product-files/${product.sertifika}` })
+    }
 
     // Fetch images for similar products
     const similarProductsWithImages = await Promise.all(
@@ -88,36 +169,28 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         })
 
         return {
-          id: prod.id,
-          name: prod.UrunAdiTR || prod.UrunAdiEN || '',
+          ...prod,
           image: prodImages[0]?.KResim || null
         }
       })
     )
 
     // Transform the data to match our frontend needs
-    const transformedProduct = {
+    const transformedProduct: Product = {
       id: product.id,
       name: product.UrunAdiTR || product.UrunAdiEN || '',
       stockCode: product.UrunKodu || '',
       brand: brand?.title || 'Unknown',
       images: images.map(img => img.KResim ? `/product-images/${img.KResim}` : '').filter(Boolean),
-      generalFeatures: product.OzelliklerTR ? product.OzelliklerTR : 
-        product.OzelliklerEN ? product.OzelliklerEN : [],
-      technicalSpecs: product.BilgiTR ? product.BilgiTR :
-        product.BilgiEN ? product.BilgiEN : [],
-      applications: product.UygulamalarTr ? product.UygulamalarTr : 
-        product.UygulamalarEn ? product.UygulamalarEn : [],
-      downloads: [
-        product.datasheet ? { name: 'Data Sheet', url: `/product-files/${product.datasheet}` } : null,
-        product.manual ? { name: 'User Manual', url: `/product-files/${product.manual}` } : null,
-        product.SurucuIndir ? { name: 'Driver', url: `/product-files/${product.SurucuIndir}` } : null,
-        product.firmware ? { name: 'Firmware', url: `/product-files/${product.firmware}` } : null,
-        product.sertifika ? { name: 'Certificate', url: `/product-files/${product.sertifika}` } : null
-      ].filter((item): item is { name: string; url: string; } => item !== null),
+      generalFeatures: product.OzelliklerTR || product.OzelliklerEN || '',
+      technicalSpecs: product.BilgiTR || product.BilgiEN || '',
+      applications: product.UygulamalarTr || product.UygulamalarEn || '',
+      downloads: groupedDownloads,
       similarProducts: similarProductsWithImages.map(prod => ({
-        ...prod,
-        image: prod.image ? `/product-images/${prod.image}` : '/gorsel_hazirlaniyor.jpg'
+        id: prod.id,
+        name: prod.UrunAdiTR || prod.UrunAdiEN || '',
+        image: prod.image ? `/product-images/${prod.image}` : '/gorsel_hazirlaniyor.jpg',
+        seo_link: prod.seo_link || ''
       })),
       isNew: product.YeniUrun || false,
       isActive: product.aktif || false,
@@ -131,3 +204,4 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
     throw error
   }
 }
+

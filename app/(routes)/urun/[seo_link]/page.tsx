@@ -13,8 +13,8 @@ type PageProps = {
 
 export default async function ProductPage({ params }: PageProps) {
   try {
-
-    const product = await getProduct(params.seo_link)
+    const resolvedParams = await params
+    const product = await getProduct(resolvedParams.seo_link)
 
     if (!product) {
       return notFound()

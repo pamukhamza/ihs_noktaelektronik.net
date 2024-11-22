@@ -9,6 +9,7 @@ import { getBrands } from '@/app/actions/brands';
 type Brand = {
   id: number;
   title: string | null;
+  seo_link: string | null;
   hover_img: string | null;
   link_img: string | null;
 };
@@ -99,7 +100,7 @@ const Markalar = () => {
         <div className="container mx-auto px-4 pb-16">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {brands.map((brand, index) => (
-              <Link href={`urunler/${brand.title?.toLowerCase()}`} key={brand.id} className="block">
+              <Link href={`urunler/?brands=${brand.seo_link}`} key={brand.id} className="block">
                 <motion.div
                   className="rounded-lg"
                   variants={cardVariants}

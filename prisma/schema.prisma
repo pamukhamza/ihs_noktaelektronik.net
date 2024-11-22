@@ -31,6 +31,7 @@ model nokta_urun_markalar {
   is_active     Boolean?
   order_by      Int?
   link_img      String?         @db.VarChar(250)
+  seo_link      String?         @db.VarChar(255)
   hover_img     String?         @db.VarChar(250)
   urunler       nokta_urunler[] @relation("UrunMarka")
 }
