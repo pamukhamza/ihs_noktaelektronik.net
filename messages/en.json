@@ -1,0 +1,348 @@
+{
+  "navigation": {
+    "home": "Home",
+    "products": "Products",
+    "rAndD": "R&D - Production",
+    "software": "Software",
+    "brands": "Brands",
+    "about": "About Us",
+    "contact": "Contact"
+  },
+  "common": {
+    "search": "Search",
+    "addToCart": "Add to Cart",
+    "viewDetails": "View Details",
+    "price": "Price"
+  },
+  "iletisim": {
+    "satis-magazalari": "Sales Stores",
+    "teknik-servisler": "Technical Services",
+    "arge-uretim-merkezi": "R&D and Production Center",
+    "ofisler": "Offices",
+    "teknik-servis": "Technical Service",
+    "genel-merkez": "Headquarters",
+    "ankara-bolge-ofisi": "Ankara Regional Office",
+    "istanbul-satis-magazasi": "Istanbul Sales Store",
+    "ankara-satis-magazasi": "Ankara Sales Store"
+  },
+  "footer": {
+    "abone-ol": "Subscribe",
+    "gonderiliyor": "Sending",
+    "urunler": "Products",
+    "destek": "Support",
+    "teknik-destek-prog": "Technical Support Program",
+    "arge-uretim": "R&D & Production",
+    "yazilim": "Software",
+    "hakkimizda": "About Us",
+    "iletisim": "Contact",
+    "bize-ulasin": "Contact Us",
+    "adreslerimiz": "Our Addresses",
+    "tel": "Tel:",
+    "e-posta": "Email",
+    "e-bulten": "Newsletter",
+    "yeniliklerden": "Subscribe to stay updated with our latest news.",
+    "e-posta-adresiniz": "Your email address",
+    "tum-haklar": "All rights reserved"
+  },
+  "products": {
+    "categories": "Categories",
+    "popularBrands": "Popular Brands:",
+    "brands": "Brands",
+    "back": "Back",
+    "sortBy": "Sort by",
+    "newest": "Newest First",
+    "oldest": "Oldest First",
+    "showFilters": "Show Filters",
+    "hideFilters": "Hide Filters",
+    "filters": "Filters",
+    "noProductsFound": "No products found.",
+    "noCategoriesFound": "No categories found"
+  },
+  "productDetail": {
+    "stockCode": "Stock Code",
+    "requestQuote": "Request Quote",
+    "features": "Features",
+    "technical": "Technical",
+    "applications": "Applications",
+    "downloads": "Downloads",
+    "similarProducts": "Similar Products",
+    "clickToDownload": "Click to download",
+    "version": "Version",
+    "fileType": "File type",
+    "date": "Date",
+    "download": "Download"
+  },
+  "arge": {
+    "title": "R&D and Production",
+    "subtitle": "Our R&D and Factory",
+    "description": "Our company maintains its leadership in the sector by continuously integrating technology with innovations. In our R&D (Research and Development) department, we follow the latest innovations in the sector and work continuously to integrate them into our products. We continue to develop innovative solutions and continue our investments without slowing down to be a pioneer in the global market.",
+    "factory": {
+      "title": "Our Factory and Investments",
+      "card1": {
+        "title": "High Technology Production",
+        "items": [
+          "We accelerate production processes with state-of-the-art machines.",
+          "We use robotic systems that increase efficiency.",
+          "We adopt environmentally friendly production techniques."
+        ]
+      },
+      "card2": {
+        "title": "Advanced R&D Studies",
+        "items": [
+          "We conduct continuous research on new product development.",
+          "We carry out R&D projects for innovative solutions.",
+          "We invest in the latest technologies by following developments in the sector."
+        ]
+      },
+      "card3": {
+        "title": "Sustainable Production",
+        "items": [
+          "We produce with environmentally friendly materials.",
+          "We develop waste management and recycling applications.",
+          "We use energy-efficient systems."
+        ]
+      }
+    },
+    "bottomSection": {
+      "title": "Our Factory",
+      "description": "In our factory, we provide the best service to our customers by combining high-quality production processes with the latest technologies. We gain competitive advantage in the sector with our high-capacity production facilities, environmentally friendly production approach, and sustainable solutions."
+    },
+    "imageAlts": {
+      "factory": "Factory Image"
+    }
+  },
+  "hakkimizda": {
+    "title": "About Us",
+    "whoWeAre": {
+      "title": "Who We Are",
+      "description": "Our company maintains its leadership in the industry by leveraging the power of technology and innovation. Our mission is to adapt to continuously evolving and changing technologies while providing quality service to our customers. We are among the leaders in the industry in providing high-quality products and services."
+    },
+    "visionMission": {
+      "vision": {
+        "title": "Our Vision",
+        "description": "To provide value to all our stakeholders in the industry by combining technology with a human-centered approach. We aim to be a leading brand in the global market."
+      },
+      "mission": {
+        "title": "Our Mission",
+        "description": "To improve our customers' business processes and deliver more value each day by continuously developing innovative solutions. We use our workforce and resources most efficiently for sustainability."
+      }
+    },
+    "values": {
+      "title": "Our Values",
+      "items": [
+        {
+          "title": "Trust",
+          "description": "We adopt the principle of building trust-based relationships with our customers and always being honest and transparent."
+        },
+        {
+          "title": "Teamwork",
+          "description": "We aim to achieve success through strong teamwork and contribute to the development of each team member."
+        },
+        {
+          "title": "Innovation",
+          "description": "We keep pace with and pioneer changes in the industry by continuously developing and producing innovative solutions."
+        }
+      ]
+    }
+  },
+  "software": {
+    "aiSolutions": {
+      "title": "Our AI Solutions",
+      "solutions": [
+        {
+          "title": "Deep Learning",
+          "description": "Extracting meaningful insights from complex datasets"
+        },
+        {
+          "title": "Natural Language Processing",
+          "description": "Understanding and processing human language"
+        },
+        {
+          "title": "Big Data Analytics",
+          "description": "Deriving value from large-scale datasets"
+        },
+        {
+          "title": "Machine Learning",
+          "description": "Systems that learn from data and make predictions"
+        },
+        {
+          "title": "Biometric AI",
+          "description": "Advanced authentication and security solutions"
+        },
+        {
+          "title": "Scientific AI",
+          "description": "AI applications in research and development"
+        }
+      ]
+    },
+    "aiApplications": {
+      "title": "AI Application Areas",
+      "areas": [
+        "Healthcare",
+        "Finance",
+        "Manufacturing",
+        "Retail",
+        "Education",
+        "Transportation",
+        "Energy",
+        "Agriculture"
+      ]
+    },
+    "services": {
+      "title": "Our Services",
+      "items": [
+        {
+          "title": "AI Solutions",
+          "description": "We provide customized artificial intelligence solutions tailored to your needs."
+        },
+        {
+          "title": "Image Processing",
+          "description": "We provide high-quality analysis with advanced image processing algorithms."
+        },
+        {
+          "title": "Full Stack Development",
+          "description": "We develop end-to-end software solutions including frontend and backend."
+        },
+        {
+          "title": "Game Development",
+          "description": "We create impressive and innovative gaming experiences."
+        },
+        {
+          "title": "Simulation Development",
+          "description": "We design custom simulation systems for training, analysis, and testing."
+        },
+        {
+          "title": "Animation and Visual Effects",
+          "description": "We bring your projects to life with creative animations and visual effects."
+        }
+      ]
+    },
+    "expertise": {
+      "title": "Our Expertise"
+    }
+  },
+  "home": {
+    "featured_products": "Featured Products",
+    "slider": {
+      "innovative": {
+        "title": "Innovative Solutions",
+        "subtitle": "Shaping the future with our innovative technologies"
+      },
+      "security": {
+        "title": "Security Solutions",
+        "subtitle": "Protect your business with modern security systems"
+      },
+      "medical": {
+        "title": "Medical Technologies",
+        "subtitle": "Innovative solutions for the healthcare sector"
+      }
+    },
+    "b2b": {
+      "badge": "B2B Platform",
+      "title": "Grow Your Business with Nokta B2B",
+      "description": "Join our B2B platform for wholesale purchasing, special pricing, and more. Take advantage of our exclusive benefits for corporate customers.",
+      "features": {
+        "wholesale": "Wholesale Price Advantage",
+        "account": "Manage Your Current Account",
+        "delivery": "Fast Order and Delivery",
+        "support": "Corporate Support Service"
+      },
+      "cta": "Join B2B",
+      "cards": {
+        "pricing": {
+          "title": "Special Pricing",
+          "description": "Special prices and discounts on bulk purchases. Gain competitive advantage for your projects."
+        },
+        "delivery": {
+          "title": "Priority Delivery",
+          "description": "Fast delivery and stock priority for our B2B customers. Don't disrupt your business processes."
+        },
+        "support": {
+          "title": "Technical Support",
+          "description": "Technical support and dedicated solution center. Our expert team is always by your side."
+        }
+      }
+    },
+    "learnMore": "Learn More",
+    "ourSolutions": "Our Solutions",
+    "solutions": {
+      "cctv": "CCTV Systems",
+      "fireAlarms": "Fire Alarms",
+      "accessControl": "Access Control",
+      "patientMonitoring": "Patient Monitoring",
+      "telemedicine": "Telemedicine",
+      "ehrSystems": "EHR Systems",
+      "customSoftware": "Custom Software",
+      "mobileApps": "Mobile Apps",
+      "cloudSolutions": "Cloud Solutions",
+      "aiIntegration": "AI Integration"
+    },
+    "newProductLaunch": "New Product Launch",
+    "security": {
+      "title": "Security Solutions",
+      "subtitle": "Cutting-edge Protection",
+      "imageAlt": "Fire Alarm System in action",
+      "description": "Our state-of-the-art CCTV systems and fire alarm products are designed to keep your premises safe and secure. With advanced features like AI-powered threat detection and real-time alerts, you can have peace of mind knowing your property is protected 24/7.",
+      "features": {
+        "ai": "AI-powered surveillance systems",
+        "fire": "Smart fire detection and prevention",
+        "monitoring": "24/7 monitoring and instant alerts",
+        "integration": "Integration with smart home systems"
+      },
+      "fire": {
+        "title": "Fire Detection Systems",
+        "description": "Protect your business 24/7 with state-of-the-art fire detection and alarm systems. Smart sensors and real-time monitoring enable immediate response."
+      },
+      "cctv": {
+        "title": "CCTV Systems",
+        "description": "Elevate your premises security with high-resolution camera systems and advanced recording features. AI-powered motion detection and facial recognition."
+      },
+      "barrier": {
+        "title": "Barrier and Parking Solutions",
+        "description": "Professional solutions with automatic barrier systems, license plate recognition, and smart parking management. Complete control with toll integration and visitor tracking system."
+      }
+    },
+    "exploreSecurityProducts": "Explore Security Products",
+    "medical": {
+      "title": "Medical Electronics",
+      "subtitle": "Advanced Healthcare Technology",
+      "description": "Our cutting-edge electronic products are designed for modern healthcare facilities and hospitals. From patient monitoring systems to advanced diagnostic tools, we provide innovative solutions that improve patient care and streamline medical processes.",
+      "features": {
+        "nursecall": "IP-Based Nurse Call Systems",
+        "clock": "GPS/NTP Synchronized Central Clock Systems",
+        "pager": "Wireless Paging and Pager Systems",
+        "roomcontrol": "Smart Room Control Panels"
+      },
+      "systems": {
+        "nurse": {
+          "title": "Nurse Call Systems",
+          "description": "IP-based nurse call systems specially designed for hospitals and healthcare facilities. Complete solution with emergency button, bedside unit, and nurse station control panel."
+        },
+        "clock": {
+          "title": "Central System Clocks",
+          "description": "Digital and analog clocks with GPS/NTP synchronization. Fully automatic clock systems for hospitals, schools, and corporate buildings. High precision and easy management."
+        },
+        "pager": {
+          "title": "Pager and Room Control Systems",
+          "description": "Wireless paging devices and smart room control panels. Integrated systems for staff calls, patient tracking, and room automation. Easy installation and operation."
+        }
+      }
+    },
+    "discoverMedicalProducts": "Discover Medical Products",
+    "software": {
+      "title": "Software Solutions",
+      "subtitle": "Innovative Digital Solutions",
+      "description": "Our team of expert developers creates custom software solutions tailored to your business needs. From enterprise resource planning (ERP) systems to mobile applications, we deliver innovative digital solutions that drive efficiency and growth for your organization.",
+      "features": {
+        "erp": "Custom ERP and CRM systems",
+        "mobile": "Mobile app development",
+        "cloud": "Cloud-based solutions",
+        "ai": "AI and machine learning integration"
+      }
+    },
+    "exploreSoftwareServices": "Explore Software Services"
+  },
+  "markalar": {
+    "title": "Our Brands"
+  }
+}

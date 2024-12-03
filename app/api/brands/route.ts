@@ -17,9 +17,6 @@ export async function GET() {
       }
     });
 
-    // Debug log
-    console.log('Fetched brands:', brands);
-
     return new NextResponse(JSON.stringify({ brands }), {
       status: 200,
       headers: {
@@ -27,7 +24,6 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('Error fetching brands:', error);
     return new NextResponse(
       JSON.stringify({ error: 'Failed to fetch brands' }), {
         status: 500,

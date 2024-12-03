@@ -1,0 +1,349 @@
+{
+  "navigation": {
+    "home": "Ana Sayfa",
+    "products": "Ürünler",
+    "rAndD": "Arge & Üretim",
+    "software": "Yazılım",
+    "brands": "Markalar",
+    "about": "Hakkımızda",
+    "contact": "İletişim"
+  },
+  "common": {
+    "search": "Ara",
+    "addToCart": "Sepete Ekle",
+    "viewDetails": "Detayları Gör",
+    "price": "Fiyat"
+  },
+  "iletisim": {
+    "satis-magazalari": "Satış Mağazaları",
+    "teknik-servisler": "Teknik Servisler",
+    "arge-uretim-merkezi": "AR-GE ve Üretim Merkezi",
+    "ofisler": "Ofisler",
+    "teknik-servis": "Teknik Servis",
+    "genel-merkez": "Genel Merkez",
+    "ankara-bolge-ofisi": "Ankara Bölge Ofisi",
+    "istanbul-satis-magazasi": "İstanbul Satış Mağazası",
+    "ankara-satis-magazasi": "Ankara Satış Mağazası"
+  },
+  "footer": {
+    "abone-ol": "Abone Ol",
+    "gonderiliyor": "Gönderiliyor",
+    "urunler": "Ürünler",
+    "destek": "Destek",
+    "teknik-destek-prog": "Teknik Destek Programı",
+    "arge-uretim": "Arge & Üretim",
+    "yazilim": "Yazılım",
+    "hakkimizda": "Hakkımızda",
+    "iletisim": "İletişim",
+    "bize-ulasin": "Bize Ulaşın",
+    "adreslerimiz": "Adreslerimiz",
+    "tel": "Tel:",
+    "e-posta": "E-Posta",
+    "e-bulten": "E-Bülten",
+    "yeniliklerden": "Yeniliklerden haberdar olmak için abone olun.",
+    "e-posta-adresiniz": "E-Posta adresiniz",
+    "tum-haklar": "Tüm hakları saklıdır"
+  },
+  "markalar": {
+    "title": "Markalarımız"
+  },
+  "products": {
+    "categories": "Kategoriler",
+    "popularBrands": "Popüler Markalar:",
+    "brands": "Markalar",
+    "back": "Geri",
+    "sortBy": "Sırala",
+    "newest": "En Yeniler",
+    "oldest": "En Eskiler",
+    "showFilters": "Filtreleri Göster",
+    "hideFilters": "Filtreleri Gizle",
+    "filters": "Filtreler",
+    "noProductsFound": "Ürün bulunamadı.",
+    "noCategoriesFound": "Kategori bulunamadı"
+  },
+  "productDetail": {
+    "home": "Ana Sayfa",
+    "stockCode": "Stok Kodu",
+    "requestQuote": "Teklif İste",
+    "features": "Özellikler",
+    "technical": "Teknik",
+    "applications": "Uygulamalar",
+    "downloads": "İndirmeler",
+    "similarProducts": "Benzer Ürünler",
+    "clickToDownload": "İndirmek için tıklayın",
+    "version": "Versiyon",
+    "fileType": "Dosya tipi",
+    "date": "Tarih",
+    "download": "İndir"
+  },
+  "arge": {
+    "title": "AR-GE ve Üretim",
+    "subtitle": "AR-GE ve Fabrikamız",
+    "description": "Şirketimiz, teknolojiyi sürekli yeniliklerle entegre ederek sektördeki liderliğini sürdürmekte. AR-GE (Araştırma ve Geliştirme) bölümümüzde, sektördeki en son yenilikleri takip ediyor ve bunları ürünlerimize entegre etmek için sürekli çalışmalar yapıyoruz. Yenilikçi çözümler geliştirmeye devam ediyoruz ve global pazarda öncü olmak için yatırımlarımıza hız kesmeden devam ediyoruz.",
+    "factory": {
+      "title": "Fabrikamız ve Yatırımlarımız",
+      "card1": {
+        "title": "Yüksek Teknoloji Üretim",
+        "items": [
+          "Son teknoloji makinelerle üretim süreçlerini hızlandırıyoruz.",
+          "Verimliliği artıran robotik sistemler kullanıyoruz.",
+          "Çevre dostu üretim tekniklerini benimsiyoruz."
+        ]
+      },
+      "card2": {
+        "title": "İleri Düzey Ar-Ge Çalışmaları",
+        "items": [
+          "Yeni ürün geliştirme üzerine sürekli araştırmalar yapıyoruz.",
+          "Yenilikçi çözümler için AR-GE projeleri yürütüyoruz.",
+          "Sektördeki gelişmeleri takip ederek en son teknolojilere yatırım yapıyoruz."
+        ]
+      },
+      "card3": {
+        "title": "Sürdürülebilir Üretim",
+        "items": [
+          "Çevre dostu malzemelerle üretim yapıyoruz.",
+          "Atık yönetimi ve geri dönüşüm uygulamaları geliştiriyoruz.",
+          "Enerji verimliliği sağlayan sistemler kullanıyoruz."
+        ]
+      }
+    },
+    "bottomSection": {
+      "title": "Fabrikamız",
+      "description": "Fabrikamızda, yüksek kaliteli üretim süreçlerini en son teknolojilerle birleştirerek müşterilerimize en iyi hizmeti sunmaktayız. Yüksek kapasiteli üretim tesislerimiz, çevre dostu üretim anlayışımız ve sürdürülebilir çözümlerle sektördeki rekabet avantajını elde ediyoruz."
+    },
+    "imageAlts": {
+      "factory": "Fabrika Görseli"
+    }
+  },
+  "hakkimizda": {
+    "title": "Hakkımızda",
+    "whoWeAre": {
+      "title": "Biz Kimiz?",
+      "description": "Şirketimiz, teknoloji ve inovasyonun gücünden faydalanarak sektörümüzdeki liderliğimizi sürdürüyoruz. Misyonumuz, müşterilerimize kaliteli hizmet sunarken, sürekli olarak gelişen ve değişen teknolojilere adapte olmaktır. Yüksek kaliteli ürün ve hizmetler sunma konusunda sektördeki liderler arasında yer alıyoruz."
+    },
+    "visionMission": {
+      "vision": {
+        "title": "Vizyonumuz",
+        "description": "Teknolojiyi, insan odaklı bir yaklaşım ile birleştirerek, sektördeki tüm paydaşlarımıza katma değer sağlamak. Global pazarda öncü bir marka olmayı hedefliyoruz."
+      },
+      "mission": {
+        "title": "Misyonumuz",
+        "description": "Sürekli yenilikçi çözümler geliştirerek, müşterilerimizin iş süreçlerini iyileştirmek ve her geçen gün daha fazla değer sunmak. İş gücümüzü ve kaynaklarımızı sürdürülebilirlik adına en verimli şekilde kullanmaktayız."
+      }
+    },
+    "values": {
+      "title": "Değerlerimiz",
+      "items": [
+        {
+          "title": "Güven",
+          "description": "Müşterilerimizle güvene dayalı ilişkiler kurmayı, her zaman dürüst ve şeffaf olmayı ilke ediniyoruz."
+        },
+        {
+          "title": "Takım Çalışması",
+          "description": "Güçlü bir takım çalışması ile başarıya ulaşmayı ve her bir takım üyesinin gelişimine katkıda bulunmayı hedefliyoruz."
+        },
+        {
+          "title": "Yenilikçilik",
+          "description": "Sürekli gelişim ve yenilikçi çözümler üreterek sektördeki değişimlere ayak uyduruyor ve öncülük ediyoruz."
+        }
+      ]
+    }
+  },
+  "software": {
+    "aiSolutions": {
+      "title": "AI Çözümlerimiz",
+      "solutions": [
+        {
+          "title": "Derin Öğrenme",
+          "description": "Karmaşık veri setlerinden anlamlı içgörüler çıkarma"
+        },
+        {
+          "title": "Doğal Dil İşleme",
+          "description": "İnsan dilini anlama ve işleme yeteneği"
+        },
+        {
+          "title": "Büyük Veri Analizi",
+          "description": "Büyük ölçekli veri setlerinden değer elde etme"
+        },
+        {
+          "title": "Makine Öğrenimi",
+          "description": "Veriden öğrenen ve tahminler yapan sistemler"
+        },
+        {
+          "title": "Biyometrik AI",
+          "description": "Gelişmiş kimlik doğrulama ve güvenlik çözümleri"
+        },
+        {
+          "title": "Bilimsel AI",
+          "description": "Araştırma ve geliştirmede AI uygulamaları"
+        }
+      ]
+    },
+    "aiApplications": {
+      "title": "AI Uygulama Alanları",
+      "areas": [
+        "Sağlık Hizmetleri",
+        "Finans",
+        "Üretim",
+        "Perakende",
+        "Eğitim",
+        "Ulaşım",
+        "Enerji",
+        "Tarım"
+      ]
+    },
+    "services": {
+      "title": "Hizmetlerimiz",
+      "items": [
+        {
+          "title": "Yapay Zeka Çözümleri",
+          "description": "İhtiyaçlarınıza uygun özelleştirilmiş yapay zeka çözümleri sunuyoruz."
+        },
+        {
+          "title": "Görüntü İşleme",
+          "description": "Gelişmiş görüntü işleme algoritmaları ile yüksek kaliteli analiz sağlıyoruz."
+        },
+        {
+          "title": "Tam Yığın Yazılım Geliştirme",
+          "description": "Frontend ve backend dahil olmak üzere uçtan uca yazılım çözümleri geliştiriyoruz."
+        },
+        {
+          "title": "Oyun Geliştirme",
+          "description": "Etkileyici ve yenilikçi oyun deneyimleri oluşturuyoruz."
+        },
+        {
+          "title": "Simülasyon Geliştirme",
+          "description": "Eğitim, analiz ve test için özel simülasyon sistemleri tasarlıyoruz."
+        },
+        {
+          "title": "Animasyon ve Görsel Efektler",
+          "description": "Yaratıcı animasyonlar ve görsel efektler ile projelerinizi canlandırıyoruz."
+        }
+      ]
+    },
+    "expertise": {
+      "title": "Uzmanlık Alanlarımız"
+    }
+  },
+  "home": {
+    "featured_products": "Öne Çıkan Ürünler",
+    "slider": {
+      "innovative": {
+        "title": "Yenilikçi Çözümler",
+        "subtitle": "Yenilikçi teknolojilerimizle geleceği şekillendiriyoruz"
+      },
+      "security": {
+        "title": "Güvenlik Çözümleri",
+        "subtitle": "Modern güvenlik sistemleri ile işletmenizi koruyun"
+      },
+      "medical": {
+        "title": "Medikal Teknolojiler",
+        "subtitle": "Sağlık sektörü için yenilikçi çözümler"
+      }
+    },
+    "b2b": {
+      "badge": "B2B Platform",
+      "title": "Nokta B2B ile İşinizi Büyütün",
+      "description": "Toptan alım, özel fiyatlandırma ve daha fazlası için B2B platformumuza katılın. Kurumsal müşterilerimize özel avantajlardan yararlanın.",
+      "features": {
+        "wholesale": "Toptan Fiyat Avantajı",
+        "account": "Cari İşlemlerinizi Yönetme",
+        "delivery": "Hızlı Sipariş ve Teslimat",
+        "support": "Kurumsal Destek Hizmeti"
+      },
+      "cta": "B2B'ye Katılın",
+      "cards": {
+        "pricing": {
+          "title": "Özel Fiyatlandırma",
+          "description": "Toplu alımlarda özel fiyatlar ve indirimler. Projeleriniz için rekabetçi avantaj sağlayın."
+        },
+        "delivery": {
+          "title": "Öncelikli Teslimat",
+          "description": "B2B müşterilerimize özel hızlı teslimat ve stok önceliği. İş süreçlerinizi aksatmayın."
+        },
+        "support": {
+          "title": "Teknik Destek",
+          "description": "Teknik destek ve özel çözüm merkezi. Uzman ekibimiz her zaman yanınızda."
+        }
+      }
+    },
+    "learnMore": "Daha Fazla Bilgi",
+    "ourSolutions": "Çözümlerimiz",
+    "solutions": {
+      "cctv": "CCTV Sistemleri",
+      "fireAlarms": "Yangın Alarmları",
+      "accessControl": "Geçiş Kontrol",
+      "patientMonitoring": "Hasta Takibi",
+      "telemedicine": "Teletıp",
+      "ehrSystems": "EHR Sistemleri",
+      "customSoftware": "Özel Yazılım",
+      "mobileApps": "Mobil Uygulamalar",
+      "cloudSolutions": "Bulut Çözümleri",
+      "aiIntegration": "Yapay Zeka Entegrasyonu"
+    },
+    "newProductLaunch": "Yeni Ürün Lansmanı",
+    "security": {
+      "title": "Güvenlik Çözümleri",
+      "subtitle": "En İleri Koruma",
+      "imageAlt": "Çalışan Yangın Alarm Sistemi",
+      "description": "En son teknoloji CCTV sistemlerimiz ve yangın alarm ürünlerimiz, tesislerinizi güvende tutmak için tasarlanmıştır. Yapay zeka destekli tehdit algılama ve gerçek zamanlı uyarılar gibi gelişmiş özelliklerle, mülkünüzün 7/24 korunduğundan emin olabilirsiniz.",
+      "features": {
+        "ai": "Yapay zeka destekli gözetim sistemleri",
+        "fire": "Akıllı yangın algılama ve önleme",
+        "monitoring": "7/24 izleme ve anlık uyarılar",
+        "integration": "Akıllı ev sistemleriyle entegrasyon"
+      },
+      "fire": {
+        "title": "Yangın Algılama Sistemleri",
+        "description": "En son teknoloji yangın algılama ve alarm sistemleri ile işletmenizi 7/24 koruma altına alın. Akıllı sensörler ve gerçek zamanlı izleme ile anında müdahale imkanı."
+      },
+      "cctv": {
+        "title": "CCTV Sistemleri",
+        "description": "Yüksek çözünürlüklü kamera sistemleri ve gelişmiş kayıt özellikleri ile mekanınızın güvenliğini üst seviyeye taşıyın. AI destekli hareket algılama ve yüz tanıma."
+      },
+      "barrier": {
+        "title": "Bariyer ve Otopark Çözümleri",
+        "description": "Otomatik bariyer sistemleri, plaka tanıma ve akıllı otopark yönetimi ile profesyonel çözümler. HGS/OGS entegrasyonu ve ziyaretçi takip sistemi ile eksiksiz kontrol."
+      }
+    },
+    "exploreSecurityProducts": "Güvenlik Ürünlerini Keşfedin",
+    "medical": {
+      "title": "Medikal Elektronik",
+      "subtitle": "Gelişmiş Sağlık Teknolojisi",
+      "description": "En son teknoloji elektronik ürünlerimiz modern sağlık tesisleri ve hastaneler için tasarlanmıştır. Hasta izleme sistemlerinden gelişmiş tanı araçlarına kadar, hasta bakımını iyileştiren ve tıbbi süreçleri kolaylaştıran yenilikçi çözümler sunuyoruz.",
+      "features": {
+        "nursecall": "IP Tabanlı Hemşire Çağrı Sistemleri",
+        "clock": "GPS/NTP Senkronizasyonlu Merkezi Saat Sistemleri",
+        "pager": "Kablosuz Çağrı ve Pager Sistemleri",
+        "roomcontrol": "Akıllı Oda Kontrol Panelleri"
+      },
+      "systems": {
+        "nurse": {
+          "title": "Hemşire Çağrı Sistemleri",
+          "description": "Hastaneler ve sağlık kuruluşları için özel tasarlanmış, IP tabanlı hemşire çağrı sistemleri. Acil durum butonu, yatak başı ünitesi ve hemşire istasyonu kontrol paneli ile eksiksiz çözüm."
+        },
+        "clock": {
+          "title": "Merkezi Sistem Saatleri",
+          "description": "GPS/NTP senkronizasyonlu dijital ve analog saatler. Hastane, okul ve kurumsal yapılar için tam otomatik saat sistemleri. Yüksek hassasiyet ve kolay yönetim."
+        },
+        "pager": {
+          "title": "Pager ve Oda Kontrol Sistemleri",
+          "description": "Kablosuz çağrı cihazları ve akıllı oda kontrol panelleri. Personel çağrı, hasta takip ve oda otomasyonu için entegre sistemler. Kolay kurulum ve kullanım."
+        }
+      }
+    },
+    "discoverMedicalProducts": "Tıbbi Ürünleri Keşfedin",
+    "software": {
+      "title": "Yazılım Çözümleri",
+      "subtitle": "Yenilikçi Dijital Çözümler",
+      "description": "Uzman geliştirici ekibimiz, işletmenizin ihtiyaçlarına özel yazılım çözümleri oluşturur. Kurumsal kaynak planlama (ERP) sistemlerinden mobil uygulamalara kadar, organizasyonunuz için verimlilik ve büyümeyi destekleyen yenilikçi dijital çözümler sunuyoruz.",
+      "features": {
+        "erp": "Özel ERP ve CRM sistemleri",
+        "mobile": "Mobil uygulama geliştirme",
+        "cloud": "Bulut tabanlı çözümler",
+        "ai": "Yapay zeka ve makine öğrenimi entegrasyonu"
+      }
+    },
+    "exploreSoftwareServices": "Yazılım Hizmetlerini Keşfedin"
+  }
+}

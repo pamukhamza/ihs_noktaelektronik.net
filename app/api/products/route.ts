@@ -8,15 +8,32 @@ export async function GET(request: Request) {
   const categoryId = searchParams.get('categoryId');
   const seoLink = searchParams.get('seo_link');
   const brands = searchParams.getAll('brands') || [];
+  const query = searchParams.get('query');
   const skip = (page - 1) * limit;
-
-  console.log('Received brands:', brands); // Debug log
 
   try {
     const whereClause: any = {
       aktif: true,  // Only get active products
     };
-    
+
+    if (query) {
+      whereClause.OR = [
+        { UrunAdiTR: { contains: query } },
+        { UrunAdiEN: { contains: query } },
+        { UrunKodu: { contains: query } },
+        {
+          Marka: {
+            title: { contains: query }
+          }
+        },
+        {
+          Kategori: {
+            KategoriAdiTr: { contains: query }
+          }
+        }
+      ];
+    }
+
     if (seoLink) {
       // First, find the category by seo_link
       const category = await prisma.nokta_kategoriler.findFirst({
@@ -24,22 +41,27 @@ export async function GET(request: Request) {
       });
 
       if (category) {
-        // Get all subcategories recursively
-        const getAllSubcategories = async (parentId: number): Promise<number[]> => {
-          const subcategories = await prisma.nokta_kategoriler.findMany({
-            where: { parent_id: parentId },
-          });
+        // Fetch all categories in a single query
+        const allCategories = await prisma.nokta_kategoriler.findMany({
+          select: {
+            id: true,
+            parent_id: true,
+          },
+        });
 
+        // Build parent-child relationships in memory
+        const categoryMap = new Map(allCategories.map(cat => [cat.id, cat]));
+        const getSubcategoryIds = (parentId: number): number[] => {
           const subcategoryIds = [parentId];
-          for (const sub of subcategories) {
-            const childIds = await getAllSubcategories(sub.id);
-            subcategoryIds.push(...childIds);
-          }
-
+          allCategories
+            .filter(cat => cat.parent_id === parentId)
+            .forEach(cat => {
+              subcategoryIds.push(...getSubcategoryIds(cat.id));
+            });
           return subcategoryIds;
         };
 
-        const categoryIds = await getAllSubcategories(category.id);
+        const categoryIds = getSubcategoryIds(category.id);
         whereClause.KategoriID = {
           in: categoryIds,
         };
@@ -59,13 +81,10 @@ export async function GET(request: Request) {
         },
       });
 
-      console.log('Found brand records:', brandRecords); // Debug log
-
       if (brandRecords.length > 0) {
         whereClause.MarkaID = {
           in: brandRecords.map(brand => brand.id)
         };
-        console.log('Added brand IDs to where clause:', brandRecords.map(brand => brand.id)); // Debug log
       }
     }
 
@@ -112,22 +131,37 @@ export async function GET(request: Request) {
     // Create a map of brands for quick lookup
     const brandMap = new Map(productBrands.map(brand => [brand.id, brand]));
 
-    // Fetch images for the products and combine with brand info
-    const productsWithImages = await Promise.all(
-      products.map(async (product) => {
-        const image = await prisma.nokta_urunler_resimler.findFirst({
-          where: { UrunID: product.id },
-          select: { KResim: true },
-          orderBy: { Sira: 'asc' },
-        });
-        
-        return {
-          ...product,
-          marka: product.MarkaID ? brandMap.get(product.MarkaID) || null : null,
-          image: image?.KResim ? `/product-images/${image.KResim}` : '/gorsel_hazirlaniyor.jpg',
-        };
-      })
-    );
+    // Fetch all images for all products in a single query
+    const productIds = products.map(product => product.id);
+    const allProductImages = await prisma.nokta_urunler_resimler.findMany({
+      where: {
+        UrunID: {
+          in: productIds
+        }
+      },
+      select: {
+        UrunID: true,
+        KResim: true
+      },
+      orderBy: {
+        Sira: 'asc'
+      }
+    });
+
+    // Create a map of first images for each product
+    const imageMap = new Map();
+    for (const image of allProductImages) {
+      if (!imageMap.has(image.UrunID)) {
+        imageMap.set(image.UrunID, image.KResim);
+      }
+    }
+
+    // Combine products with their images and brand info
+    const productsWithImages = products.map(product => ({
+      ...product,
+      image: imageMap.get(product.id) ? `/product-images/${imageMap.get(product.id)}` : '/gorsel_hazirlaniyor.jpg',
+      marka: product.MarkaID ? brandMap.get(product.MarkaID) || null : null
+    }));
 
     return NextResponse.json({
       products: productsWithImages,

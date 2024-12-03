@@ -14,6 +14,7 @@ export async function GET(request: Request) {
       select: {
         id: true,
         KategoriAdiTr: true,
+        KategoriAdiEn: true,
         seo_link: true,
         parent_id: true,
       },
@@ -47,16 +48,16 @@ export async function POST(request: Request) {
     
     const categories = await prisma.nokta_kategoriler.findMany({
       where: {
-        parent_id: parent_id
+        parent_id: parent_id,
+        is_active: true
       },
       select: {
         id: true,
         KategoriAdiTr: true,
+        KategoriAdiEn: true,
         seo_link: true,
-      },
-      orderBy: {
-        id: 'asc',
-      },
+        parent_id: true,
+      }
     });
 
     return NextResponse.json({
@@ -64,9 +65,9 @@ export async function POST(request: Request) {
       success: true,
     });
   } catch (error) {
-    console.error('Error fetching subcategories:', error);
+    console.error('Error fetching categories:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch subcategories' },
+      { error: 'Failed to fetch categories' },
       { status: 500 }
     );
   }

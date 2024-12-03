@@ -1,3 +1,4 @@
-1. Yazılım sayfası tasarımı komple yapılacaklar
-2. İndex tasarımı netleşecek ve veriler gelecek 
-3. search yapılacak
+1. Dil ile ilgili consoldaki hatayı çöz
+2. Ürünler ve ürün detay sayfalarındaki veritabını bağlantılarını azalt ve optimize et
+3. Arge ve Üretim bölümune görselleri ekle.
+4. ürünlerin indirme dosyalarını ve fotoğrafları cdn e yükle yada railway e yükle

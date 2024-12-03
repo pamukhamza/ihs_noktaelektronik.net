@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client'
-import { Product, Download, DownloadCategory } from '../types/product'
-
-const prisma = new PrismaClient()
+import { prisma } from "@/lib/prisma"
+import { Product } from "@/types/product"
 
 export async function getProduct(seo_link: string): Promise<Product | null> {
   const productSeolink = seo_link
@@ -30,13 +28,28 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         create_date: true,
         modify_date: true,
         KategoriID: true,
-        MarkaID: true
+        MarkaID: true,
+        seo_link: true
       }
     })
 
     if (!product) {
       return null
     }
+
+    // Fetch categories
+    const categories = await prisma.nokta_kategoriler.findMany({
+      where: {
+        id: product.KategoriID ?? undefined,  // Use nullish coalescing to handle null
+        is_active: true
+      },
+      select: {
+        id: true,
+        KategoriAdiTr: true,
+        KategoriAdiEn: true,
+        seo_link: true,
+      }
+    });
 
     // Fetch images
     const images = await prisma.nokta_urunler_resimler.findMany({
@@ -110,7 +123,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
     const categoryMap = new Map(downloadCategories.map(cat => [cat.id, cat]))
 
     // Group downloads by category
-    const groupedDownloads: DownloadCategory[] = []
+    const groupedDownloads: Product['downloads'] = []
     downloads.forEach(download => {
       const categoryId = download.yukleme_id
       const category = categoryId ? categoryMap.get(categoryId) : null
@@ -133,7 +146,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
     })
 
     // Add existing downloads to appropriate categories
-    const addToCategory = (name: string, item: Download) => {
+    const addToCategory = (name: string, item: Product['downloads'][0]['items'][0]) => {
       let category = groupedDownloads.find(cat => cat.name === name)
       if (!category) {
         category = { name, items: [] }
@@ -170,7 +183,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
 
         return {
           ...prod,
-          image: prodImages[0]?.KResim || null
+          image: prodImages[0]?.KResim ? `/product-images/${prodImages[0].KResim}` : null
         }
       })
     )
@@ -178,30 +191,49 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
     // Transform the data to match our frontend needs
     const transformedProduct: Product = {
       id: product.id,
-      name: product.UrunAdiTR || product.UrunAdiEN || '',
+      name: {
+        UrunAdiTR: product.UrunAdiTR || '',
+        UrunAdiEN: product.UrunAdiEN || ''
+      },
       stockCode: product.UrunKodu || '',
       brand: brand?.title || 'Unknown',
+      categories: categories.map(cat => ({
+        id: cat.id,
+        name: {
+          KategoriAdiTR: cat.KategoriAdiTr || '',
+          KategoriAdiEN: cat.KategoriAdiEn || ''
+        },
+        seo_link: cat.seo_link || ''
+      })),
       images: images.map(img => img.KResim ? `/product-images/${img.KResim}` : '').filter(Boolean),
-      generalFeatures: product.OzelliklerTR || product.OzelliklerEN || '',
-      technicalSpecs: product.BilgiTR || product.BilgiEN || '',
-      applications: product.UygulamalarTr || product.UygulamalarEn || '',
+      generalFeatures: {
+        OzelliklerTR: product.OzelliklerTR || '',
+        OzelliklerEN: product.OzelliklerEN || ''
+      },
+      technicalSpecs: {
+        BilgiTR: product.BilgiTR || '',
+        BilgiEN: product.BilgiEN || ''
+      },
+      applications: {
+        UygulamalarTr: product.UygulamalarTr || '',
+        UygulamalarEn: product.UygulamalarEn || ''
+      },
       downloads: groupedDownloads,
       similarProducts: similarProductsWithImages.map(prod => ({
         id: prod.id,
-        name: prod.UrunAdiTR || prod.UrunAdiEN || '',
-        image: prod.image ? `/product-images/${prod.image}` : '/gorsel_hazirlaniyor.jpg',
+        name: {
+          UrunAdiTR: prod.UrunAdiTR || '',
+          UrunAdiEN: prod.UrunAdiEN || ''
+        },
+        image: prod.image || '', // Add a fallback empty string
         seo_link: prod.seo_link || ''
       })),
-      isNew: product.YeniUrun || false,
-      isActive: product.aktif || false,
-      createdAt: product.create_date || null,
-      modifiedAt: product.modify_date || null
+      seo_link: product.seo_link || ''
     }
 
     return transformedProduct
   } catch (error) {
     console.error('Error fetching product:', error)
-    throw error
+    return null
   }
 }
-

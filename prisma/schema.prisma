@@ -19,35 +19,37 @@ model nokta_kategoriler {
   marka_id      Int?
   img_path      String?  @db.VarChar(250)
   seo_link      String?  @unique(map: "seo_link") @db.VarChar(250)
+
+  @@index([sira], map: "idx_kategori_sira")
+  @@index([parent_id, is_active], map: "idx_parent_active")
 }
 
 model nokta_urun_markalar {
-  id            Int             @id
-  title         String?         @db.VarChar(250)
-  img_path      String?         @db.VarChar(50)
-  bilgi_basligi String?         @db.VarChar(250)
-  bilgi         String?         @db.VarChar(0)
+  id            Int      @id
+  title         String?  @db.VarChar(250)
+  img_path      String?  @db.VarChar(50)
+  bilgi_basligi String?  @db.VarChar(250)
+  bilgi         String?  @db.VarChar(0)
   old_id        Int?
   is_active     Boolean?
   order_by      Int?
-  link_img      String?         @db.VarChar(250)
-  seo_link      String?         @db.VarChar(255)
-  hover_img     String?         @db.VarChar(250)
+  link_img      String?  @db.VarChar(250)
+  hover_img     String?  @db.VarChar(250)
+  seo_link      String?  @db.VarChar(255)
   urunler       nokta_urunler[] @relation("UrunMarka")
 }
 
 model nokta_urunler {
-  id            Int                @id @default(autoincrement())
-  UrunKodu      String?            @db.VarChar(256)
-  UrunAdiTR     String?            @db.VarChar(256)
-  UrunAdiEN     String?            @db.VarChar(256)
-  OzelliklerTR  String?            @db.LongText
-  OzelliklerEN  String?            @db.LongText
-  BilgiTR       String?            @db.LongText
-  BilgiEN       String?            @db.LongText
+  id            Int       @id @default(autoincrement())
+  UrunKodu      String?   @db.VarChar(256)
+  UrunAdiTR     String?   @db.VarChar(256)
+  UrunAdiEN     String?   @db.VarChar(256)
+  OzelliklerTR  String?   @db.LongText
+  OzelliklerEN  String?   @db.LongText
+  BilgiTR       String?   @db.LongText
+  BilgiEN       String?   @db.LongText
   KategoriID    Int?
   MarkaID       Int?
-  marka         nokta_urun_markalar? @relation("UrunMarka", fields: [MarkaID], references: [id])
   SurucuIndir   String?   @db.VarChar(256)
   Vitrin        Boolean?
   YeniUrun      Boolean?
@@ -68,6 +70,8 @@ model nokta_urunler {
   UygulamalarTr String?   @db.LongText
   UygulamalarEn String?   @db.LongText
   seo_link      String?   @unique(map: "seo_link") @db.VarChar(255)
+  marka         nokta_urun_markalar? @relation("UrunMarka", fields: [MarkaID], references: [id])
+  resimler      nokta_urunler_resimler[] @relation("UrunResimler")
 }
 
 model nokta_urunler_resimler {
@@ -76,6 +80,9 @@ model nokta_urunler_resimler {
   KResim String? @db.VarChar(250)
   UrunID Int?
   Sira   Int?
+  urun   nokta_urunler? @relation("UrunResimler", fields: [UrunID], references: [id])
+
+  @@index([UrunID, Sira], map: "idx_urun_sira")
 }
 
 model nokta_urunler_yuklemeler {
@@ -107,4 +114,16 @@ model nokta_yuklemeler {
   dosya_yolu String?  @db.VarChar(250)
   order_by   Int?
   is_active  Boolean?
+}
+
+model nokta_ebulten {
+  id          Int      @id @default(autoincrement())
+  email       String?  @db.VarChar(255)
+  create_date DateTime @default(now()) @db.Timestamp(0)
+}
+
+model category_brand_rel {
+  id       Int  @id @default(autoincrement())
+  marka_id Int?
+  kat_id   Int?
 }

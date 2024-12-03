@@ -1,0 +1,348 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "products": "Produkte",
+    "rAndD": "F&E und Produktion",
+    "software": "Software",
+    "brands": "Marken",
+    "about": "Über uns",
+    "contact": "Kontakt"
+  },
+  "common": {
+    "search": "Suche",
+    "addToCart": "In den Warenkorb",
+    "viewDetails": "Details anzeigen",
+    "price": "Preis"
+  },
+  "iletisim": {
+    "satis-magazalari": "Outlets",
+    "teknik-servisler": "Technische Dienstleistungen",
+    "arge-uretim-merkezi": "F&E- und Produktionszentrum",
+    "ofisler": "Büros",
+    "teknik-servis": "Technischer Service",
+    "genel-merkez": "Hauptsitz",
+    "ankara-bolge-ofisi": "Regionalbüro Ankara",
+    "istanbul-satis-magazasi": "Istanbuler Verkaufsladen",
+    "ankara-satis-magazasi": "Ankara-Verkaufsladen"
+  },
+  "products": {
+    "categories": "Kategorien",
+    "brands": "Marken",
+    "popularBrands": "Beliebte Marken:",
+    "back": "Zurück",
+    "sortBy": "Sortieren nach",
+    "newest": "Neueste zuerst",
+    "oldest": "Älteste zuerst",
+    "showFilters": "Filter anzeigen",
+    "hideFilters": "Filter ausblenden",
+    "filters": "Filter",
+    "noProductsFound": "Keine Produkte gefunden.",
+    "noCategoriesFound": "Keine Kategorien gefunden"
+  },
+  "productDetail": {
+    "stockCode": "Artikelnummer",
+    "requestQuote": "Angebot anfordern",
+    "features": "Eigenschaften",
+    "technical": "Technisch",
+    "applications": "Anwendungen",
+    "downloads": "Downloads",
+    "similarProducts": "Ähnliche Produkte",
+    "clickToDownload": "Zum Herunterladen klicken",
+    "version": "Version",
+    "fileType": "Dateityp",
+    "date": "Datum",
+    "download": "Herunterladen"
+  },
+  "arge": {
+    "title": "F&E und Produktion",
+    "subtitle": "Unsere F&E und Fabrik",
+    "description": "Unser Unternehmen behält seine Führungsposition in der Branche bei, indem es kontinuierlich Technologie mit Innovationen integriert. In unserer F&E-Abteilung (Forschung und Entwicklung) verfolgen wir die neuesten Innovationen in der Branche und arbeiten kontinuierlich daran, diese in unsere Produkte zu integrieren. Wir entwickeln weiterhin innovative Lösungen und setzen unsere Investitionen ohne Verlangsamung fort, um Vorreiter auf dem globalen Markt zu sein.",
+    "factory": {
+      "title": "Unsere Fabrik und Investitionen",
+      "card1": {
+        "title": "Hightech-Produktion",
+        "items": [
+          "Wir beschleunigen Produktionsprozesse mit modernsten Maschinen.",
+          "Wir setzen Robotersysteme ein, die die Effizienz steigern.",
+          "Wir setzen umweltfreundliche Produktionstechniken ein."
+        ]
+      },
+      "card2": {
+        "title": "Fortgeschrittene F&E-Studien",
+        "items": [
+          "Wir führen kontinuierliche Forschung zur Neuentwicklung von Produkten durch.",
+          "Wir führen F&E-Projekte für innovative Lösungen durch.",
+          "Wir investieren in die neuesten Technologien durch Verfolgung der Entwicklungen in der Branche."
+        ]
+      },
+      "card3": {
+        "title": "Nachhaltige Produktion",
+        "items": [
+          "Wir produzieren mit umweltfreundlichen Materialien.",
+          "Wir entwickeln Abfallmanagement- und Recycling-Anwendungen.",
+          "Wir nutzen energieeffiziente Systeme."
+        ]
+      }
+    },
+    "bottomSection": {
+      "title": "Unsere Fabrik",
+      "description": "In unserer Fabrik bieten wir unseren Kunden den besten Service, indem wir hochwertige Produktionsprozesse mit den neuesten Technologien kombinieren. Wir gewinnen Wettbewerbsvorteile in der Branche durch unsere Produktionsanlagen mit hoher Kapazität, unseren umweltfreundlichen Produktionsansatz und nachhaltige Lösungen."
+    },
+    "imageAlts": {
+      "factory": "Fabrikbild"
+    }
+  },
+  "hakkimizda": {
+    "title": "Über Uns",
+    "whoWeAre": {
+      "title": "Wer Wir Sind",
+      "description": "Unser Unternehmen behält seine Führungsposition in der Branche bei, indem es die Kraft von Technologie und Innovation nutzt. Unsere Mission ist es, uns an sich ständig weiterentwickelnde und verändernde Technologien anzupassen und dabei unseren Kunden qualitativ hochwertige Dienstleistungen zu bieten. Wir gehören zu den führenden Unternehmen der Branche bei der Bereitstellung hochwertiger Produkte und Dienstleistungen."
+    },
+    "visionMission": {
+      "vision": {
+        "title": "Unsere Vision",
+        "description": "Durch die Verbindung von Technologie mit einem menschenzentrierten Ansatz allen unseren Stakeholdern in der Branche einen Mehrwert zu bieten. Wir streben an, eine führende Marke im globalen Markt zu sein."
+      },
+      "mission": {
+        "title": "Unsere Mission",
+        "description": "Die Geschäftsprozesse unserer Kunden zu verbessern und jeden Tag mehr Wert zu schaffen, indem wir kontinuierlich innovative Lösungen entwickeln. Wir setzen unsere Arbeitskraft und Ressourcen im Sinne der Nachhaltigkeit am effizientesten ein."
+      }
+    },
+    "values": {
+      "title": "Unsere Werte",
+      "items": [
+        {
+          "title": "Vertrauen",
+          "description": "Wir haben uns zum Prinzip gemacht, vertrauensbasierte Beziehungen zu unseren Kunden aufzubauen und stets ehrlich und transparent zu sein."
+        },
+        {
+          "title": "Teamarbeit",
+          "description": "Wir streben danach, durch starke Teamarbeit Erfolg zu erzielen und zur Entwicklung jedes Teammitglieds beizutragen."
+        },
+        {
+          "title": "Innovation",
+          "description": "Wir halten mit den Veränderungen in der Branche Schritt und sind Vorreiter, indem wir uns kontinuierlich weiterentwickeln und innovative Lösungen produzieren."
+        }
+      ]
+    }
+  },
+  "software": {
+    "aiSolutions": {
+      "title": "Unsere KI-Lösungen",
+      "solutions": [
+        {
+          "title": "Deep Learning",
+          "description": "Gewinnung aussagekräftiger Erkenntnisse aus komplexen Datensätzen"
+        },
+        {
+          "title": "Natürliche Sprachverarbeitung",
+          "description": "Verstehen und Verarbeiten menschlicher Sprache"
+        },
+        {
+          "title": "Big Data Analytics",
+          "description": "Wertschöpfung aus großen Datensätzen"
+        },
+        {
+          "title": "Maschinelles Lernen",
+          "description": "Systeme, die aus Daten lernen und Vorhersagen treffen"
+        },
+        {
+          "title": "Biometrische KI",
+          "description": "Fortschrittliche Authentifizierungs- und Sicherheitslösungen"
+        },
+        {
+          "title": "Wissenschaftliche KI",
+          "description": "KI-Anwendungen in Forschung und Entwicklung"
+        }
+      ]
+    },
+    "aiApplications": {
+      "title": "KI-Anwendungsbereiche",
+      "areas": [
+        "Gesundheitswesen",
+        "Finanzen",
+        "Produktion",
+        "Einzelhandel",
+        "Bildung",
+        "Transport",
+        "Energie",
+        "Landwirtschaft"
+      ]
+    },
+    "services": {
+      "title": "Unsere Dienstleistungen",
+      "items": [
+        {
+          "title": "KI-Lösungen",
+          "description": "Wir bieten maßgeschneiderte künstliche Intelligenz-Lösungen für Ihre Bedürfnisse."
+        },
+        {
+          "title": "Bildverarbeitung",
+          "description": "Wir bieten hochwertige Analysen mit fortschrittlichen Bildverarbeitungsalgorithmen."
+        },
+        {
+          "title": "Full-Stack-Entwicklung",
+          "description": "Wir entwickeln End-to-End-Softwarelösungen einschließlich Frontend und Backend."
+        },
+        {
+          "title": "Spieleentwicklung",
+          "description": "Wir schaffen beeindruckende und innovative Spielerlebnisse."
+        },
+        {
+          "title": "Simulationsentwicklung",
+          "description": "Wir entwickeln maßgeschneiderte Simulationssysteme für Training, Analyse und Tests."
+        },
+        {
+          "title": "Animation und visuelle Effekte",
+          "description": "Wir erwecken Ihre Projekte mit kreativen Animationen und visuellen Effekten zum Leben."
+        }
+      ]
+    },
+    "expertise": {
+      "title": "Unsere Expertise"
+    }
+  },
+  "markalar": {
+    "title": "Unsere Marken"
+  },
+  "footer": {
+    "abone-ol": "Abonnieren",
+    "gonderiliyor": "Wird gesendet",
+    "urunler": "Produkte",
+    "destek": "Support",
+    "teknik-destek-prog": "Technisches Support-Programm",
+    "arge-uretim": "F&E & Produktion",
+    "yazilim": "Software",
+    "hakkimizda": "Über uns",
+    "iletisim": "Kontakt",
+    "bize-ulasin": "Kontaktieren Sie uns",
+    "adreslerimiz": "Unsere Adressen",
+    "tel": "Tel:",
+    "e-posta": "E-Mail",
+    "e-bulten": "Newsletter",
+    "yeniliklerden": "Abonnieren Sie, um über Neuigkeiten informiert zu bleiben.",
+    "e-posta-adresiniz": "Ihre E-Mail-Adresse",
+    "tum-haklar": "Alle Rechte vorbehalten"
+  },
+  "home": {
+    "featured_products": "Ausgewählte Produkte",
+    "slider": {
+      "innovative": {
+        "title": "Innovative Lösungen",
+        "subtitle": "Gestalten Sie die Zukunft mit unseren innovativen Technologien"
+      },
+      "security": {
+        "title": "Sicherheitslösungen",
+        "subtitle": "Modernster Schutz"
+      },
+      "medical": {
+        "title": "Medizintechnik",
+        "subtitle": "Innovative Lösungen für den Gesundheitssektor"
+      }
+    },
+    "b2b": {
+      "badge": "B2B Plattform",
+      "title": "Wachsen Sie mit Nokta B2B",
+      "description": "Treten Sie unserer B2B-Plattform bei für Großeinkäufe, Sonderpreise und mehr. Nutzen Sie unsere exklusiven Vorteile für Geschäftskunden.",
+      "features": {
+        "wholesale": "Großhandelspreisvorteile",
+        "account": "Kontoführung",
+        "delivery": "Schnelle Bestellung und Lieferung",
+        "support": "Unternehmenskundendienst"
+      },
+      "cta": "B2B beitreten",
+      "cards": {
+        "pricing": {
+          "title": "Sonderpreise",
+          "description": "Sonderpreise und Rabatte bei Großeinkäufen. Sichern Sie sich Wettbewerbsvorteile für Ihre Projekte."
+        },
+        "delivery": {
+          "title": "Vorrangige Lieferung",
+          "description": "Schnelle Lieferung und Lagerpriorität für unsere B2B-Kunden. Keine Unterbrechung Ihrer Geschäftsprozesse."
+        },
+        "support": {
+          "title": "Technischer Support",
+          "description": "Technischer Support und spezielles Lösungszentrum. Unser Expertenteam steht Ihnen jederzeit zur Seite."
+        }
+      }
+    },
+    "learnMore": "Mehr erfahren",
+    "ourSolutions": "Unsere Lösungen",
+    "solutions": {
+      "cctv": "CCTV-Systeme",
+      "fireAlarms": "Feuermelder",
+      "accessControl": "Zugangskontrolle",
+      "patientMonitoring": "Patientenüberwachung",
+      "telemedicine": "Telemedizin",
+      "ehrSystems": "EHR-Systeme",
+      "customSoftware": "Individuelle Software",
+      "mobileApps": "Mobile Apps",
+      "cloudSolutions": "Cloud-Lösungen",
+      "aiIntegration": "KI-Integration"
+    },
+    "newProductLaunch": "Neue Produkteinführung",
+    "security": {
+      "title": "Sicherheitslösungen",
+      "subtitle": "Modernster Schutz",
+      "imageAlt": "Brandmeldeanlage in Aktion",
+      "description": "Unsere hochmodernen CCTV-Systeme und Brandmeldeanlagen sind darauf ausgelegt, Ihre Räumlichkeiten sicher zu schützen. Mit fortschrittlichen Funktionen wie KI-gestützter Bedrohungserkennung und Echtzeitwarnungen können Sie sicher sein, dass Ihr Eigentum rund um die Uhr geschützt ist.",
+      "features": {
+        "ai": "KI-gestützte Überwachungssysteme",
+        "fire": "Intelligente Branderkennung und -prävention",
+        "monitoring": "24/7-Überwachung und Sofortbenachrichtigungen",
+        "integration": "Integration mit Smart-Home-Systemen"
+      },
+      "fire": {
+        "title": "Brandmeldesysteme",
+        "description": "Schützen Sie Ihr Unternehmen rund um die Uhr mit modernsten Brandmelde- und Alarmsystemen. Intelligente Sensoren und Echtzeitüberwachung ermöglichen sofortige Reaktion."
+      },
+      "cctv": {
+        "title": "Videoüberwachungssysteme",
+        "description": "Verbessern Sie die Sicherheit Ihrer Räumlichkeiten mit hochauflösenden Kamerasystemen und erweiterten Aufnahmefunktionen. KI-gestützte Bewegungserkennung und Gesichtserkennung."
+      },
+      "barrier": {
+        "title": "Schranken- und Parklösungen",
+        "description": "Professionelle Lösungen mit automatischen Schrankensystemen, Kennzeichenerkennung und intelligenter Parkplatzverwaltung. Vollständige Kontrolle mit Mautintegration und Besucherverwaltungssystem."
+      }
+    },
+    "exploreSecurityProducts": "Sicherheitsprodukte entdecken",
+    "medical": {
+      "title": "Medizinische Elektronik",
+      "subtitle": "Fortschrittliche Gesundheitstechnologie",
+      "description": "Unsere hochmodernen elektronischen Produkte sind für moderne Gesundheitseinrichtungen und Krankenhäuser konzipiert. Von Patientenüberwachungssystemen bis hin zu fortschrittlichen Diagnosewerkzeugen bieten wir innovative Lösungen, die die Patientenversorgung verbessern und medizinische Prozesse optimieren.",
+      "features": {
+        "nursecall": "IP-basierte Schwesternrufsysteme",
+        "clock": "GPS/NTP-synchronisierte Zentraluhrsysteme",
+        "pager": "Drahtlose Paging- und Pagersysteme",
+        "roomcontrol": "Intelligente Raumsteuerungspanels"
+      },
+      "systems": {
+        "nurse": {
+          "title": "Schwesternrufsysteme",
+          "description": "IP-basierte Schwesternrufsysteme, speziell entwickelt für Krankenhäuser und Gesundheitseinrichtungen. Komplettlösung mit Notfallknopf, Bettseiteneinheit und Stationskontrollpanel."
+        },
+        "clock": {
+          "title": "Zentrale Uhrenanlagen",
+          "description": "Digitale und analoge Uhren mit GPS/NTP-Synchronisation. Vollautomatische Zeitsysteme für Krankenhäuser, Schulen und Unternehmensgebäude. Hohe Präzision und einfache Verwaltung."
+        },
+        "pager": {
+          "title": "Pager- und Raumkontrollsysteme",
+          "description": "Drahtlose Rufgeräte und intelligente Raumsteuerungspanels. Integrierte Systeme für Personalruf, Patientenverfolgung und Raumautomatisierung. Einfache Installation und Bedienung."
+        }
+      }
+    },
+    "discoverMedicalProducts": "Medizinische Produkte entdecken",
+    "software": {
+      "title": "Softwarelösungen",
+      "subtitle": "Innovative digitale Lösungen",
+      "description": "Unser Team von Experten entwickelt maßgeschneiderte Softwarelösungen für Ihre Geschäftsanforderungen. Von Enterprise Resource Planning (ERP)-Systemen bis hin zu mobilen Anwendungen liefern wir innovative digitale Lösungen, die die Effizienz und das Wachstum Ihrer Organisation vorantreiben.",
+      "features": {
+        "erp": "Maßgeschneiderte ERP- und CRM-Systeme",
+        "mobile": "Mobile App-Entwicklung",
+        "cloud": "Cloud-basierte Lösungen",
+        "ai": "KI- und Machine Learning-Integration"
+      }
+    },
+    "exploreSoftwareServices": "Softwaredienstleistungen entdecken"
+  }
+}
