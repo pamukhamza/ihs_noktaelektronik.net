@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import React, { useState, useEffect } from "react"
@@ -7,12 +8,12 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Star, Shield, Stethoscope, Code, ChevronRight, ChevronLeft } from 'lucide-react'
+import { ArrowRight, Shield, Stethoscope, Code, ChevronRight} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { type CarouselApi } from "@/components/ui/carousel"
 import FeaturedProducts from './_components/FeaturedProducts'
-import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
+import Link from 'next/link'
 
 const mainSliderItems = [
   { id: 1, image: "/slider/1.jpg?height=600&width=1600", titleKey: "slider.innovative.title", subtitleKey: "slider.innovative.subtitle" },
@@ -25,13 +26,6 @@ interface Product {
   name: string;
   image: string;
 }
-
-const products: Product[] = [
-  { id: 1, name: "Smart CCTV Camera", image: "/placeholder.svg?height=300&width=300" },
-  { id: 2, name: "Fire Alarm System", image: "/placeholder.svg?height=300&width=300" },
-  { id: 3, name: "Patient Monitoring Device", image: "/placeholder.svg?height=300&width=300" },
-  { id: 4, name: "Custom ERP Solution", image: "/placeholder.svg?height=300&width=300" },
-]
 
 const solutions = [
   { id: 1, nameKey: "solutions.cctv", icon: "🎥" },
@@ -244,13 +238,13 @@ export default function Home() {
                     className="bg-blue-600 hover:bg-blue-700 text-white"
                     asChild
                   >
-                    <a 
+                    <Link 
                       href="https://www.noktaelektronik.com.tr/?ref=nokta" 
                       target="_blank"
                       rel="noopener"
                     >
                       {t('b2b.cta')} <ArrowRight className="ml-2" />
-                    </a>
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -352,13 +346,12 @@ export default function Home() {
                 ))}
               </ul>
               <Button size="lg" className="bg-red-500 hover:bg-red-600 text-white">
-                
-                <a 
+                <Link 
                   href="/urunler?brands=dahua" 
                   rel="noopener"
                 >
                   {t('exploreSecurityProducts')}
-                </a>
+                </Link>
               </Button>
             </div>
           </div>
@@ -425,12 +418,12 @@ export default function Home() {
                 ))}
               </ul>
               <Button size="lg" className="bg-green-500 hover:bg-green-600 text-white">
-                <a 
+                <Link 
                   href="/urunler?brands=atek" 
                   rel="noopener"
                 >
                   {t('discoverMedicalProducts')}
-                </a>
+                </Link>
               </Button>
             </div>
           </div>
@@ -480,12 +473,12 @@ export default function Home() {
                 ))}
               </ul>
               <Button size="lg" className="bg-blue-500 hover:bg-blue-600 text-white">
-                <a 
+                <Link 
                   href="/software" 
                   rel="noopener"
                 >
                   {t('exploreSoftwareServices')} 
-                </a>
+                </Link>
               </Button>
             </div>
           </div>

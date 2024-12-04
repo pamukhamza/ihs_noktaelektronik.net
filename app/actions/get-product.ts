@@ -228,7 +228,11 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         image: prod.image || '', // Add a fallback empty string
         seo_link: prod.seo_link || ''
       })),
-      seo_link: product.seo_link || ''
+      seo_link: product.seo_link || '',
+      isNew: product.YeniUrun || false,
+      isActive: product.aktif || false,
+      createdAt: product.create_date ? new Date(product.create_date).toISOString() : null,
+      modifiedAt: product.modify_date ? new Date(product.modify_date).toISOString() : null
     }
 
     return transformedProduct

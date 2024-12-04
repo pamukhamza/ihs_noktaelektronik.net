@@ -3,18 +3,21 @@ import ProductDetail from './ProductDetail'
 import { getProduct } from '@/app/actions/get-product'
 import { Suspense } from 'react'
 import Loading from './loading'
-import { Product } from '@/app/types/product'
 
-type PageProps = {
-  params: {
-    seo_link: string
-  }
+interface PageParams {
+  seo_link: string;
+  locale: string;
 }
 
-export default async function ProductPage({ params }: PageProps) {
+interface Props {
+  params: Promise<PageParams>;
+}
+
+export default async function ProductPage({ params }: Props) {
+  const { seo_link } = await params;
+  
   try {
-    const resolvedParams = await params
-    const product = await getProduct(resolvedParams.seo_link)
+    const product = await getProduct(seo_link)
 
     if (!product) {
       return notFound()

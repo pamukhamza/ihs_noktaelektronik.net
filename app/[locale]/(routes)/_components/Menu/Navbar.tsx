@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { motion, useScroll, useSpring } from 'framer-motion'
@@ -36,6 +37,9 @@ interface SearchResult {
   KResim: string | null
 }
 
+const LOCALES = ["en", "tr", "ru", "de"] as const;
+type Locale = typeof LOCALES[number];
+
 export default function Navbar() {
   const t = useTranslations('navigation');
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -59,7 +63,7 @@ export default function Navbar() {
     { href: "/iletisim", label: t('contact') },
   ]
 
-  const switchLocale = (newLocale: string) => {
+  const switchLocale = (newLocale: Locale) => {
     intlRouter.replace(pathname, { locale: newLocale });
     setIsMobileMenuOpen(false);
   };
@@ -184,9 +188,11 @@ export default function Navbar() {
           >
             <div className="w-16 h-16 flex-shrink-0 mr-4">
               {result.KResim ? (
-                <img
+                <Image
                   src={`/product-images/${result.KResim}`}
                   alt={result.UrunAdiTR}
+                  width={64}
+                  height={64}
                   className="w-full h-full object-cover"
                 />
               ) : (

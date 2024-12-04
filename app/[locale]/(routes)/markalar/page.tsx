@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -117,7 +118,7 @@ const Markalar = () => {
                     animate={{ opacity: 1 }}
                     transition={{
                       duration: 0.4,
-                      delay: index * 0.1 +0.2,
+                      delay: index * 0.1 + 0.2,
                     }}
                   >
                     <Image
@@ -131,7 +132,6 @@ const Markalar = () => {
                     />
                   </motion.div>
                 </motion.div>
-                
               </Link>
             ))}
           </div>

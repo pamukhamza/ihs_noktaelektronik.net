@@ -16,6 +16,8 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { getTranslatedField } from '@/lib/get-translated-field'
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface Product {
   id: number;
@@ -116,7 +118,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
 
   useEffect(() => {
     fetchProducts();
-  }, [fetchProducts]);
+  }, [fetchProducts, selectedBrands]);
 
   useEffect(() => {
     setPage(1);
@@ -276,14 +278,14 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     };
 
     initializeCategory();
-  }, [initialCategory]);
+  }, [initialCategory, selectedBrands]);
 
   useEffect(() => {
     const seoLink = searchParams.get('seo_link');
     if (seoLink) {
       setSelectedCategorySeo(seoLink);
     }
-  }, [searchParams]);
+  }, [searchParams, selectedBrands]);
 
   useEffect(() => {
     const urlBrands = searchParams.getAll('brands');
@@ -293,15 +295,16 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
       setPage(1);
       setTotalPages(1);
     }
-  }, [searchParams]);
+  }, [searchParams, isLoading]);
 
   useEffect(() => {
     if (!isLoading) {
       setProducts([]);
       setPage(1);
       setTotalPages(1);
+      fetchProducts(); // Add this to fetch products when brands change
     }
-  }, [selectedBrands]);
+  }, [selectedBrands, isLoading, fetchProducts]);
 
   const fetchBrands = async () => {
     try {
@@ -495,10 +498,18 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
             <div className="hidden md:flex items-center gap-4">
               <span className="text-sm text-gray-500 font-medium">{t('popularBrands')}</span>
               <div className="flex gap-3">
-                <a href="urunler/?brands=xiaomi"><img src="/brands/7zsn68hv_link.jpg" alt="Brand 1" className="h-8 w-auto transition-all cursor-pointer" /></a>
-                <a href="urunler/?brands=ignitenet"><img src="/brands/8pqgymzc_hover.jpg" alt="Brand 2" className="h-8 w-auto transition-all cursor-pointer" /></a>
-                <a href="urunler/?brands=oring"><img src="/brands/3qgw7zly_hover.jpg" alt="Brand 3" className="h-8 w-auto transition-all cursor-pointer" /></a>
-                <a href="urunler/?brands=planet"><img src="/brands/ulxz8zg0_hover.png" alt="Brand 4" className="h-8 w-auto transition-all cursor-pointer" /></a>
+                <Link href="urunler/?brands=xiaomi">
+                  <Image src="/brands/7zsn68hv_link.jpg" alt="Xiaomi" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
+                </Link>
+                <Link href="urunler/?brands=ignitenet">
+                  <Image src="/brands/8pqgymzc_hover.jpg" alt="Ignitenet" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
+                </Link>
+                <Link href="urunler/?brands=oring">
+                  <Image src="/brands/3qgw7zly_hover.jpg" alt="ORing" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
+                </Link>
+                <Link href="urunler/?brands=planet">
+                  <Image src="/brands/ulxz8zg0_hover.png" alt="Planet" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
+                </Link>
               </div>
             </div>
 

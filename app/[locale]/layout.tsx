@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { locales } from '@/config';
+import { setRequestLocale } from 'next-intl/server';
 
 // Generate static params for all supported locales
 export function generateStaticParams() {
@@ -17,7 +19,7 @@ async function getMessages(locale: string) {
 
 type Props = {
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: typeof locales[number] };
 };
 
 export default async function LocaleLayout({
@@ -25,10 +27,11 @@ export default async function LocaleLayout({
   params: { locale }
 }: Props) {
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale as any)) {
+  if (!locales.includes(locale)) {
     notFound();
   }
 
+  setRequestLocale(locale);
   const messages = await getMessages(locale);
 
   return (

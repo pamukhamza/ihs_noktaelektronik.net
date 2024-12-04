@@ -15,8 +15,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import {Carousel,CarouselContent,CarouselItem,CarouselNext,CarouselPrevious,} from "@/components/ui/carousel"
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
-import { Product, DownloadCategory } from "@/types/product"
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
+import { Product } from "@/types/product"
+import { BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb"
 
 type Download = {
   id: number
