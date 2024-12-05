@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma"
 import { Product } from "@/types/product"
 
+const BASE_IMAGE_URL = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/';
+const DEFAULT_IMAGE = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg';
+
 export async function getProduct(seo_link: string): Promise<Product | null> {
   const productSeolink = seo_link
   try {
@@ -183,7 +186,9 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
 
         return {
           ...prod,
-          image: prodImages[0]?.KResim ? `/product-images/${prodImages[0].KResim}` : null
+          image: prodImages[0]?.KResim 
+            ? `${BASE_IMAGE_URL}${prodImages[0].KResim}` 
+            : DEFAULT_IMAGE
         }
       })
     )
@@ -205,7 +210,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         },
         seo_link: cat.seo_link || ''
       })),
-      images: images.map(img => img.KResim ? `/product-images/${img.KResim}` : '').filter(Boolean),
+      images: images.map(img => img.KResim ? `${BASE_IMAGE_URL}${img.KResim}` : '').filter(Boolean),
       generalFeatures: {
         OzelliklerTR: product.OzelliklerTR || '',
         OzelliklerEN: product.OzelliklerEN || ''
@@ -225,7 +230,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
           UrunAdiTR: prod.UrunAdiTR || '',
           UrunAdiEN: prod.UrunAdiEN || ''
         },
-        image: prod.image || '', // Add a fallback empty string
+        image: prod.image || '', 
         seo_link: prod.seo_link || ''
       })),
       seo_link: product.seo_link || '',

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // components/ProductCard.tsx
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLocale } from 'next-intl'
@@ -27,6 +27,8 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode }) => {
   const locale = useLocale();
+  const [imgSrc, setImgSrc] = useState(product.image);
+  const defaultImage = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg';
 
   const productName = getTranslatedField(
     {
@@ -36,6 +38,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode }) => {
     'UrunAdi',
     locale
   ) || product.UrunAdiTR;
+
+  const handleImageError = () => {
+    setImgSrc(defaultImage);
+  };
 
   return (
     <div className={`group w-full h-full p-4 border rounded-lg shadow-md bg-white ${
@@ -49,12 +55,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode }) => {
               : 'w-[200px] aspect-square'
           }`}>
             <Image
-              src={product.image}
+              src={imgSrc}
               alt={productName}
               fill
-              priority={true}
+              priority={false}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-contain rounded-md transition-transform duration-300 group-hover:scale-110"
+              onError={handleImageError}
+              loading="lazy"
             />
           </div>
           <div className={`flex flex-col ${viewMode === 'grid' ? 'flex-grow' : 'flex-1'}`}>

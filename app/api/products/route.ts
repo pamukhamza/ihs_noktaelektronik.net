@@ -154,14 +154,17 @@ export async function GET(request: Request) {
     const imageMap = new Map();
     for (const image of allProductImages) {
       if (!imageMap.has(image.UrunID)) {
-        imageMap.set(image.UrunID, image.KResim);
+        // Only set the image if KResim exists and is not empty
+        imageMap.set(image.UrunID, image.KResim && image.KResim.trim() !== '' ? image.KResim : null);
       }
     }
 
     // Combine products with their images and brand info
     const productsWithImages = products.map(product => ({
       ...product,
-      image: imageMap.get(product.id) ? `/product-images/${imageMap.get(product.id)}` : '/gorsel_hazirlaniyor.jpg',
+      image: imageMap.get(product.id) 
+        ? `https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/${imageMap.get(product.id)}`
+        : 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg',
       marka: product.MarkaID ? brandMap.get(product.MarkaID) || null : null
     }));
 

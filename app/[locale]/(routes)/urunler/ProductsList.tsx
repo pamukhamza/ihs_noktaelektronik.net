@@ -79,6 +79,19 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     try {
       setIsLoading(true);
       
+      // Create a cache key based on current filters
+      const cacheKey = `products-${page}-${selectedCategorySeo}-${selectedBrands.join(',')}-${searchQuery}`;
+      
+      // Check if we have cached data
+      const cachedData = sessionStorage.getItem(cacheKey);
+      if (cachedData) {
+        const parsed = JSON.parse(cachedData);
+        setProducts(parsed.products);
+        setTotalPages(Math.ceil(parsed.total / ITEMS_PER_PAGE));
+        setIsLoading(false);
+        return;
+      }
+
       const params = new URLSearchParams({
         page: page.toString(),
         limit: ITEMS_PER_PAGE.toString(),
@@ -99,30 +112,52 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
         }
       }
 
-      const response = await fetch(`${endpoint}?${params}`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
+      const response = await fetch(`${endpoint}?${params.toString()}`);
       const data = await response.json();
+
+      // Cache the response
+      sessionStorage.setItem(cacheKey, JSON.stringify(data));
+
       setProducts(data.products);
       setTotalPages(Math.ceil(data.total / ITEMS_PER_PAGE));
-      
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
       setIsLoading(false);
     }
-  }, [page, selectedCategorySeo, selectedBrands, searchQuery]);
+  }, [page, selectedCategorySeo, selectedBrands, searchQuery, ITEMS_PER_PAGE]);
 
+  // Fetch products when filters change
   useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts, selectedBrands]);
+    if (!isLoading) {
+      fetchProducts();
+    }
+  }, [fetchProducts]);
 
+  // Reset page when filters change
   useEffect(() => {
     setPage(1);
-  }, [searchQuery, selectedCategorySeo, selectedBrands]);
+  }, [selectedCategorySeo, selectedBrands, searchQuery]);
+
+  // Update URL with current filters
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    
+    // Update category in URL
+    if (selectedCategorySeo) {
+      params.set('category', selectedCategorySeo);
+    } else {
+      params.delete('category');
+    }
+
+    // Update brands in URL
+    params.delete('brands');
+    selectedBrands.forEach(brand => params.append('brands', brand));
+
+    // Update the URL without causing a page reload
+    const newUrl = `${pathname}?${params.toString()}`;
+    router.replace(newUrl, { scroll: false });
+  }, [selectedCategorySeo, selectedBrands, pathname, router, searchParams]);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -296,15 +331,6 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
       setTotalPages(1);
     }
   }, [searchParams, isLoading]);
-
-  useEffect(() => {
-    if (!isLoading) {
-      setProducts([]);
-      setPage(1);
-      setTotalPages(1);
-      fetchProducts(); // Add this to fetch products when brands change
-    }
-  }, [selectedBrands, isLoading, fetchProducts]);
 
   const fetchBrands = async () => {
     try {

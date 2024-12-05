@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-const IMAGE_BASE_URL = '/product-images/';
+const BASE_IMAGE_URL = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/';
+const DEFAULT_IMAGE = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg';
 
 export async function GET() {
   try {
@@ -65,8 +66,8 @@ export async function GET() {
       seo_link: product.seo_link,
       marka: product.MarkaID ? brandMap.get(product.MarkaID) || null : null,
       image: product.resimler[0]?.KResim 
-        ? `${IMAGE_BASE_URL}${product.resimler[0].KResim}` 
-        : '/gorsel_hazirlaniyor.jpg'
+        ? `${BASE_IMAGE_URL}${product.resimler[0].KResim}` 
+        : DEFAULT_IMAGE
     }));
 
     return NextResponse.json(transformedProducts);
