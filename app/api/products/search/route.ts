@@ -2,15 +2,11 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: Request) {
-  console.log('Search API called');
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('query');
   const limit = parseInt(searchParams.get('limit') || '5');
 
-  console.log('Search params:', { query, limit });
-
   if (!query) {
-    console.log('No query provided');
     return NextResponse.json({ products: [] });
   }
 
@@ -40,19 +36,13 @@ export async function GET(request: Request) {
         UrunAdiEN: true,
         UrunKodu: true,
         seo_link: true,
+        MarkaID: true,
         marka: {
           select: {
-            title: true
+            id: true,
+            title: true,
+            seo_link: true
           }
-        },
-        resimler: {
-          where: {
-            Sira: 0
-          },
-          select: {
-            KResim: true
-          },
-          take: 1
         }
       },
       take: limit,
@@ -61,30 +51,55 @@ export async function GET(request: Request) {
       }
     });
 
-    console.log('Raw products data:', JSON.stringify(products, null, 2));
+    // Get all images for the products
+    const productIds = products.map(product => product.id);
+    const allProductImages = await prisma.nokta_urunler_resimler.findMany({
+      where: {
+        UrunID: {
+          in: productIds
+        }
+      },
+      select: {
+        UrunID: true,
+        KResim: true,
+        Sira: true
+      },
+      orderBy: {
+        Sira: 'asc'
+      }
+    });
 
-    const formattedProducts = products.map(product => {
-      // Safely access the first image
-      const firstImage = product.resimler && product.resimler[0];
+    // Create a map of first images for each product
+    const imageMap = new Map();
+    for (const image of allProductImages) {
+      if (!imageMap.has(image.UrunID) && image.KResim) {
+        const trimmedImage = image.KResim.trim();
+        if (trimmedImage !== '') {
+          imageMap.set(image.UrunID, trimmedImage);
+          console.log(`Set image for product ${image.UrunID}:`, trimmedImage);
+        }
+      }
+    }
+
+    // Transform products with images and brand info
+    const transformedProducts = products.map(product => {
+      const productImage = imageMap.get(product.id);
       
       return {
         id: product.id,
-        UrunAdiTR: product.UrunAdiTR ?? '',
-        UrunAdiEN: product.UrunAdiEN ?? '',
-        UrunKodu: product.UrunKodu ?? '',
-        seo_link: product.seo_link ?? '',
-        marka: product.marka?.title ?? null,
-        KResim: firstImage?.KResim ?? null
+        UrunAdiTR: product.UrunAdiTR,
+        UrunAdiEN: product.UrunAdiEN,
+        UrunKodu: product.UrunKodu,
+        seo_link: product.seo_link,
+        marka: product.marka?.title || null,
+        KResim: productImage || null
       };
     });
-
-    console.log('Formatted products:', JSON.stringify(formattedProducts, null, 2));
-
-    console.log('Sending response with products');
-    return NextResponse.json({ products: formattedProducts });
+    return NextResponse.json({
+      products: transformedProducts,
+      total: products.length
+    });
   } catch (error) {
-    console.error('Prisma query error:', error);
-    console.error('Error details:', JSON.stringify(error, null, 2));
     return NextResponse.json(
       { 
         error: 'Search failed', 

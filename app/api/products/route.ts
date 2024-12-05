@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   const limit = parseInt(searchParams.get('limit') || '12');
   const categoryId = searchParams.get('categoryId');
   const seoLink = searchParams.get('seo_link');
-  const brands = searchParams.getAll('brands') || [];
+  const brand = searchParams.get('brand');
   const query = searchParams.get('query');
   const skip = (page - 1) * limit;
 
@@ -72,21 +72,17 @@ export async function GET(request: Request) {
       whereClause.KategoriID = parseInt(categoryId);
     }
 
-    // Add brand filter for multiple brands
-    if (brands.length > 0) {
-      console.log('Searching for brands with seo_links:', brands); // Debug log
-      const brandRecords = await prisma.nokta_urun_markalar.findMany({
+    // Add brand filter for single brand
+    if (brand) {
+      console.log('Searching for brand with seo_link:', brand); // Debug log
+      const brandRecord = await prisma.nokta_urun_markalar.findFirst({
         where: {
-          seo_link: {
-            in: brands
-          }
+          seo_link: brand
         },
       });
 
-      if (brandRecords.length > 0) {
-        whereClause.MarkaID = {
-          in: brandRecords.map(brand => brand.id)
-        };
+      if (brandRecord) {
+        whereClause.MarkaID = brandRecord.id;
       }
     }
 
@@ -169,16 +165,19 @@ export async function GET(request: Request) {
     }));
 
     return NextResponse.json({
-      products: productsWithImages,
-      hasMore: (skip + products.length) < total,
-      total,
+      products: productsWithImages || [],
+      hasMore: (skip + (products?.length || 0)) < (total || 0),
+      total: total || 0,
       currentPage: page,
     });
   } catch (error) {
     console.error('Error fetching products:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch products' },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      products: [],
+      hasMore: false,
+      total: 0,
+      currentPage: page,
+      error: 'Failed to fetch products'
+    }, { status: 500 });
   }
 }

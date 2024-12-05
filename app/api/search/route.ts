@@ -78,14 +78,16 @@ export async function GET(request: Request) {
             return {
               ...product,
               marka: brand,
-              image: image?.KResim ? `/product-images/${image.KResim}` : '/gorsel_hazirlaniyor.jpg'
+              image: image?.KResim 
+                ? `https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/${image.KResim}`
+                : 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg'
             };
           } catch (error) {
             console.error(`Error fetching details for product ${product.id}:`, error);
             return {
               ...product,
               marka: null,
-              image: '/gorsel_hazirlaniyor.jpg'
+              image: 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg'
             };
           }
         })

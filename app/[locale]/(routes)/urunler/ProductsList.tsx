@@ -62,66 +62,89 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   const [isLoadingCategories, setIsLoadingCategories] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [brands, setBrands] = useState<Brand[]>([]);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>(() => {
-    // Initialize selected brands from URL on component mount
-    if (typeof window !== 'undefined') {
-      const urlBrands = searchParams.getAll('brands');
-      return urlBrands;
-    }
-    return [];
-  });
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [isLoadingBrands, setIsLoadingBrands] = useState(false);
   const searchQuery = searchParams.get('search') || '';
 
   const ITEMS_PER_PAGE = 20;
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const brandParam = searchParams.get('brand');
+      if (brandParam && brandParam !== selectedBrands[0]) {
+        setSelectedBrands([brandParam]);
+        setProducts([]);
+        setPage(1);
+        setTotalPages(1);
+      } else if (!brandParam && selectedBrands.length > 0) {
+        setSelectedBrands([]);
+        setProducts([]);
+        setPage(1);
+        setTotalPages(1);
+      }
+    }
+  }, [searchParams]);
+
+  const handleBrandToggle = (brandSeoLink: string) => {
+    // If the brand is already selected, deselect it
+    if (selectedBrands.includes(brandSeoLink)) {
+      setSelectedBrands([]);
+      // Remove brand parameter from URL
+      const params = new URLSearchParams(searchParams);
+      params.delete('brand');
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    } else {
+      // Select the new brand (replacing any existing selection)
+      setSelectedBrands([brandSeoLink]);
+      // Update URL with new brand
+      const params = new URLSearchParams(searchParams);
+      params.set('brand', brandSeoLink);
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }
+    
+    // Reset products to trigger new fetch
+    setProducts([]);
+    setPage(1);
+    setTotalPages(1);
+  };
+
   const fetchProducts = useCallback(async () => {
     try {
       setIsLoading(true);
-      
-      // Create a cache key based on current filters
-      const cacheKey = `products-${page}-${selectedCategorySeo}-${selectedBrands.join(',')}-${searchQuery}`;
-      
-      // Check if we have cached data
-      const cachedData = sessionStorage.getItem(cacheKey);
-      if (cachedData) {
-        const parsed = JSON.parse(cachedData);
-        setProducts(parsed.products);
-        setTotalPages(Math.ceil(parsed.total / ITEMS_PER_PAGE));
-        setIsLoading(false);
-        return;
-      }
-
       const params = new URLSearchParams({
         page: page.toString(),
-        limit: ITEMS_PER_PAGE.toString(),
+        limit: ITEMS_PER_PAGE.toString()
       });
 
-      let endpoint = '/api/products';
-
-      if (searchQuery) {
-        endpoint = '/api/search';
-        params.append('query', searchQuery);
-      } else {
-        if (selectedCategorySeo) {
-          params.append('seo_link', selectedCategorySeo);
-        }
-
-        if (selectedBrands.length > 0) {
-          selectedBrands.forEach(brand => params.append('brands', brand));
-        }
+      if (selectedCategorySeo) {
+        params.append('seo_link', selectedCategorySeo);
       }
 
-      const response = await fetch(`${endpoint}?${params.toString()}`);
+      if (selectedBrands.length > 0) {
+        params.set('brand', selectedBrands[0]); // Use set instead of append for single brand
+      }
+
+      if (searchQuery) {
+        params.append('query', searchQuery);
+      }
+
+      console.log('Fetching products with params:', params.toString()); // Debug log
+      const response = await fetch(`/api/products?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
-
-      // Cache the response
-      sessionStorage.setItem(cacheKey, JSON.stringify(data));
-
-      setProducts(data.products);
-      setTotalPages(Math.ceil(data.total / ITEMS_PER_PAGE));
+      
+      if (data.products) {
+        setProducts(data.products);
+        setTotalPages(Math.ceil(data.total / ITEMS_PER_PAGE));
+      } else {
+        console.error('No products in response:', data);
+      }
     } catch (error) {
       console.error('Error fetching products:', error);
+      setProducts([]);
+      setTotalPages(1);
     } finally {
       setIsLoading(false);
     }
@@ -138,26 +161,6 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   useEffect(() => {
     setPage(1);
   }, [selectedCategorySeo, selectedBrands, searchQuery]);
-
-  // Update URL with current filters
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    
-    // Update category in URL
-    if (selectedCategorySeo) {
-      params.set('category', selectedCategorySeo);
-    } else {
-      params.delete('category');
-    }
-
-    // Update brands in URL
-    params.delete('brands');
-    selectedBrands.forEach(brand => params.append('brands', brand));
-
-    // Update the URL without causing a page reload
-    const newUrl = `${pathname}?${params.toString()}`;
-    router.replace(newUrl, { scroll: false });
-  }, [selectedCategorySeo, selectedBrands, pathname, router, searchParams]);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -186,66 +189,28 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
 
   const handleCategoryClick = async (category: Category) => {
     try {
-      // Add current category to path
-      setCategoryPath(prev => [...prev, category]);
-      
-      // Fetch subcategories
-      setIsLoadingCategories(true);
-      const response = await fetch(`/api/categories?parent_id=${category.id}`);
-      const data = await response.json();
-      
-      // Update subcategories list
-      if (data.categories) {
-        setCategories(data.categories);
-        setCurrentParentId(category.id);
-      }
-
-      // Always update products for the clicked category
-      setProducts([]);
-      setPage(1);
-      setTotalPages(1);
-      setSelectedCategorySeo(category.seo_link);
+      // Simply navigate to the category page without fetching products
       router.push(`/urunler/${category.seo_link}`);
-      
     } catch (error) {
       console.error('Error in handleCategoryClick:', error);
-    } finally {
-      setIsLoadingCategories(false);
     }
   };
 
   const handleBackClick = async () => {
     if (categoryPath.length <= 1) {
-      // If at root level, just fetch root categories
-      setCurrentParentId(0);
-      setCategoryPath([]);
-      await fetchCategories(0);
-      
-      // Clear category filter
-      setSelectedCategorySeo(null);
+      // If at root level, just go back to products page
       router.push('/urunler');
-      setProducts([]);
-      setPage(1);
-      setTotalPages(1);
     } else {
       // Go back to previous category
       const newPath = [...categoryPath];
       newPath.pop(); // Remove current category
       const previousCategory = newPath[newPath.length - 1];
-      setCurrentParentId(previousCategory?.id || 0);
-      setCategoryPath(newPath);
-      await fetchCategories(previousCategory?.id || 0);
-
-      // Update products to show previous category's products
-      setSelectedCategorySeo(previousCategory?.seo_link || null);
+      
       if (previousCategory?.seo_link) {
         router.push(`/urunler/${previousCategory.seo_link}`);
       } else {
         router.push('/urunler');
       }
-      setProducts([]);
-      setPage(1);
-      setTotalPages(1);
     }
   };
 
@@ -277,6 +242,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     return path;
   };
 
+  // Initialize category path and fetch subcategories when initialCategory changes
   useEffect(() => {
     const initializeCategory = async () => {
       if (initialCategory) {
@@ -290,7 +256,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
             const path = await buildCategoryPath(category);
             setCategoryPath(path);
             
-            // Set current parent ID
+            // Set current parent ID and selected category
             setCurrentParentId(category.id);
             setSelectedCategorySeo(category.seo_link);
             
@@ -307,13 +273,13 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
           setIsLoadingCategories(false);
         }
       } else {
-        // Load root categories if no initial category
+        // Reset to root categories if no initial category
         fetchCategories(0);
       }
     };
 
     initializeCategory();
-  }, [initialCategory, selectedBrands]);
+  }, [initialCategory]);
 
   useEffect(() => {
     const seoLink = searchParams.get('seo_link');
@@ -321,16 +287,6 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
       setSelectedCategorySeo(seoLink);
     }
   }, [searchParams, selectedBrands]);
-
-  useEffect(() => {
-    const urlBrands = searchParams.getAll('brands');
-    if (JSON.stringify(urlBrands) !== JSON.stringify(selectedBrands)) {
-      setSelectedBrands(urlBrands);
-      setProducts([]); // Reset products to trigger a new fetch
-      setPage(1);
-      setTotalPages(1);
-    }
-  }, [searchParams, isLoading]);
 
   const fetchBrands = async () => {
     try {
@@ -354,29 +310,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   };
 
   const handleBrandClick = async (brand: Brand) => {
-    const newBrands = selectedBrands.includes(brand.seo_link)
-      ? selectedBrands.filter(b => b !== brand.seo_link)
-      : [...selectedBrands, brand.seo_link];
-    
-    setSelectedBrands(newBrands);
-    
-    // Update URL with both category and brands
-    const baseUrl = selectedCategorySeo 
-      ? `/urunler/${selectedCategorySeo}` 
-      : '/urunler';
-    
-    const searchParams = new URLSearchParams();
-    if (newBrands.length > 0) {
-      newBrands.forEach(b => searchParams.append('brands', b));
-    }
-    
-    const queryString = searchParams.toString();
-    // Use replace instead of push to avoid adding to history stack
-    router.replace(`${baseUrl}${queryString ? `?${queryString}` : ''}`);
-    
-    setProducts([]);
-    setPage(1);
-    setTotalPages(1);
+    handleBrandToggle(brand.seo_link);
   };
 
   useEffect(() => {
@@ -524,16 +458,16 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
             <div className="hidden md:flex items-center gap-4">
               <span className="text-sm text-gray-500 font-medium">{t('popularBrands')}</span>
               <div className="flex gap-3">
-                <Link href="urunler/?brands=xiaomi">
+                <Link href="/urunler?brand=xiaomi">
                   <Image src="/brands/7zsn68hv_link.jpg" alt="Xiaomi" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
                 </Link>
-                <Link href="urunler/?brands=ignitenet">
+                <Link href="/urunler?brand=ignitenet">
                   <Image src="/brands/8pqgymzc_hover.jpg" alt="Ignitenet" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
                 </Link>
-                <Link href="urunler/?brands=oring">
+                <Link href="/urunler?brand=oring">
                   <Image src="/brands/3qgw7zly_hover.jpg" alt="ORing" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
                 </Link>
-                <Link href="urunler/?brands=planet">
+                <Link href="/urunler?brand=planet">
                   <Image src="/brands/ulxz8zg0_hover.png" alt="Planet" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
                 </Link>
               </div>

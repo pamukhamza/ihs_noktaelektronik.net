@@ -189,14 +189,22 @@ export default function Navbar() {
             <div className="w-16 h-16 flex-shrink-0 mr-4">
               {result.KResim ? (
                 <Image
-                  src={`/product-images/${result.KResim}`}
+                  src={`https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/${result.KResim}`}
                   alt={result.UrunAdiTR}
                   width={64}
                   height={64}
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gray-200" />
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <Image
+                    src="https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg"
+                    alt="No image available"
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               )}
             </div>
             <div className="flex-grow min-w-0">

@@ -19,8 +19,8 @@ const Iletisim = () => {
   const categorizedAddresses = {
     [t('satis-magazalari')]: [
       { title: t('istanbul-satis-magazasi') + " 1", address: "Perpa Ticaret Merkezi B Blok Kat 8 No. 906-907 34384 Şişli / İstanbul" },
-      { title: t('istanbul-satis-magazasi') + " 2", address: "Perpa Ticaret Merkezi A Blok Kat 8 No.841 34384 Şişli / İstanbul"},
-      { title: t('ankara-satis-magazasi') + " 2", address: "Timko İş Yerleri Sitesi Timko Sk. E Blok No.4 06200 Yenimahalle / Ankara"},
+      { title: t('istanbul-satis-magazasi') + " 2", address: "Perpa Ticaret Merkezi A Blok Kat 8 No. 841 34384 Şişli / İstanbul"},
+      { title: t('ankara-satis-magazasi') + " 2", address: "Timko İş Yerleri Sitesi Timko Sk. E Blok No. 4 06200 Yenimahalle / Ankara"},
     ],
     [t('ofisler')]: [
       { title:  t('genel-merkez') , address: "Perpa Ticaret Merkezi A Blok Kat 2 No.1 34384 Şişli / İstanbul" },
@@ -30,8 +30,8 @@ const Iletisim = () => {
       { title:  t('teknik-servis') , address: "Perpa Ticaret Merkezi B Blok Kat 8 No. 906-907 34384 Şişli / İstanbul" },
     ],
     [t('arge-uretim-merkezi')]: [
-      { title: t('arge-uretim-merkezi') + " (İzmir)", address: "Organize Sanayi Bölgesi 5. Cadde No: 45, 41400 Kocaeli" },
-      { title: t('arge-uretim-merkezi') + " (Ankara)", address: "Teknokent 2. Bölge No: 33, 06800 Ankara" },
+      { title: t('arge-uretim-merkezi') + " (İzmir)", address: "Tuna Mah. Sanat Cad. No. 17/220 Bornova / İzmir" },
+      { title: t('arge-uretim-merkezi') + " (Ankara)", address: "Çamlıca Mah. Anadolu Bulvarı 28/10 Gimat / Yenimahalle / Ankara" },
     ],
   }
   const [activeTab, setActiveTab] = useState(Object.keys(categorizedAddresses)[0])
