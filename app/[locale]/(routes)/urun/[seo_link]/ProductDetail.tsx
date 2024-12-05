@@ -233,7 +233,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             <div className="mt-6">
               <TabsContent value="features">
                 <Card>
-                  <ScrollArea className="max-h-[80vh] p-6">
+                  <ScrollArea className=" p-6">
                     <div
                       className="prose max-w-none"
                       dangerouslySetInnerHTML={{ 
@@ -248,7 +248,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </TabsContent>
               <TabsContent value="technical">
                 <Card>
-                  <ScrollArea className="max-h-[80vh] p-6">
+                  <ScrollArea className=" p-6">
                     <div
                       className="prose max-w-none"
                       dangerouslySetInnerHTML={{ 
@@ -263,7 +263,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </TabsContent>
               <TabsContent value="applications">
                 <Card>
-                  <ScrollArea className="max-h-[80vh] p-6">
+                  <ScrollArea className=" p-6">
                     <div
                       className="prose max-w-none"
                       dangerouslySetInnerHTML={{ 
@@ -279,7 +279,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               <TabsContent value="downloads">
                 <Card>
                   <CardContent>
-                    <ScrollArea className="max-h-[80vh] pr-4">
+                    <ScrollArea className=" pr-4">
                       {product.downloads.map((category) => (
                         <div key={category.name} className="mb-6 pt-5">
                           <h3 className="text-lg font-semibold mb-2">{category.name}</h3>
