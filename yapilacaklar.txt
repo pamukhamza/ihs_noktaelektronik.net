@@ -1,4 +1,5 @@
 1. Dil ile ilgili consoldaki hatayı çöz
-2. Ürünler ve ürün detay sayfalarındaki veritabını bağlantılarını azalt ve optimize et
-3. Arge ve Üretim bölümune görselleri ekle.
-4. ürünlerin indirme dosyalarını ve fotoğrafları cdn e yükle yada railway e yükle
+2. Arge ve Üretim bölümune görselleri ekle.
+3. Search ürünler sayfasında çalıştır
+4. Birden fazla marka seçme yapılabilir
+5. Çözümler kısmını magicui ile yapabilirsin.

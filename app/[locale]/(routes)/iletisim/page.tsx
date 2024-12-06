@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { MapPin, Phone, Mail, ExternalLink } from "lucide-react"
 import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
-
+import { WhatsAppButton } from "@/components/whatsapp-button"
 
 
 const phoneNumber = "+90 (212) 222 87 80"
@@ -119,6 +119,7 @@ const Iletisim = () => {
           ))}
         </Tabs>
       </div>
+      <WhatsAppButton phoneNumber="905555555555" message="Merhaba, sizinle iletişime geçmek istiyorum." />
     </motion.div>
   )
 }

@@ -69,6 +69,15 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   const ITEMS_PER_PAGE = 20;
 
   useEffect(() => {
+    const search = searchParams.get('search');
+    if (search) {
+      setProducts([]); // Clear current products
+      setPage(1); // Reset to first page
+      fetchProducts(); // Fetch new products with search query
+    }
+  }, [searchParams]); // React to searchParams changes
+
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const brandParam = searchParams.get('brand');
       if (brandParam && brandParam !== selectedBrands[0]) {
@@ -121,14 +130,18 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
       }
 
       if (selectedBrands.length > 0) {
-        params.set('brand', selectedBrands[0]); // Use set instead of append for single brand
+        params.set('brand', selectedBrands[0]);
       }
 
-      if (searchQuery) {
+      // Use search parameter from URL if available
+      const urlSearchQuery = searchParams.get('search');
+      if (urlSearchQuery) {
+        params.append('query', urlSearchQuery);
+      } else if (searchQuery) {
         params.append('query', searchQuery);
       }
 
-      console.log('Fetching products with params:', params.toString()); // Debug log
+      console.log('Fetching products with params:', params.toString());
       const response = await fetch(`/api/products?${params.toString()}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -148,7 +161,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     } finally {
       setIsLoading(false);
     }
-  }, [page, selectedCategorySeo, selectedBrands, searchQuery, ITEMS_PER_PAGE]);
+  }, [page, selectedCategorySeo, selectedBrands, ITEMS_PER_PAGE, searchParams, searchQuery]);
 
   // Fetch products when filters change
   useEffect(() => {

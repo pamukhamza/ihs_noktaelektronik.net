@@ -14,6 +14,7 @@ import { type CarouselApi } from "@/components/ui/carousel"
 import FeaturedProducts from './_components/FeaturedProducts'
 import Autoplay from 'embla-carousel-autoplay'
 import Link from 'next/link'
+import { WhatsAppButton } from "@/components/whatsapp-button"
 
 const mainSliderItems = [
   { id: 1, image: "/slider/1.jpg?height=600&width=1600", titleKey: "slider.innovative.title", subtitleKey: "slider.innovative.subtitle" },
@@ -139,7 +140,7 @@ export default function Home() {
           </Carousel>
         </div>
       </section>
-
+              
       <section className="py-10 bg-gradient-to-br from-blue-200 via-blue-50 to-indigo-200 relative">
         <div className="absolute inset-0 bg-[linear-gradient(30deg,#cce1ff_12%,transparent_12.5%,transparent_87%,#cce1ff_87.5%,#cce1ff_100%)] opacity-80"></div>
         <div className="container mx-auto px-4 relative">
@@ -482,6 +483,12 @@ export default function Home() {
               </Button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="py-8 bg-gray-50">
+        <div className="container mx-auto px-4 relative">
+          <WhatsAppButton phoneNumber="905555555555" message="Merhaba, ürünleriniz hakkında bilgi almak istiyorum." />
         </div>
       </section>
     </main>
