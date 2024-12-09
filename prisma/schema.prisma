@@ -127,3 +127,12 @@ model category_brand_rel {
   marka_id Int?
   kat_id   Int?
 }
+
+model slider {
+  id        Int      @id @default(autoincrement())
+  link      String?  @db.Text
+  photo     String?  @db.Text
+  is_active Int
+  order_by  Int?
+  date      DateTime @default(now()) @db.Timestamp(0)
+}

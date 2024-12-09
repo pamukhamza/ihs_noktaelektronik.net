@@ -22,18 +22,40 @@ export async function GET(request: Request) {
       whereClause.OR = [
         { UrunAdiTR: { contains: query } },
         { UrunAdiEN: { contains: query } },
-        { UrunKodu: { contains: query } },
-        {
-          Marka: {
-            title: { contains: query }
-          }
-        },
-        {
-          Kategori: {
-            KategoriAdiTr: { contains: query }
-          }
-        }
+        { UrunKodu: { contains: query } }
       ];
+
+      // Add brand search as a separate query
+      const brandResults = await prisma.nokta_urun_markalar.findMany({
+        where: {
+          title: { contains: query }
+        },
+        select: { id: true }
+      });
+
+      if (brandResults.length > 0) {
+        whereClause.OR.push({
+          MarkaID: {
+            in: brandResults.map(b => b.id)
+          }
+        });
+      }
+
+      // Add category search as a separate query
+      const categoryResults = await prisma.nokta_kategoriler.findMany({
+        where: {
+          KategoriAdiTr: { contains: query }
+        },
+        select: { id: true }
+      });
+
+      if (categoryResults.length > 0) {
+        whereClause.OR.push({
+          KategoriID: {
+            in: categoryResults.map(c => c.id)
+          }
+        });
+      }
     }
 
     if (seoLink) {

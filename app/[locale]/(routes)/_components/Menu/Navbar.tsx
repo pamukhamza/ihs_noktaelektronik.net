@@ -79,7 +79,7 @@ export default function Navbar() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
-      router.push(`/urunler?search=${encodeURIComponent(searchQuery.trim())}`);
+      router.push(`/urunler?query=${encodeURIComponent(searchQuery)}`);
       handleCloseSearch();
       e.preventDefault();
     }

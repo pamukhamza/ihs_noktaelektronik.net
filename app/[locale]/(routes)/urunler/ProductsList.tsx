@@ -64,18 +64,9 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   const [brands, setBrands] = useState<Brand[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [isLoadingBrands, setIsLoadingBrands] = useState(false);
-  const searchQuery = searchParams.get('search') || '';
+  const searchQuery = searchParams.get('query') || '';
 
   const ITEMS_PER_PAGE = 20;
-
-  useEffect(() => {
-    const search = searchParams.get('search');
-    if (search) {
-      setProducts([]); // Clear current products
-      setPage(1); // Reset to first page
-      fetchProducts(); // Fetch new products with search query
-    }
-  }, [searchParams]); // React to searchParams changes
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -130,18 +121,14 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
       }
 
       if (selectedBrands.length > 0) {
-        params.set('brand', selectedBrands[0]);
+        params.set('brand', selectedBrands[0]); // Use set instead of append for single brand
       }
 
-      // Use search parameter from URL if available
-      const urlSearchQuery = searchParams.get('search');
-      if (urlSearchQuery) {
-        params.append('query', urlSearchQuery);
-      } else if (searchQuery) {
+      if (searchQuery) {
         params.append('query', searchQuery);
       }
 
-      console.log('Fetching products with params:', params.toString());
+      console.log('Fetching products with params:', params.toString()); // Debug log
       const response = await fetch(`/api/products?${params.toString()}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -161,7 +148,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     } finally {
       setIsLoading(false);
     }
-  }, [page, selectedCategorySeo, selectedBrands, ITEMS_PER_PAGE, searchParams, searchQuery]);
+  }, [page, selectedCategorySeo, selectedBrands, searchQuery, ITEMS_PER_PAGE]);
 
   // Fetch products when filters change
   useEffect(() => {
@@ -472,16 +459,44 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
               <span className="text-sm text-gray-500 font-medium">{t('popularBrands')}</span>
               <div className="flex gap-3">
                 <Link href="/urunler?brand=xiaomi">
-                  <Image src="/brands/7zsn68hv_link.jpg" alt="Xiaomi" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
+                  <Image 
+                    src="/brands/7zsn68hv_link.jpg" 
+                    alt="Xiaomi" 
+                    width={100} 
+                    height={100} 
+                    className="h-12 w-auto object-contain hover:scale-110 transition-transform duration-200"
+                    quality={100}
+                  />
                 </Link>
                 <Link href="/urunler?brand=ignitenet">
-                  <Image src="/brands/8pqgymzc_hover.jpg" alt="Ignitenet" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
+                  <Image 
+                    src="/brands/8pqgymzc_hover.jpg" 
+                    alt="Ignitenet" 
+                    width={100} 
+                    height={100} 
+                    className="h-12 w-auto object-contain hover:scale-110 transition-transform duration-200"
+                    quality={100}
+                  />
                 </Link>
                 <Link href="/urunler?brand=oring">
-                  <Image src="/brands/3qgw7zly_hover.jpg" alt="ORing" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
+                  <Image 
+                    src="/brands/3qgw7zly_hover.jpg" 
+                    alt="ORing" 
+                    width={100} 
+                    height={100} 
+                    className="h-12 w-auto object-contain hover:scale-110 transition-transform duration-200"
+                    quality={100}
+                  />
                 </Link>
                 <Link href="/urunler?brand=planet">
-                  <Image src="/brands/ulxz8zg0_hover.png" alt="Planet" width={32} height={32} className="h-8 w-auto transition-all cursor-pointer" />
+                  <Image 
+                    src="/brands/ulxz8zg0_hover.png" 
+                    alt="Planet" 
+                    width={100} 
+                    height={100} 
+                    className="h-12 w-auto object-contain hover:scale-110 transition-transform duration-200"
+                    quality={100}
+                  />
                 </Link>
               </div>
             </div>
