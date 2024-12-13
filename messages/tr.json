@@ -79,7 +79,7 @@
     "download": "İndir"
   },
   "arge": {
-    "title": "AR-GE ve Üretim",
+    "title": "AR-GE & Üretim",
     "subtitle": "AR-GE ve Fabrikamız",
     "description": "Şirketimiz, teknolojiyi sürekli yeniliklerle entegre ederek sektördeki liderliğini sürdürmekte. AR-GE (Araştırma ve Geliştirme) bölümümüzde, sektördeki en son yenilikleri takip ediyor ve bunları ürünlerimize entegre etmek için sürekli çalışmalar yapıyoruz. Yenilikçi çözümler geliştirmeye devam ediyoruz ve global pazarda öncü olmak için yatırımlarımıza hız kesmeden devam ediyoruz.",
     "factory": {
@@ -110,7 +110,7 @@
       }
     },
     "bottomSection": {
-      "title": "Fabrikamız",
+      "title": "Teknoloji Üssü & Ar-Ge Merkezi",
       "description": "Fabrikamızda, yüksek kaliteli üretim süreçlerini en son teknolojilerle birleştirerek müşterilerimize en iyi hizmeti sunmaktayız. Yüksek kapasiteli üretim tesislerimiz, çevre dostu üretim anlayışımız ve sürdürülebilir çözümlerle sektördeki rekabet avantajını elde ediyoruz."
     },
     "imageAlts": {

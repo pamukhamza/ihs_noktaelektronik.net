@@ -31,48 +31,62 @@ const ArgeFabrika = () => {
         </div>
       </div>
 
-      {/* Content Section with text */}
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <motion.h2
-          className="text-3xl font-semibold text-center mb-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-        >
-          {t('subtitle')}
-        </motion.h2>
-        <motion.p
-          className="text-lg text-gray-700 leading-relaxed mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.5 }}
-        >
-          {t('description')}
-        </motion.p>
+      {/* Bottom Image Section */}
+      
+      <div className="relative mt-2">
+        <div className="container mx-auto px-4 py-5">
+          {/* Image Section */}
+          <div className="relative h-96">
+            <motion.p
+              className="text-lg text-gray-700 mb-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 1 }}
+            >
+              <Image
+                src="https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/arge/fabrika.jpg"
+                alt={t('imageAlts.factory')}
+                layout="fill"
+                objectFit="cover"
+                className="rounded-lg shadow-lg"
+              />
+            </motion.p>
+          </div>
+          <div className="text-center  py-10">
+            <motion.h1
+              className="text-3xl font-semibold text-gray-800 mb-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 1.4 }}
+            >
+              {t('bottomSection.title')}
+            </motion.h1>
+            <motion.p
+              className="text-lg text-gray-700 mb-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 1.8 }}
+            >
+              {t('bottomSection.description')}<br/><br/>
+              {t('description')}
+            </motion.p>
+          </div>
+        </div>
       </div>
-
       {/* Cards Section with three cards */}
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <motion.h2
-          className="text-3xl font-semibold text-center mb-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2 }}
-        >
-          {t('factory.title')}
-        </motion.h2>
+      <div className="container mx-auto px-4 py-8 pb-20 max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Card 1 */}
           <motion.div
             className="hover:shadow-xl transition duration-300 transform hover:scale-105 hover:translate-y-2 rounded-lg overflow-hidden shadow-md h-full"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 2.5 }}
+            transition={{ duration: 0.8, delay: 2.2 }}
           >
             <Card className="h-full flex flex-col">
               <div className="relative h-48">
                 <Image
-                  src="/path/to/your/image2.jpg"
+                  src="https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/arge/Yüksek-Teknoloji.jpg"
                   alt={t('imageAlts.factory')}
                   layout="fill"
                   objectFit="cover"
@@ -103,12 +117,12 @@ const ArgeFabrika = () => {
             className="hover:shadow-xl transition duration-300 transform hover:scale-105 hover:translate-y-2 rounded-lg overflow-hidden shadow-md h-full"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 3 }}
+            transition={{ duration: 0.8, delay: 2.6 }}
           >
             <Card className="h-full flex flex-col">
               <div className="relative h-48">
                 <Image
-                  src="/path/to/your/image3.jpg"
+                  src="https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/arge/arge.webp"
                   alt={t('imageAlts.factory')}
                   layout="fill"
                   objectFit="cover"
@@ -139,12 +153,12 @@ const ArgeFabrika = () => {
             className="hover:shadow-xl transition duration-300 transform hover:scale-105 hover:translate-y-2 rounded-lg overflow-hidden shadow-md h-full"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 3.5 }}
+            transition={{ duration: 0.8, delay: 3 }}
           >
             <Card className="h-full flex flex-col">
               <div className="relative h-48">
                 <Image
-                  src="/path/to/your/image4.jpg"
+                  src="https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/arge/sürdürülebilir.webp"
                   alt={t('imageAlts.factory')}
                   layout="fill"
                   objectFit="cover"
@@ -172,40 +186,7 @@ const ArgeFabrika = () => {
         </div>
       </div>
 
-      {/* Bottom Image Section */}
-      <div className="relative mt-16">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center mb-8">
-            <motion.h2
-              className="text-2xl font-semibold text-gray-800 mb-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 4 }}
-            >
-              {t('bottomSection.title')}
-            </motion.h2>
-            <motion.p
-              className="text-lg text-gray-700 mb-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 4.5 }}
-            >
-              {t('bottomSection.description')}
-            </motion.p>
-          </div>
-
-          {/* Image Section */}
-          <div className="relative h-96">
-            <Image
-              src="/path/to/your/image5.jpg"
-              alt={t('imageAlts.factory')}
-              layout="fill"
-              objectFit="cover"
-              className="rounded-lg shadow-lg"
-            />
-          </div>
-        </div>
-      </div>
+      
     </motion.div>
   )
 }

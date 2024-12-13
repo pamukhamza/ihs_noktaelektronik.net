@@ -488,7 +488,7 @@ export default function Home() {
 
       <section className="py-8 bg-gray-50">
         <div className="container mx-auto px-4 relative">
-          <WhatsAppButton phoneNumber="905555555555" message="Merhaba, ürünleriniz hakkında bilgi almak istiyorum." />
+          <WhatsAppButton />
         </div>
       </section>
     </main>

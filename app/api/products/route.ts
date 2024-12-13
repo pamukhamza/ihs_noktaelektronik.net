@@ -6,17 +6,14 @@ import prisma from '@/lib/prisma';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '12');
   const categoryId = searchParams.get('categoryId');
   const seoLink = searchParams.get('seo_link');
   const brand = searchParams.get('brand');
   const query = searchParams.get('query');
-  const skip = (page - 1) * limit;
+  const limit = parseInt(searchParams.get('limit') || '10');
 
   try {
-    const whereClause: any = {
-      aktif: true,  // Only get active products
-    };
+    const whereClause: any = {};
 
     if (query) {
       whereClause.OR = [
@@ -108,21 +105,29 @@ export async function GET(request: Request) {
       }
     }
 
+    const offset = (page - 1) * limit;
+
     const [products, total] = await Promise.all([
       prisma.nokta_urunler.findMany({
         where: whereClause,
-        skip,
-        take: limit,
         select: {
           id: true,
+          UrunKodu: true,
           UrunAdiTR: true,
           UrunAdiEN: true,
-          seo_link: true,
-          MarkaID: true
+          aktif: true,
+          MarkaID: true,
+          marka: {
+            select: {
+              title: true,
+            },
+          },
         },
         orderBy: {
           id: 'desc',
         },
+        skip: offset,
+        take: limit,
       }),
       prisma.nokta_urunler.count({
         where: whereClause
@@ -188,7 +193,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       products: productsWithImages || [],
-      hasMore: (skip + (products?.length || 0)) < (total || 0),
+      hasMore: total > (page * limit),
       total: total || 0,
       currentPage: page,
     });

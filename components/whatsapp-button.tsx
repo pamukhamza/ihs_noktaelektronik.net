@@ -1,12 +1,6 @@
-import { Phone } from "lucide-react"
 import Link from "next/link"
 
-interface WhatsAppButtonProps {
-  phoneNumber: string
-  message?: string
-}
-
-export function WhatsAppButton({ phoneNumber, message = "Merhaba" }: WhatsAppButtonProps) {
+export function WhatsAppButton() {
   const whatsappUrl = `https://whatsapp.com/channel/0029VaD3M9L7T8bggHZoBT27`
 
   return (

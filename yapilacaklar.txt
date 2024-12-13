@@ -1,5 +1,5 @@
-1. Dil ile ilgili consoldaki hatayı çöz
-2. Arge ve Üretim bölümune görselleri ekle.
-3. Search ürünler sayfasında çalıştır
-4. Birden fazla marka seçme yapılabilir
-5. Çözümler kısmını magicui ile yapabilirsin.
+1. Urun-düzenleme ve ekleme sayfasını yap.
+2. Urunler tablosunu shadcn ile baştan yapabilirsin.
+3. Markalar sayfasını yap.
+4. Kategori sayfasını yap.
+5. Slider ekleme sayfasını yap.

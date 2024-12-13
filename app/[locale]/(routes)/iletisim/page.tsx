@@ -119,7 +119,7 @@ const Iletisim = () => {
           ))}
         </Tabs>
       </div>
-      <WhatsAppButton phoneNumber="905555555555" message="Merhaba, sizinle iletişime geçmek istiyorum." />
+      <WhatsAppButton />
     </motion.div>
   )
 }

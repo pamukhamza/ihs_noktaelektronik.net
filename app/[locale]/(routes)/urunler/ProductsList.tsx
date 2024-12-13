@@ -64,13 +64,13 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   const [brands, setBrands] = useState<Brand[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [isLoadingBrands, setIsLoadingBrands] = useState(false);
-  const searchQuery = searchParams.get('query') || '';
+  const searchQuery = searchParams ? searchParams.get('query') || '' : '';
 
   const ITEMS_PER_PAGE = 20;
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const brandParam = searchParams.get('brand');
+      const brandParam = searchParams ? searchParams.get('brand') : null;
       if (brandParam && brandParam !== selectedBrands[0]) {
         setSelectedBrands([brandParam]);
         setProducts([]);
@@ -90,16 +90,20 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     if (selectedBrands.includes(brandSeoLink)) {
       setSelectedBrands([]);
       // Remove brand parameter from URL
-      const params = new URLSearchParams(searchParams);
-      params.delete('brand');
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      if (searchParams) {
+        const params = new URLSearchParams(searchParams);
+        params.delete('brand');
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      }
     } else {
       // Select the new brand (replacing any existing selection)
       setSelectedBrands([brandSeoLink]);
       // Update URL with new brand
-      const params = new URLSearchParams(searchParams);
-      params.set('brand', brandSeoLink);
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      if (searchParams) {
+        const params = new URLSearchParams(searchParams);
+        params.set('brand', brandSeoLink);
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      }
     }
     
     // Reset products to trigger new fetch
@@ -165,9 +169,11 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
     // Update URL with new page number
-    const params = new URLSearchParams(searchParams);
-    params.set('page', newPage.toString());
-    router.push(`${pathname}?${params.toString()}`);
+    if (searchParams) {
+      const params = new URLSearchParams(searchParams);
+      params.set('page', newPage.toString());
+      router.push(`${pathname}?${params.toString()}`);
+    }
     // Scroll to top of products
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -282,11 +288,13 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   }, [initialCategory]);
 
   useEffect(() => {
-    const seoLink = searchParams.get('seo_link');
-    if (seoLink) {
-      setSelectedCategorySeo(seoLink);
+    if (searchParams) {
+      const seoLink = searchParams.get('seo_link');
+      if (seoLink) {
+        setSelectedCategorySeo(seoLink);
+      }
     }
-  }, [searchParams, selectedBrands]);
+  }, [searchParams]);
 
   const fetchBrands = async () => {
     try {
