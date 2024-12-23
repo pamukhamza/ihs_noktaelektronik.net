@@ -3,3 +3,11 @@
 3. Markalar sayfasını yap.
 4. Kategori sayfasını yap.
 5. Slider ekleme sayfasını yap.
+
+
+-Düzelt
+
+Anasayfa slider mobilde kötü.
+Öne çıkan ürünler mobilde kötü.
+Footer da e bülten mobilde kötü.
+Dil değişince sapıtıyor.

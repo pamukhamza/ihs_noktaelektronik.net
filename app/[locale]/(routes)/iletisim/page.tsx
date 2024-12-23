@@ -16,26 +16,26 @@ const Iletisim = () => {
 
   const categorizedAddresses = {
     [t('satis-magazalari')]: [
-      { title: t('istanbul-satis-magazasi') + " 1", address: "Perpa Ticaret Merkezi B Blok Kat 8 No. 906-907 34384 Şişli / İstanbul" },
-      { title: t('istanbul-satis-magazasi') + " 2", address: "Perpa Ticaret Merkezi A Blok Kat 8 No. 841 34384 Şişli / İstanbul"},
-      { title: t('ankara-satis-magazasi') + " 2", address: "Timko İş Yerleri Sitesi Timko Sk. E Blok No. 4 06200 Yenimahalle / Ankara"},
+      { title: t('istanbul-satis-magazasi') + " 1", address: "Perpa Ticaret Merkezi B Blok Kat 8 No. 906-907 34384 Şişli / İstanbul", addressMaps: "Perpa Ticaret Merkezi, Şişli, İstanbul" },
+      { title: t('istanbul-satis-magazasi') + " 2", address: "Perpa Ticaret Merkezi A Blok Kat 8 No. 841 34384 Şişli / İstanbul", addressMaps: "Perpa Ticaret Merkezi, Şişli, İstanbul" },
+      { title: t('ankara-satis-magazasi') + " 2", address: "Timko İş Yerleri Sitesi Timko Sk. E Blok No. 4 06200 Yenimahalle / Ankara", addressMaps: "Nokta Elektronik - Ankara" },
     ],
     [t('ofisler')]: [
-      { title:  t('genel-merkez') , address: "Perpa Ticaret Merkezi A Blok Kat 2 No.1 34384 Şişli / İstanbul" },
-      { title:  t('ankara-bolge-ofisi') , address: "Timko İş Yerleri Sitesi Timko Sk. E Blok No.4 06200 Yenimahalle / Ankara" },
+      { title: t('genel-merkez'), address: "Perpa Ticaret Merkezi A Blok Kat 2 No.1 34384 Şişli / İstanbul", addressMaps: "Nokta Elektronik ve Bilişim Sistemleri San. Tic. A.Ş." },
+      { title: t('ankara-bolge-ofisi'), address: "Timko İş Yerleri Sitesi Timko Sk. E Blok No.4 06200 Yenimahalle / Ankara", addressMaps: "Nokta Elektronik - Ankara" },
     ],
     [t('arge-uretim-merkezi')]: [
-      { title: t('arge-uretim-merkezi') + " (İzmir)", address: "Tuna Mah. Sanat Cad. No. 17/220 Bornova / İzmir" },
-      { title: t('arge-uretim-merkezi') + " (Ankara)", address: "Çamlıca Mah. Anadolu Bulvarı 28/10 Gimat / Yenimahalle / Ankara" },
+      { title: t('arge-uretim-merkezi') + " (İzmir)", address: "Tuna Mah. Sanat Cad. No. 17/220 Bornova / İzmir", addressMaps: "Nokta Elektronik İzmir Fabrika" },
+      { title: t('arge-uretim-merkezi') + " (Ankara)", address: "Çamlıca Mah. Anadolu Bulvarı 28/10 Gimat / Yenimahalle / Ankara", addressMaps: "Çamlıca, Anadolu Blv No:28, 06200 Yenimahalle/Ankara, Türkiye" },
     ],
     [t('teknik-servisler')]: [
-      { title:  t('teknik-servis') , address: "Perpa Ticaret Merkezi B Blok Kat 8 No. 906-907 34384 Şişli / İstanbul" },
+      { title: t('teknik-servis'), address: "Perpa Ticaret Merkezi B Blok Kat 8 No. 906-907 34384 Şişli / İstanbul", addressMaps: "Perpa Ticaret Merkezi, Şişli, İstanbul" },
     ],
   }
   
   // Function to generate Google Maps embed URL
-  const generateMapUrl = (address: string) => {
-    const encodedAddress = encodeURIComponent(address);
+  const generateMapUrl = (addressMaps: string) => {
+    const encodedAddress = encodeURIComponent(addressMaps);
     return `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
   };
 
@@ -60,7 +60,7 @@ const Iletisim = () => {
                 <Card key={index} className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                   <div className="relative h-48">
                     <iframe
-                      src={generateMapUrl(item.address)}
+                      src={generateMapUrl(item.addressMaps)}
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}

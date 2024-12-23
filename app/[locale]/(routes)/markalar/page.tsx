@@ -26,7 +26,7 @@ const getImageUrl = (path: string | null) => {
   if (!path) return '/placeholder.jpg';
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
   if (path.startsWith('/')) return path;
-  return `/brand/${path}`;
+  return `/brands/${path}`;
 };
 
 const Markalar = () => {
