@@ -2,7 +2,7 @@
   "navigation": {
     "home": "Ana Sayfa",
     "products": "Ürünler",
-    "rAndD": "Arge & Üretim",
+    "rAndD": "Ar-Ge & Üretim",
     "software": "Yazılım",
     "brands": "Markalar",
     "about": "Hakkımızda",
@@ -31,7 +31,7 @@
     "urunler": "Ürünler",
     "destek": "Destek",
     "teknik-destek-prog": "Teknik Destek Programı",
-    "arge-uretim": "Arge & Üretim",
+    "arge-uretim": "Ar-Ge & Üretim",
     "yazilim": "Yazılım",
     "hakkimizda": "Hakkımızda",
     "iletisim": "İletişim",
@@ -206,7 +206,7 @@
           "description": "Gelişmiş görüntü işleme algoritmaları ile yüksek kaliteli analiz sağlıyoruz."
         },
         {
-          "title": "Tam Yığın Yazılım Geliştirme",
+          "title": "Fullstack Yazılım Geliştirme",
           "description": "Frontend ve backend dahil olmak üzere uçtan uca yazılım çözümleri geliştiriyoruz."
         },
         {
@@ -272,12 +272,12 @@
     "learnMore": "Daha Fazla Bilgi",
     "ourSolutions": "Çözümlerimiz",
     "solutions": {
-      "cctv": "CCTV Sistemleri",
-      "fireAlarms": "Yangın Alarmları",
+      "cctv": "CCTV Çözümleri",
+      "fireAlarms": "Yangın Algılama Sistemleri",
       "accessControl": "Geçiş Kontrol",
-      "patientMonitoring": "Hasta Takibi",
-      "telemedicine": "Teletıp",
-      "ehrSystems": "EHR Sistemleri",
+      "hemsirecagri": "Hemşire Çağrı Sistemleri",
+      "sistemsaat": "Merkezi Sistem Saat Çözümleri",
+      "bariyerotopark": "Bariyer ve Otopark Çözümleri",
       "customSoftware": "Özel Yazılım",
       "mobileApps": "Mobil Uygulamalar",
       "cloudSolutions": "Bulut Çözümleri",

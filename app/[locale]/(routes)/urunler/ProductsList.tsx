@@ -21,10 +21,14 @@ import Link from 'next/link';
 
 interface Product {
   id: number;
+  seo_link: string;
   UrunAdiTR: string;
   UrunAdiEN: string;
-  seo_link: string;
+  MarkaID?: number;
   image: string;
+  marka?: {
+    title: string;
+  };
 }
 
 interface Category {

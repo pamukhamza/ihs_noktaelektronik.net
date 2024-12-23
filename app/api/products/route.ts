@@ -112,6 +112,7 @@ export async function GET(request: Request) {
         where: whereClause,
         select: {
           id: true,
+          seo_link: true,
           UrunKodu: true,
           UrunAdiTR: true,
           UrunAdiEN: true,

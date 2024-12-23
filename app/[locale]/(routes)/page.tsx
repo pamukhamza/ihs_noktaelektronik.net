@@ -32,9 +32,9 @@ const solutions = [
   { id: 1, nameKey: "solutions.cctv", icon: "🎥" },
   { id: 2, nameKey: "solutions.fireAlarms", icon: "🚨" },
   { id: 3, nameKey: "solutions.accessControl", icon: "🔐" },
-  { id: 4, nameKey: "solutions.patientMonitoring", icon: "💓" },
-  { id: 5, nameKey: "solutions.telemedicine", icon: "🏥" },
-  { id: 6, nameKey: "solutions.ehrSystems", icon: "📊" },
+  { id: 4, nameKey: "solutions.hemsirecagri", icon: "💓" },
+  { id: 5, nameKey: "solutions.sistemsaat", icon: "🏥" },
+  { id: 6, nameKey: "solutions.bariyerotopark", icon: "📊" },
   { id: 7, nameKey: "solutions.customSoftware", icon: "💻" },
   { id: 8, nameKey: "solutions.mobileApps", icon: "📱" },
   { id: 9, nameKey: "solutions.cloudSolutions", icon: "☁️" },
@@ -176,7 +176,7 @@ export default function Home() {
                         <div className="w-16 h-16 flex items-center justify-center rounded-full bg-blue-50 group-hover:bg-blue-100 transition-colors duration-300">
                           <span className="text-4xl text-blue-600">{solution.icon}</span>
                         </div>
-                        <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
+                        <h3 className="text-lg text-cent font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
                           {t(solution.nameKey)}
                         </h3>
                       </div>
@@ -486,7 +486,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-8 bg-gray-50">
+      <section className="bg-gray-50">
         <div className="container mx-auto px-4 relative">
           <WhatsAppButton />
         </div>
