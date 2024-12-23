@@ -141,7 +141,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
       categoryGroup.items.push({
         id: download.id,
         name: download.aciklama || download.aciklamaEn || download.dosya_adi || 'Unknown',
-        url: download.url_path ? `/product-files/${download.url_path}` : '#',
+        url: download.url_path ? `https://noktanet.s3.eu-central-1.amazonaws.com${download.url_path}` : '#',
         version: download.version || '',
         type: download.type || '',
         date: download.datetime ? download.datetime.toISOString() : null
