@@ -159,19 +159,19 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
     }
 
     if (product.datasheet) {
-      addToCategory('Data Sheet', { id: 0, name: 'Data Sheet', url: `/product-files/${product.datasheet}` })
+      addToCategory('Data Sheet', { id: 0, name: 'Data Sheet', url: `https://noktanet.s3.eu-central-1.amazonaws.com${product.datasheet}` })
     }
     if (product.manual) {
-      addToCategory('User Manual', { id: 0, name: 'User Manual', url: `/product-files/${product.manual}` })
+      addToCategory('User Manual', { id: 0, name: 'User Manual', url: `https://noktanet.s3.eu-central-1.amazonaws.com${product.manual}` })
     }
     if (product.SurucuIndir) {
-      addToCategory('Driver', { id: 0, name: 'Driver', url: `/product-files/${product.SurucuIndir}` })
+      addToCategory('Driver', { id: 0, name: 'Driver', url: `https://noktanet.s3.eu-central-1.amazonaws.com${product.SurucuIndir}` })
     }
     if (product.firmware) {
-      addToCategory('Firmware', { id: 0, name: 'Firmware', url: `/product-files/${product.firmware}` })
+      addToCategory('Firmware', { id: 0, name: 'Firmware', url: `https://noktanet.s3.eu-central-1.amazonaws.com${product.firmware}` })
     }
     if (product.sertifika) {
-      addToCategory('Certificate', { id: 0, name: 'Certificate', url: `/product-files/${product.sertifika}` })
+      addToCategory('Certificate', { id: 0, name: 'Certificate', url: `https://noktanet.s3.eu-central-1.amazonaws.com/${product.sertifika}` })
     }
 
     // Fetch images for similar products

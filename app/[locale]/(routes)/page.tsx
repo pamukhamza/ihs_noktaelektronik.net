@@ -348,7 +348,7 @@ export default function Home() {
               </ul>
               <Button size="lg" className="bg-red-500 hover:bg-red-600 text-white">
                 <Link 
-                  href="/urunler?brands=dahua" 
+                  href="/urunler?brand=dahua" 
                   rel="noopener"
                 >
                   {t('exploreSecurityProducts')}
@@ -420,7 +420,7 @@ export default function Home() {
               </ul>
               <Button size="lg" className="bg-green-500 hover:bg-green-600 text-white">
                 <Link 
-                  href="/urunler?brands=atek" 
+                  href="/urunler/medikal-urun-cozumleri-10556" 
                   rel="noopener"
                 >
                   {t('discoverMedicalProducts')}
