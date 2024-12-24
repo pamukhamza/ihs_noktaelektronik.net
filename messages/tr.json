@@ -152,79 +152,89 @@
     }
   },
   "software": {
-    "aiSolutions": {
-      "title": "AI Çözümlerimiz",
-      "solutions": [
-        {
-          "title": "Derin Öğrenme",
-          "description": "Karmaşık veri setlerinden anlamlı içgörüler çıkarma"
-        },
-        {
-          "title": "Doğal Dil İşleme",
-          "description": "İnsan dilini anlama ve işleme yeteneği"
-        },
-        {
-          "title": "Büyük Veri Analizi",
-          "description": "Büyük ölçekli veri setlerinden değer elde etme"
-        },
-        {
-          "title": "Makine Öğrenimi",
-          "description": "Veriden öğrenen ve tahminler yapan sistemler"
-        },
-        {
-          "title": "Biyometrik AI",
-          "description": "Gelişmiş kimlik doğrulama ve güvenlik çözümleri"
-        },
-        {
-          "title": "Bilimsel AI",
-          "description": "Araştırma ve geliştirmede AI uygulamaları"
-        }
-      ]
-    },
-    "aiApplications": {
-      "title": "AI Uygulama Alanları",
-      "areas": [
-        "Sağlık Hizmetleri",
-        "Finans",
-        "Üretim",
-        "Perakende",
-        "Eğitim",
-        "Ulaşım",
-        "Enerji",
-        "Tarım"
-      ]
-    },
+    "title1": "Yazılım Çözümleri",
+    "text1": "İşletmeleri ileri teknoloji ve eşsiz uzmanlıkla güçlendirme",
+    "button1": "Hizmetlerimizi Keşfedin",
     "services": {
       "title": "Hizmetlerimiz",
       "items": [
         {
-          "title": "Yapay Zeka Çözümleri",
-          "description": "İhtiyaçlarınıza uygun özelleştirilmiş yapay zeka çözümleri sunuyoruz."
+            "title": "Yapay Zeka Çözümleri",
+            "description": "Karmaşık sorunlar için son teknoloji yapay zeka çözümleri."
         },
         {
-          "title": "Görüntü İşleme",
-          "description": "Gelişmiş görüntü işleme algoritmaları ile yüksek kaliteli analiz sağlıyoruz."
+            "title": "Makine Öğrenimi",
+            "description": "Tahmine dayalı analizler için ileri düzey makine öğrenimi modelleri ve algoritmalar."
         },
         {
-          "title": "Fullstack Yazılım Geliştirme",
-          "description": "Frontend ve backend dahil olmak üzere uçtan uca yazılım çözümleri geliştiriyoruz."
+            "title": "Büyük Veri Analitiği",
+            "description": "İş kararlarını yönlendirmek için geniş ölçekli veri analizi."
         },
         {
-          "title": "Oyun Geliştirme",
-          "description": "Etkileyici ve yenilikçi oyun deneyimleri oluşturuyoruz."
+            "title": "Nesnelerin İnterneti Entegrasyonu",
+            "description": "Akıllı ekosistemler için sorunsuz Nesnelerin İnterneti bağlantısı."
         },
         {
-          "title": "Simülasyon Geliştirme",
-          "description": "Eğitim, analiz ve test için özel simülasyon sistemleri tasarlıyoruz."
+            "title": "Bilgisayarlı Görü",
+            "description": "Görüntü ve video analizi için görsel veri işleme."
         },
         {
-          "title": "Animasyon ve Görsel Efektler",
-          "description": "Yaratıcı animasyonlar ve görsel efektler ile projelerinizi canlandırıyoruz."
+            "title": "Yazılım Geliştirme",
+            "description": "Özel ihtiyaçlarınıza göre uyarlanmış yazılım çözümleri."
+        },
+        {
+            "title": "Biyometrik Sistemler",
+            "description": "İleri düzey biyometrik kimlik doğrulama ve tanımlama sistemleri."
+        },
+        {
+            "title": "Oyun Geliştirme",
+            "description": "Platformlar arası etkileyici ve eğlenceli oyun deneyimleri."
+        },
+        {
+            "title": "Video Analitiği",
+            "description": "Güvenlik ve iş içgörüleri için akıllı video analizi."
         }
       ]
     },
     "expertise": {
-      "title": "Uzmanlık Alanlarımız"
+      "title": "Uzmanlık Alanlarımız",
+      "solutions": [
+        {
+          "title": "Küresel Erişim",
+          "description": "Yerelleştirilmiş çözümlerle kıtalar arası hizmet."
+        },
+        {
+          "title": "Güvenlik Öncelikli",
+          "description": "Tüm çözümlerimizde güçlü güvenlik önlemleri."
+        },
+        {
+          "title": "Hızlı Dağıtım",
+          "description": "Kaliteden ödün vermeden hızlı teslimatlar."
+        },
+        {
+          "title": "İşbirlikçi Yaklaşım",
+          "description": "Projelerin başarıya ulaşmasını sağlamak için müşterilerle yakın çalışıyoruz."
+        },
+        {
+          "title": "Yenilikçi Çözümler",
+          "description": "Son teknoloji ile sınırları zorluyoruz."
+        },
+        {
+          "title": "Veri Tabanlı İçgörüler",
+          "description": "Analitiklerden faydalanarak bilinçli kararlar almayı sağlıyoruz."
+        }
+      ]
+    },
+    "technologies": {
+      "title": "Kullandığımız Teknolojiler",
+      "areas": [
+        "Programlama Dilleri",
+        "Frameworkler",
+        "Veritabanları",
+        "DevOps Araçları",
+        "Bulut Platformları",
+        "Diğer Teknolojiler"
+      ]
     }
   },
   "home": {

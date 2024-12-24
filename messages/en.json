@@ -148,79 +148,89 @@
     }
   },
   "software": {
-    "aiSolutions": {
-      "title": "Our AI Solutions",
-      "solutions": [
-        {
-          "title": "Deep Learning",
-          "description": "Extracting meaningful insights from complex datasets"
-        },
-        {
-          "title": "Natural Language Processing",
-          "description": "Understanding and processing human language"
-        },
-        {
-          "title": "Big Data Analytics",
-          "description": "Deriving value from large-scale datasets"
-        },
-        {
-          "title": "Machine Learning",
-          "description": "Systems that learn from data and make predictions"
-        },
-        {
-          "title": "Biometric AI",
-          "description": "Advanced authentication and security solutions"
-        },
-        {
-          "title": "Scientific AI",
-          "description": "AI applications in research and development"
-        }
-      ]
-    },
-    "aiApplications": {
-      "title": "AI Application Areas",
-      "areas": [
-        "Healthcare",
-        "Finance",
-        "Manufacturing",
-        "Retail",
-        "Education",
-        "Transportation",
-        "Energy",
-        "Agriculture"
-      ]
-    },
+    "title1" : "Software Solutions",
+    "text1" : "Empowering businesses with cutting-edge technology and unparalleled expertise",
+    "button1" : "Explore Our Services",
     "services": {
       "title": "Our Services",
       "items": [
         {
           "title": "AI Solutions",
-          "description": "We provide customized artificial intelligence solutions tailored to your needs."
+          "description": "Cutting-edge artificial intelligence solutions for complex problems."
         },
         {
-          "title": "Image Processing",
-          "description": "We provide high-quality analysis with advanced image processing algorithms."
+          "title": "Machine Learning",
+          "description": "Advanced machine learning models and algorithms for predictive analytics."
         },
         {
-          "title": "Full Stack Development",
-          "description": "We develop end-to-end software solutions including frontend and backend."
+          "title": "Big Data Analytics",
+          "description": "Insights from large-scale data analysis to drive business decisions."
+        },
+        {
+          "title": "IoT Integration",
+          "description": "Seamless Internet of Things connectivity for smart ecosystems."
+        },
+        {
+          "title": "Computer Vision",
+          "description": "Visual data processing and analysis for image and video understanding."
+        },
+        {
+          "title": "Software Development",
+          "description": "Custom software solutions tailored to your specific needs."
+        },
+        {
+          "title": "Biometric Systems",
+          "description": "Advanced biometric authentication and identification systems."
         },
         {
           "title": "Game Development",
-          "description": "We create impressive and innovative gaming experiences."
+          "description": "Immersive and engaging game experiences across platforms."
         },
         {
-          "title": "Simulation Development",
-          "description": "We design custom simulation systems for training, analysis, and testing."
-        },
-        {
-          "title": "Animation and Visual Effects",
-          "description": "We bring your projects to life with creative animations and visual effects."
+          "title": "Video Analytics",
+          "description": "Intelligent video analysis for security and business insights."
         }
       ]
     },
     "expertise": {
-      "title": "Our Expertise"
+      "title": "Our Expertise",
+      "solutions": [
+        {
+          "title": "Global Reach",
+          "description": "Serving clients across continents with localized solutions"
+        },
+        {
+          "title": "Security First",
+          "description": "Implementing robust security measures in all our solutions"
+        },
+        {
+          "title": "Rapid Deployment",
+          "description": "Quick turnaround times without compromising on quality"
+        },
+        {
+          "title": "Collaborative Approach",
+          "description": "Working closely with clients to ensure project success"
+        },
+        {
+          "title": "Innovative Solutions",
+          "description": "Pushing boundaries with cutting-edge technologies"
+        },
+        {
+          "title": "Data-Driven Insights",
+          "description": "Leveraging analytics to drive informed decision-making"
+        }
+      ]
+    },
+    "technologies": {
+      "title": "Technologies We Use",
+      "areas": [
+        "Programming Languages",
+        "Frameworks",
+        "Databases",
+        "DevOps Tools",
+        "Cloud Platforms",
+        "Other Technologies"
+      ]
     }
   },
   "home": {

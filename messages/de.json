@@ -129,79 +129,89 @@
     }
   },
   "software": {
-    "aiSolutions": {
-      "title": "Unsere KI-Lösungen",
-      "solutions": [
-        {
-          "title": "Deep Learning",
-          "description": "Gewinnung aussagekräftiger Erkenntnisse aus komplexen Datensätzen"
-        },
-        {
-          "title": "Natürliche Sprachverarbeitung",
-          "description": "Verstehen und Verarbeiten menschlicher Sprache"
-        },
-        {
-          "title": "Big Data Analytics",
-          "description": "Wertschöpfung aus großen Datensätzen"
-        },
-        {
-          "title": "Maschinelles Lernen",
-          "description": "Systeme, die aus Daten lernen und Vorhersagen treffen"
-        },
-        {
-          "title": "Biometrische KI",
-          "description": "Fortschrittliche Authentifizierungs- und Sicherheitslösungen"
-        },
-        {
-          "title": "Wissenschaftliche KI",
-          "description": "KI-Anwendungen in Forschung und Entwicklung"
-        }
-      ]
-    },
-    "aiApplications": {
-      "title": "KI-Anwendungsbereiche",
-      "areas": [
-        "Gesundheitswesen",
-        "Finanzen",
-        "Produktion",
-        "Einzelhandel",
-        "Bildung",
-        "Transport",
-        "Energie",
-        "Landwirtschaft"
-      ]
-    },
+    "title1": "Softwarelösungen",
+    "text1": "Unternehmen mit modernster Technologie und außergewöhnlichem Fachwissen stärken",
+    "button1": "Unsere Dienstleistungen entdecken",
     "services": {
       "title": "Unsere Dienstleistungen",
       "items": [
         {
           "title": "KI-Lösungen",
-          "description": "Wir bieten maßgeschneiderte künstliche Intelligenz-Lösungen für Ihre Bedürfnisse."
+          "description": "Hochmoderne KI-Lösungen für komplexe Probleme."
         },
         {
-          "title": "Bildverarbeitung",
-          "description": "Wir bieten hochwertige Analysen mit fortschrittlichen Bildverarbeitungsalgorithmen."
+          "title": "Maschinelles Lernen",
+          "description": "Fortschrittliche Modelle und Algorithmen für prädiktive Analysen."
         },
         {
-          "title": "Full-Stack-Entwicklung",
-          "description": "Wir entwickeln End-to-End-Softwarelösungen einschließlich Frontend und Backend."
+          "title": "Big Data Analytics",
+          "description": "Einblicke aus groß angelegten Datenanalysen zur Unterstützung von Geschäftsentscheidungen."
+        },
+        {
+          "title": "IoT-Integration",
+          "description": "Nahtlose Konnektivität für intelligente Ökosysteme."
+        },
+        {
+          "title": "Computer Vision",
+          "description": "Verarbeitung und Analyse von visuellen Daten für Bild- und Videoverstehen."
+        },
+        {
+          "title": "Softwareentwicklung",
+          "description": "Maßgeschneiderte Softwarelösungen für Ihre spezifischen Anforderungen."
+        },
+        {
+          "title": "Biometrische Systeme",
+          "description": "Fortschrittliche biometrische Authentifizierungs- und Identifikationssysteme."
         },
         {
           "title": "Spieleentwicklung",
-          "description": "Wir schaffen beeindruckende und innovative Spielerlebnisse."
+          "description": "Fesselnde und ansprechende Spielerlebnisse auf allen Plattformen."
         },
         {
-          "title": "Simulationsentwicklung",
-          "description": "Wir entwickeln maßgeschneiderte Simulationssysteme für Training, Analyse und Tests."
-        },
-        {
-          "title": "Animation und visuelle Effekte",
-          "description": "Wir erwecken Ihre Projekte mit kreativen Animationen und visuellen Effekten zum Leben."
+          "title": "Videoanalysen",
+          "description": "Intelligente Videoanalyse für Sicherheit und Geschäftseinblicke."
         }
       ]
     },
     "expertise": {
-      "title": "Unsere Expertise"
+      "title": "Unsere Expertise",
+      "solutions": [
+        {
+          "title": "Globale Reichweite",
+          "description": "Kunden auf der ganzen Welt mit lokalisierten Lösungen bedienen."
+        },
+        {
+          "title": "Sicherheit an erster Stelle",
+          "description": "Robuste Sicherheitsmaßnahmen in all unseren Lösungen implementieren."
+        },
+        {
+          "title": "Schnelle Bereitstellung",
+          "description": "Schnelle Durchlaufzeiten ohne Qualitätsverlust."
+        },
+        {
+          "title": "Kollaborativer Ansatz",
+          "description": "Enge Zusammenarbeit mit Kunden, um den Projekterfolg sicherzustellen."
+        },
+        {
+          "title": "Innovative Lösungen",
+          "description": "Grenzen mit modernster Technologie überschreiten."
+        },
+        {
+          "title": "Datengetriebene Erkenntnisse",
+          "description": "Analytics nutzen, um fundierte Entscheidungen zu treffen."
+        }
+      ]
+    },
+    "technologies": {
+      "title": "Technologien, die wir nutzen",
+      "areas": [
+        "Programmiersprachen",
+        "Frameworks",
+        "Datenbanken",
+        "DevOps-Tools",
+        "Cloud-Plattformen",
+        "Weitere Technologien"
+      ]
     }
   },
   "markalar": {
