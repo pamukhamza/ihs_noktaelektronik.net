@@ -1,4 +1,2 @@
 -Düzelt
 
-Ürün detay responsive yap açıklamaları.
-Markalar sayfasında tıklayınca o markanının ürünleri gelsin.
