@@ -69,12 +69,13 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [isLoadingBrands, setIsLoadingBrands] = useState(false);
   const searchQuery = searchParams ? searchParams.get('query') || '' : '';
-
+  const brandParam = searchParams ? searchParams.get('brand') : null;
+  
   const ITEMS_PER_PAGE = 20;
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const brandParam = searchParams ? searchParams.get('brand') : null;
+      
       if (brandParam && brandParam !== selectedBrands[0]) {
         setSelectedBrands([brandParam]);
         setProducts([]);
@@ -130,6 +131,10 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
 
       if (selectedBrands.length > 0) {
         params.set('brand', selectedBrands[0]); // Use set instead of append for single brand
+      }
+
+      if (brandParam) {
+        params.append('brand', brandParam);
       }
 
       if (searchQuery) {
@@ -470,20 +475,20 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
             <div className="hidden md:flex items-center gap-4">
               <span className="text-sm text-gray-500 font-medium">{t('popularBrands')}</span>
               <div className="flex gap-3">
-                <Link href="/urunler?brand=xiaomi">
+                <Link href="/urunler?brand=dahua">
                   <Image 
-                    src="/brands/7zsn68hv_link.jpg" 
-                    alt="Xiaomi" 
+                    src="/brands/zltyebjd_link.jpg" 
+                    alt="Dahua" 
                     width={100} 
                     height={100} 
                     className="h-12 w-auto object-contain hover:scale-110 transition-transform duration-200"
                     quality={100}
                   />
                 </Link>
-                <Link href="/urunler?brand=ignitenet">
+                <Link href="/urunler?brand=uptech">
                   <Image 
-                    src="/brands/8pqgymzc_hover.jpg" 
-                    alt="Ignitenet" 
+                    src="/brands/trr6hf4w_link.jpg" 
+                    alt="Uptech" 
                     width={100} 
                     height={100} 
                     className="h-12 w-auto object-contain hover:scale-110 transition-transform duration-200"

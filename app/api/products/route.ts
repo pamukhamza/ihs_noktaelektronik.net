@@ -93,7 +93,6 @@ export async function GET(request: Request) {
 
     // Add brand filter for single brand
     if (brand) {
-      console.log('Searching for brand with seo_link:', brand); // Debug log
       const brandRecord = await prisma.nokta_urun_markalar.findFirst({
         where: {
           seo_link: brand
