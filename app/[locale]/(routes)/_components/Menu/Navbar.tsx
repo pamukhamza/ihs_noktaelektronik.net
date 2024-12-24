@@ -64,10 +64,11 @@ export default function Navbar() {
   ]
 
   const switchLocale = (newLocale: Locale) => {
+    console.log(`Switching locale to: ${newLocale}`); // Debugging log
     localStorage.setItem('selectedLanguage', newLocale); 
     intlRouter.replace(pathname, { locale: newLocale });
+    window.location.reload(); // Reload after replacing the locale
     setIsMobileMenuOpen(false);
-    window.location.reload();
   };
 
   const handleCloseSearch = () => {
