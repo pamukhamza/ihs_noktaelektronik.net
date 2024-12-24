@@ -203,7 +203,7 @@ export default function Home() {
       </section>
 
       <section className="py-8 bg-gray-50">
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-1 md:px-4 relative">
           <FeaturedProducts viewMode="grid" />
         </div>
       </section>

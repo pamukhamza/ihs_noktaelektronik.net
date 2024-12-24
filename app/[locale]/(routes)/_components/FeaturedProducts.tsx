@@ -97,13 +97,13 @@ export default function FeaturedProducts({ viewMode }: FeaturedProductsProps) {
 
   return (
     <section className="py-8">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-1 md:px-4">
         <h2 className="text-3xl font-bold mb-8 text-center text-black">{t('featured_products')}</h2>
         <div className="relative">
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex">
               {products.map((product) => (
-                <div key={product.id} className="flex-[0_0_50%] md:flex-[0_0_25%] min-w-0 pl-4">
+                <div key={product.id} className="flex-[0_0_50%] md:flex-[0_0_25%] min-w-0 pl-2 md:pl-4">
                   <ProductCard product={product} viewMode={viewMode} />
                 </div>
               ))}
