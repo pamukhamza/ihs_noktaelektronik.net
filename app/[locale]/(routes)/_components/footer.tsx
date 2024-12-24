@@ -30,19 +30,19 @@ const Footer = () => {
           <div>
             <h2 className="mb-6 text-sm font-semibold  text-white uppercase ">{t('cozumler')}</h2>
             <ul className="text-white text-sm">
-              <li className="mb-4"><a href="urunler/cctv-cozumleri-326" className=" hover:underline">CCTV Çözümleri</a></li>
-              <li className="mb-4"><a href="urunler/aktif-network-urunleri-2384" className=" hover:underline">Aktif Network Çözümleri</a></li>
-              <li className="mb-4"><a href="urunler/pasif-network-urunleri-2389" className=" hover:underline">Pasif Network Çözümleri</a></li>
-              <li className="mb-4"><a href="urunler/medikal-urun-cozumleri-10556" className=" hover:underline">Medikal Ürün Çözümleri</a></li>
-              <li className="mb-4"><a href="urunler/yangin-algilama-sistemleri-10629" className=" hover:underline">Yangın Algılama Sistemleri</a></li>
-              <li className="mb-4"><a href="urunler/bariyer-ve-otopark-cozumleri-10638" className=" hover:underline">Bariyer ve Otopark Sistemleri</a></li>
-              <li className="mb-4"><a href="software" className=" hover:underline">Yazılım Çözümleri</a></li>
+              <li className="mb-4"><a href="urunler/cctv-cozumleri-326" className=" hover:underline">{t('cctv-cozumleri')}</a></li>
+              <li className="mb-4"><a href="urunler/aktif-network-urunleri-2384" className=" hover:underline">{t('aktif-network')}</a></li>
+              <li className="mb-4"><a href="urunler/pasif-network-urunleri-2389" className=" hover:underline">{t('pasif-network')}</a></li>
+              <li className="mb-4"><a href="urunler/medikal-urun-cozumleri-10556" className=" hover:underline">{t('medikal-urun')}</a></li>
+              <li className="mb-4"><a href="urunler/yangin-algilama-sistemleri-10629" className=" hover:underline">{t('yangin-algilama')}</a></li>
+              <li className="mb-4"><a href="urunler/bariyer-ve-otopark-cozumleri-10638" className=" hover:underline">{t('bariyer-otopark')}</a></li>
+              <li className="mb-4"><a href="software" className=" hover:underline">{t('yazilim-cozumleri')}</a></li>
             </ul>
           </div>
           <div>
             <h2 className="mb-6 text-sm font-semibold  uppercase text-white">{t('destek')}</h2>
             <ul className="text-white text-sm">
-              <li className="mb-4"><a href="#" className="hover:underline">{t('teknik-destek-prog')}</a></li>
+              <li className="mb-4"><a href="https://www.noktaelektronik.com.tr/tr/teknik-destek" className="hover:underline">{t('teknik-destek-prog')}</a></li>
               <li className="mb-4"><a href="arge" className="hover:underline">{t('arge-uretim')}</a></li>
               <li className="mb-4"><a href="software" className="hover:underline">{t('yazilim')}</a></li>
               <li className="mb-4"><a href="hakkimizda" className="hover:underline">{t('hakkimizda')}</a></li>

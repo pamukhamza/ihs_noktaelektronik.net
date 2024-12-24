@@ -13,6 +13,7 @@ interface Product {
   seo_link: string;
   UrunAdiTR: string;
   UrunAdiEN: string;
+  UrunKodu: string;
   MarkaID?: number;
   image: string;
   marka?: {
@@ -68,11 +69,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode }) => {
           <div className={`flex flex-col ${viewMode === 'grid' ? 'flex-grow' : 'flex-1'}`}>
             <div className="flex flex-col h-full">
               <span className="inline-flex items-center mb-2">
-                <span className="text-xs uppercase tracking-wider text-gray-600 font-medium bg-gray-100 px-2 py-1 rounded">
+                <span className="text-[11px] uppercase tracking-wider text-black-500 font-medium bg-gradient-to-r from-blue-100 to-green-100 px-2 py-1 rounded">
                   {product.marka?.title || 'Marka'}
                 </span>
               </span>
-              <h4 className="font-medium text-base text-gray-900 line-clamp-2 mb-auto leading-snug hover:text-primary transition-colors">
+              <span className="inline-flex items-center mb-2">
+                <span className="text-[11px] uppercase tracking-wider text-black-600 bg-gradient-to-r from-purple-100 to-pink-100 px-2 py-1 rounded">
+                  {product.UrunKodu}
+                </span>
+              </span>
+              <h4 className="font-bold text-base text-gray-800 line-clamp-2 mb-auto leading-snug hover:text-primary transition-colors">
                 {productName}
               </h4>
             </div>

@@ -17,9 +17,9 @@ import Link from 'next/link'
 import { WhatsAppButton } from "@/components/whatsapp-button"
 
 const mainSliderItems = [
-  { id: 1, image: "/slider/1.jpg?height=600&width=1600", titleKey: "slider.innovative.title", subtitleKey: "slider.innovative.subtitle" },
-  { id: 2, image: "/slider/2.jpg?height=600&width=1600", titleKey: "slider.security.title", subtitleKey: "slider.security.subtitle" },
-  { id: 3, image: "/slider/3.jpg?height=600&width=1600", titleKey: "slider.medical.title", subtitleKey: "slider.medical.subtitle" },
+  { id: 1, image: "/slider/1.jpg?height=600&width=1600", titleKey: "slider.innovative.title", subtitleKey: "slider.innovative.subtitle", link: "urunler/yangin-algilama-sistemleri-10629" },
+  { id: 2, image: "/slider/2.jpg?height=600&width=1600", titleKey: "slider.security.title", subtitleKey: "slider.security.subtitle", link: "urunler/yonetilemeyen-poe-switchler-2398" },
+  { id: 3, image: "/slider/3.jpg?height=600&width=1600", titleKey: "slider.medical.title", subtitleKey: "slider.medical.subtitle", link: "urunler?brand=uptech" },
 ]
 
 interface Product {
@@ -29,16 +29,16 @@ interface Product {
 }
 
 const solutions = [
-  { id: 1, nameKey: "solutions.cctv", icon: "🎥" },
-  { id: 2, nameKey: "solutions.fireAlarms", icon: "🚨" },
-  { id: 3, nameKey: "solutions.accessControl", icon: "🔐" },
-  { id: 4, nameKey: "solutions.hemsirecagri", icon: "💓" },
-  { id: 5, nameKey: "solutions.sistemsaat", icon: "🏥" },
-  { id: 6, nameKey: "solutions.bariyerotopark", icon: "📊" },
-  { id: 7, nameKey: "solutions.customSoftware", icon: "💻" },
-  { id: 8, nameKey: "solutions.mobileApps", icon: "📱" },
-  { id: 9, nameKey: "solutions.cloudSolutions", icon: "☁️" },
-  { id: 10, nameKey: "solutions.aiIntegration", icon: "🤖" },
+  { id: 1, nameKey: "solutions.cctv", icon: "🎥", link: "urunler/cctv-cozumleri-326" },
+  { id: 2, nameKey: "solutions.fireAlarms", icon: "🚨", link: "urunler/yangin-algilama-sistemleri-10629"  },
+  { id: 3, nameKey: "solutions.accessControl", icon: "🔐", link: "software"  },
+  { id: 4, nameKey: "solutions.hemsirecagri", icon: "💓", link: "urunler/hemsire-cagri-sistemleri-10558"  },
+  { id: 5, nameKey: "solutions.sistemsaat", icon: "🏥", link: "urunler/merkezi-sistem-saat-cozumleri-10626"  },
+  { id: 6, nameKey: "solutions.bariyerotopark", icon: "📊", link: "urunler/bariyer-ve-otopark-cozumleri-10638"  },
+  { id: 7, nameKey: "solutions.customSoftware", icon: "💻", link: "software"  },
+  { id: 8, nameKey: "solutions.mobileApps", icon: "📱", link: "software"  },
+  { id: 9, nameKey: "solutions.cloudSolutions", icon: "☁️", link: "software"  },
+  { id: 10, nameKey: "solutions.aiIntegration", icon: "🤖", link: "software"  },
 ]
 
 
@@ -93,28 +93,32 @@ export default function Home() {
                 <CarouselItem key={item.id}>
                   {/* Desktop Version */}
                   <div className="hidden md:block relative aspect-[16/6] overflow-hidden">
-                    <Image
-                      src={item.image}
-                      alt={t(item.titleKey)}
-                      fill
-                      priority={index === 0}
-                      className="object-contain"
-                      sizes="(max-width: 1600px) 100vw, 1600px"
-                      quality={100}
-                    />
-                  </div>
-                  {/* Mobile Version */}
-                  <div className="md:hidden relative aspect-[16/6] overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center">
+                    <a href={item.link} className="block">
                       <Image
                         src={item.image}
                         alt={t(item.titleKey)}
                         fill
                         priority={index === 0}
                         className="object-contain"
-                        sizes="100vw"
+                        sizes="(max-width: 1600px) 100vw, 1600px"
                         quality={100}
                       />
+                    </a>
+                  </div>
+                  {/* Mobile Version */}
+                  <div className="md:hidden relative aspect-[16/6] overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <a href={item.link} className="block">
+                        <Image
+                          src={item.image}
+                          alt={t(item.titleKey)}
+                          fill
+                          priority={index === 0}
+                          className="object-contain"
+                          sizes="100vw"
+                          quality={100}
+                        />
+                      </a>
                     </div>
                   </div>
                 </CarouselItem>
@@ -140,67 +144,65 @@ export default function Home() {
           </Carousel>
         </div>
       </section>
-              
       <section className="py-10 bg-gradient-to-br from-blue-200 via-blue-50 to-indigo-200 relative">
         <div className="absolute inset-0 bg-[linear-gradient(30deg,#cce1ff_12%,transparent_12.5%,transparent_87%,#cce1ff_87.5%,#cce1ff_100%)] opacity-80"></div>
-        <div className="container mx-auto px-4 relative">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">{t('ourSolutions')}</h2>
-            <div className="w-24 h-2 bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600 mx-auto rounded-full shadow-md"></div>
-          </div>
-          
-          <Carousel 
-            className="w-full max-w-7xl mx-auto"
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            setApi={setSolutionsApi}
-            plugins={[
-              Autoplay({
-                delay: 2000,
-                stopOnInteraction: false,
-                stopOnMouseEnter: true,
-              }),
-            ]}
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {solutions.map((solution, index) => (
-                <CarouselItem 
-                  key={index} 
-                  className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
-                >
-                  <Card className="h-full group transition-all duration-300 hover:scale-105 hover:shadow-xl border-none bg-white rounded-xl overflow-hidden">
-                    <CardContent className="p-6">
-                      <div className="flex flex-col items-center space-y-4">
-                        <div className="w-16 h-16 flex items-center justify-center rounded-full bg-blue-50 group-hover:bg-blue-100 transition-colors duration-300">
-                          <span className="text-4xl text-blue-600">{solution.icon}</span>
-                        </div>
-                        <h3 className="text-lg text-cent font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
-                          {t(solution.nameKey)}
-                        </h3>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-
-            <div className="flex justify-center mt-8 space-x-2">
-              {solutions.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => solutionsApi?.scrollTo(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    currentSolution === index ? 'bg-blue-600 w-6' : 'bg-gray-300 hover:bg-blue-400'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
+          <div className="container mx-auto px-4 relative">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-800 mb-4">{t('ourSolutions')}</h2>
+              <div className="w-24 h-2 bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600 mx-auto rounded-full shadow-md"></div>
             </div>
-          </Carousel>
-        </div>
-      </section>
+            <Carousel 
+              className="w-full max-w-7xl mx-auto"
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              setApi={setSolutionsApi}
+              plugins={[
+                Autoplay({
+                  delay: 2000,
+                  stopOnInteraction: false,
+                  stopOnMouseEnter: true,
+                }),
+              ]}
+            >
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {solutions.map((solution, index) => (
+                  <CarouselItem 
+                    key={index} 
+                    className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
+                  >
+                    <Card className="h-full group transition-all duration-300 hover:scale-105 hover:shadow-xl border-none bg-white rounded-xl overflow-hidden">
+                      <CardContent className="p-6">
+                        <div className="flex flex-col items-center space-y-4">
+                          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-blue-50 group-hover:bg-blue-100 transition-colors duration-300">
+                            <span className="text-4xl text-blue-600">{solution.icon}</span>
+                          </div>
+                          <h3 className="text-lg text-cent font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
+                            <a href={solution.link} className="hover:text-blue-600">{t(solution.nameKey)}</a>
+                          </h3>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+
+              <div className="flex justify-center mt-8 space-x-2">
+                {solutions.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => solutionsApi?.scrollTo(index)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      currentSolution === index ? 'bg-blue-600 w-6' : 'bg-gray-300 hover:bg-blue-400'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </Carousel>
+          </div>
+        </section>
 
       <section className="py-8 bg-gray-50">
         <div className="container mx-auto px-1 md:px-4 relative">
