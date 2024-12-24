@@ -66,7 +66,9 @@ export default function Navbar() {
   const switchLocale = (newLocale: Locale) => {
     localStorage.setItem('selectedLanguage', newLocale); 
     intlRouter.replace(pathname, { locale: newLocale });
-
+    setTimeout(() => {
+      window.location.reload(); // Reload after replacing the locale
+    }, 200);
     setIsMobileMenuOpen(false);
   };
 
