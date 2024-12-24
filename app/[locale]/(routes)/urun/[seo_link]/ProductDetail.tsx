@@ -76,8 +76,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   }
   return (
     <div className="bg-gray-100">
-      <div className="container mx-auto px-4 py-8 ">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-10 rounded-lg">
+      <div className="container mx-auto md:px-4 px-2 py-8 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-4 md:p-10 rounded-lg">
           {/* Breadcrumb */}
           <div className="col-span-full bg-white/60 backdrop-blur-sm p-4 rounded-lg shadow-sm">
             <nav aria-label="Breadcrumb" className="flex items-center space-x-1 text-sm text-muted-foreground">
@@ -155,7 +155,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             {/* Improved Thumbnail Gallery */}
             {product.images.length > 1 && (
               <ScrollArea className="w-full">
-                <div className="flex space-x-2 pb-2 p-5">
+                <div className="flex space-x-2 pb-2 p-2 md:p-5">
                   {product.images.map((image, index) => (
                     <motion.button
                       key={index}
@@ -221,7 +221,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-12 bg-white p-10 rounded-lg rounded-lg"
+          className="mt-12 bg-white p-4 md:p-10 rounded-lg"
         >
           <Tabs defaultValue="features" className="w-full">
             <TabsList className="grid w-full grid-cols-4">
