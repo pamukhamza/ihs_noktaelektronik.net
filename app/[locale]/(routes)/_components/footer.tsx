@@ -26,7 +26,7 @@ const Footer = () => {
   return (
     <footer className="bg-gradient-to-r from-black to-gray-700">
       <div className="mx-auto w-full max-w-screen-xl container">
-        <div className="grid grid-cols-2 gap-8 px-4 py-6 lg:py-8 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-8 px-1 md:px-4 py-6 lg:py-8 md:grid-cols-4">
           <div>
             <h2 className="mb-6 text-sm font-semibold  text-white uppercase ">{t('urunler')}</h2>
             <ul className="text-white text-sm">

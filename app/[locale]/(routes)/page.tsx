@@ -72,7 +72,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-100">
       <section className="relative">
-        <div className="md:container md:mx-auto -mx-4 md:mx-0">
+        <div className="md:container md:mx-auto -mx-4 md:mx-0 ">
           <Carousel 
             className="w-full md:max-w-[1600px] md:mx-auto relative group"
             opts={{

@@ -103,7 +103,7 @@ export default function FeaturedProducts({ viewMode }: FeaturedProductsProps) {
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex">
               {products.map((product) => (
-                <div key={product.id} className="flex-[0_0_25%] min-w-0 pl-4">
+                <div key={product.id} className="flex-[0_0_50%] md:flex-[0_0_25%] min-w-0 pl-4">
                   <ProductCard product={product} viewMode={viewMode} />
                 </div>
               ))}
