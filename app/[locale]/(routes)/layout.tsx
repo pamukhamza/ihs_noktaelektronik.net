@@ -10,14 +10,14 @@ interface RoutesLayoutProps{
 
 const RoutesLayout = ({children}:RoutesLayoutProps) => {
   return (
-    <>
+    <div className="overflov-x-hidden">
         <TopBar />
         <Navbar/>
-        <div className='min-h-screen'>
+        <div className='min-h-screen overflow-x-hidden'>
             {children}
         </div>  
         <Footer/>
-    </>
+    </div>
   )
 }
 

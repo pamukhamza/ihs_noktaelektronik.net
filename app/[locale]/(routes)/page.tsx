@@ -74,7 +74,7 @@ export default function Home() {
       <section className="relative">
         <div className="md:container md:mx-auto -mx-4 md:mx-0 ">
           <Carousel 
-            className="w-full md:max-w-[1600px] md:mx-auto relative group"
+            className="w-full px-2 md:max-w-[1600px] md:mx-auto relative group"
             opts={{
               loop: true,
               align: "start",
@@ -104,7 +104,7 @@ export default function Home() {
                     />
                   </div>
                   {/* Mobile Version */}
-                  <div className="md:hidden relative aspect-[16/9] overflow-hidden">
+                  <div className="md:hidden relative aspect-[16/6] overflow-hidden">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <Image
                         src={item.image}
@@ -120,13 +120,13 @@ export default function Home() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 px-4 py-2 rounded-full bg-black/20 backdrop-blur-sm">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 px-2 md:px-4 py-1 md:py-2 rounded-full bg-black/20 backdrop-blur-sm">
               {mainSliderItems.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => api?.scrollTo(index)}
-                  className={`relative h-2.5 transition-all duration-500 ease-out ${
-                    index === current ? 'w-12 bg-white' : 'w-2.5 bg-white/40 hover:bg-white/60'
+                  className={`relative h-1 md:h-2.5 transition-all duration-500 ease-out ${
+                    index === current ? 'w-8 md:w-12 bg-white' : 'md:w-2.5 w-2 bg-white/40 hover:bg-white/60'
                   } rounded-full overflow-hidden group`}
                 >
                   <span className={`absolute inset-0 w-full h-full transition-all duration-500 ${

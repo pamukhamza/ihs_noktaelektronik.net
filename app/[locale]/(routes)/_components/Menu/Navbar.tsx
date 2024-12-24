@@ -64,6 +64,7 @@ export default function Navbar() {
   ]
 
   const switchLocale = (newLocale: Locale) => {
+    localStorage.setItem('selectedLanguage', newLocale); 
     intlRouter.replace(pathname, { locale: newLocale });
     setIsMobileMenuOpen(false);
   };
@@ -240,7 +241,7 @@ export default function Navbar() {
       <header className="sticky top-0 z-50 w-full border-b navbgone backdrop-blur">
         <div className="container flex h-16 items-center justify-between">
         <ScrollProgressBar />
-            <div className="w-[205px] flex-shrink-0 mr-4">
+            <div className="w-[150px] md:w-[205px] flex-shrink-0 mr-4">
               <Logo />
             </div>
             <nav className="hidden lg:flex items-center space-x-6">
