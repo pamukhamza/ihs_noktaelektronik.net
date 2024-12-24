@@ -24,6 +24,7 @@ interface Product {
   seo_link: string;
   UrunAdiTR: string;
   UrunAdiEN: string;
+  UrunKodu: string;
   MarkaID?: number;
   image: string;
   marka?: {
