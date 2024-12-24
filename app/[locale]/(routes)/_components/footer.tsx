@@ -32,10 +32,11 @@ const Footer = () => {
             <ul className="text-white text-sm">
               <li className="mb-4"><a href="urunler/cctv-cozumleri-326" className=" hover:underline">CCTV Çözümleri</a></li>
               <li className="mb-4"><a href="urunler/aktif-network-urunleri-2384" className=" hover:underline">Aktif Network Çözümleri</a></li>
-              <li className="mb-4"><a href="#" className=" hover:underline">Pasif Network Çözümleri</a></li>
-              <li className="mb-4"><a href="#" className=" hover:underline">Hemşire Çağrı Sistemleri</a></li>
-              <li className="mb-4"><a href="#" className=" hover:underline">Yangın Algılama Sistemleri</a></li>
-              <li className="mb-4"><a href="#" className=" hover:underline">Bariyer ve Otopark Sistemleri</a></li>
+              <li className="mb-4"><a href="urunler/pasif-network-urunleri-2389" className=" hover:underline">Pasif Network Çözümleri</a></li>
+              <li className="mb-4"><a href="urunler/medikal-urun-cozumleri-10556" className=" hover:underline">Medikal Ürün Çözümleri</a></li>
+              <li className="mb-4"><a href="urunler/yangin-algilama-sistemleri-10629" className=" hover:underline">Yangın Algılama Sistemleri</a></li>
+              <li className="mb-4"><a href="urunler/bariyer-ve-otopark-cozumleri-10638" className=" hover:underline">Bariyer ve Otopark Sistemleri</a></li>
+              <li className="mb-4"><a href="software" className=" hover:underline">Yazılım Çözümleri</a></li>
             </ul>
           </div>
           <div>
