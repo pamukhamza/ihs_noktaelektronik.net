@@ -67,6 +67,7 @@ export default function Navbar() {
     localStorage.setItem('selectedLanguage', newLocale); 
     intlRouter.replace(pathname, { locale: newLocale });
     setIsMobileMenuOpen(false);
+    window.location.reload();
   };
 
   const handleCloseSearch = () => {
