@@ -38,7 +38,7 @@
     ".next/types/**/*.ts",
     "node_modules/@heroicons/react/**/*",
     "node_modules/@react-three/fiber/**/*" // Ensure react-three/fiber is included
-  ],
+, "next-sitemap.config.js"  ],
   "exclude": [
     "node_modules"
   ]

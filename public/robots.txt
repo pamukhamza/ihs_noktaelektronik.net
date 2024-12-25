@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://noktaelektronik.net
+
+# Sitemaps
+Sitemap: https://noktaelektronik.net/sitemap.xml
