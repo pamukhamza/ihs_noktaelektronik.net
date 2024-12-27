@@ -2,7 +2,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { ChevronDown, Grid, List, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronDown, Grid, List, ChevronLeft, ChevronRight, Home } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import {
@@ -39,7 +39,46 @@ interface Category {
   KategoriAdiDe: string;
   KategoriAdiRu: string;
   seo_link: string;
+  img_path?: string;
 }
+
+interface CategoryCardProps {
+  category: Category;
+  locale: string;
+}
+
+const CategoryCard = ({ category, locale }: CategoryCardProps) => {
+  const [imageError, setImageError] = useState(false);
+  const imageUrl = category.img_path 
+    ? `https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/categories/${category.img_path}`
+    : 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg';
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+      <Link href={`/urunler/${category.seo_link}`} className="block">
+        {/* Image Container */}
+        <div className="relative aspect-[16/9] overflow-hidden rounded-t-lg bg-gray-100">
+          <Image
+            src={imageError ? 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg' : imageUrl}
+            alt={locale === 'tr' ? category.KategoriAdiTr : category.KategoriAdiEn}
+            fill
+            className="object-cover"
+            onError={() => setImageError(true)}
+          />
+        </div>
+        
+        {/* Content */}
+        <div className="p-4 flex flex-col">
+          <div className="mt-auto">
+            <span className="block w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-center rounded-md transition-colors text-sm font-medium">
+              {locale === 'tr' ? category.KategoriAdiTr : category.KategoriAdiEn}
+            </span>
+          </div>
+        </div>
+      </Link>
+    </div>
+  );
+};
 
 interface Brand {
   id: number;
@@ -57,6 +96,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   const [viewMode, setViewMode] = useState('grid');
   const [sortOption, setSortOption] = useState('newest');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingCategory, setIsLoadingCategory] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [imageError, setImageError] = useState<{[key: string]: boolean}>({});
@@ -69,6 +109,8 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   const [brands, setBrands] = useState<Brand[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [isLoadingBrands, setIsLoadingBrands] = useState(false);
+  const [categoryBreadcrumbs, setCategoryBreadcrumbs] = useState<Category[]>([]);
+  const [hasSubcategories, setHasSubcategories] = useState<boolean | null>(null);
   const searchQuery = searchParams ? searchParams.get('query') || '' : '';
   const brandParam = searchParams ? searchParams.get('brand') : null;
   
@@ -118,42 +160,42 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     setTotalPages(1);
   };
 
+  // Fetch products only if category has no subcategories or if there's a search query
   const fetchProducts = useCallback(async () => {
+    // Only fetch products if:
+    // 1. There's a search query OR
+    // 2. We're in a category with no subcategories
+    if ((!selectedCategorySeo || hasSubcategories !== false) && !searchQuery) {
+      return;
+    }
+
     try {
       setIsLoading(true);
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: ITEMS_PER_PAGE.toString()
-      });
-
-      if (selectedCategorySeo) {
-        params.append('seo_link', selectedCategorySeo);
+      const queryParams = new URLSearchParams();
+      queryParams.set('page', page.toString());
+      queryParams.set('limit', ITEMS_PER_PAGE.toString());
+      
+      if (selectedCategorySeo && !searchQuery) {
+        queryParams.set('seo_link', selectedCategorySeo);
       }
 
       if (selectedBrands.length > 0) {
-        params.set('brand', selectedBrands[0]); // Use set instead of append for single brand
-      }
-
-      if (brandParam) {
-        params.append('brand', brandParam);
+        queryParams.set('brand', selectedBrands[0]);
       }
 
       if (searchQuery) {
-        params.append('query', searchQuery);
+        queryParams.set('query', searchQuery);
       }
 
-      console.log('Fetching products with params:', params.toString()); // Debug log
-      const response = await fetch(`/api/products?${params.toString()}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      const response = await fetch(`/api/products?${queryParams.toString()}`);
       const data = await response.json();
-      
+
       if (data.products) {
         setProducts(data.products);
         setTotalPages(Math.ceil(data.total / ITEMS_PER_PAGE));
       } else {
-        console.error('No products in response:', data);
+        setProducts([]);
+        setTotalPages(1);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -162,19 +204,14 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     } finally {
       setIsLoading(false);
     }
-  }, [page, selectedCategorySeo, selectedBrands, searchQuery, ITEMS_PER_PAGE]);
+  }, [page, selectedCategorySeo, selectedBrands, searchQuery, ITEMS_PER_PAGE, hasSubcategories]);
 
-  // Fetch products when filters change
+  // Fetch products when search query changes or when we know there are no subcategories
   useEffect(() => {
-    if (!isLoading) {
+    if (searchQuery || (!isLoadingCategory && selectedCategorySeo && hasSubcategories === false)) {
       fetchProducts();
     }
-  }, [fetchProducts]);
-
-  // Reset page when filters change
-  useEffect(() => {
-    setPage(1);
-  }, [selectedCategorySeo, selectedBrands, searchQuery]);
+  }, [fetchProducts, selectedCategorySeo, hasSubcategories, isLoadingCategory, searchQuery]);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -203,12 +240,44 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     }
   };
 
+  const checkForSubcategories = async (parentId: number) => {
+    try {
+      const response = await fetch(`/api/categories?parent_id=${parentId}`);
+      const data = await response.json();
+      return data.categories && data.categories.length > 0;
+    } catch (error) {
+      console.error('Error checking subcategories:', error);
+      return false;
+    }
+  };
+
+  // Modified category click handler
   const handleCategoryClick = async (category: Category) => {
     try {
-      // Simply navigate to the category page without fetching products
+      setIsLoadingCategory(true);
+      setProducts([]); // Clear products immediately
+      setSelectedCategorySeo(category.seo_link);
+      setHasSubcategories(null); // Reset subcategories state
+      
+      // Update URL first
       router.push(`/urunler/${category.seo_link}`);
+      
+      // Check for subcategories first
+      const hasSubcats = await checkForSubcategories(category.id);
+      setHasSubcategories(hasSubcats);
+      
+      if (hasSubcats) {
+        // If has subcategories, fetch and display them
+        const response = await fetch(`/api/categories?parent_id=${category.id}`);
+        const data = await response.json();
+        if (data.categories) {
+          setCategories(data.categories);
+        }
+      }
     } catch (error) {
       console.error('Error in handleCategoryClick:', error);
+    } finally {
+      setIsLoadingCategory(false);
     }
   };
 
@@ -268,20 +337,20 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
           const category = await getCategoryBySeoLink(initialCategory);
           
           if (category) {
-            // Build category path
+            const hasSubcats = await checkForSubcategories(category.id);
+            setHasSubcategories(hasSubcats);
+            
+            if (hasSubcats) {
+              const response = await fetch(`/api/categories?parent_id=${category.id}`);
+              const data = await response.json();
+              if (data.categories) {
+                setCategories(data.categories);
+              }
+            }
+            
+            setSelectedCategorySeo(category.seo_link);
             const path = await buildCategoryPath(category);
             setCategoryPath(path);
-            
-            // Set current parent ID and selected category
-            setCurrentParentId(category.id);
-            setSelectedCategorySeo(category.seo_link);
-            
-            // Fetch subcategories of current category
-            const subResponse = await fetch(`/api/categories?parent_id=${category.id}`);
-            const subData = await subResponse.json();
-            if (subData.categories) {
-              setCategories(subData.categories);
-            }
           }
         } catch (error) {
           console.error('Error initializing category:', error);
@@ -296,6 +365,31 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
 
     initializeCategory();
   }, [initialCategory]);
+
+  useEffect(() => {
+    const fetchCategoryBreadcrumbs = async () => {
+      if (!pathname) return;
+      
+      const categorySlug = pathname.split('/').pop();
+      if (!categorySlug) return;
+
+      try {
+        const response = await fetch(`/api/categories/breadcrumb?seo_link=${categorySlug}`);
+        const data = await response.json();
+        if (data.categories) {
+          setCategoryBreadcrumbs(data.categories);
+        }
+      } catch (error) {
+        console.error('Error fetching category breadcrumbs:', error);
+      }
+    };
+
+    if (pathname && pathname.split('/').length > 3) {
+      fetchCategoryBreadcrumbs();
+    } else {
+      setCategoryBreadcrumbs([]);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (searchParams) {
@@ -403,8 +497,8 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
                     onClick={() => handleCategoryClick(category)}
                     className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
                       selectedCategorySeo === category.seo_link
-                        ? 'bg-primary text-primary-foreground shadow-sm'
-                        : 'hover:bg-muted hover:shadow-sm'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'hover:bg-blue-100'
                     }`}
                   >
                     {renderCategoryName(category)}
@@ -430,17 +524,17 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
                 {brands.map((brand) => (
                   <label
                     key={brand.id}
-                    className="flex items-center gap-2 w-full px-3 py-2 rounded-md transition-colors hover:bg-muted cursor-pointer"
+                    className="flex items-center gap-2 w-full px-3 py-2 rounded-md transition-colors hover:bg-blue-100 cursor-pointer"
                   >
                     <input
                       type="checkbox"
                       checked={selectedBrands.includes(brand.seo_link)}
                       onChange={() => handleBrandClick(brand)}
-                      className="rounded border-gray-300 text-primary focus:ring-primary"
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-600"
                     />
                     <span className={`${
                       selectedBrands.includes(brand.seo_link)
-                        ? 'text-primary font-medium'
+                        ? 'text-blue-600 font-medium'
                         : ''
                     }`}>
                       {brand.title}
@@ -470,111 +564,97 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
             </Button>
           </div>
 
-          {/* Sort, View Options and Popular Brands */}
-          <div className="flex justify-between items-center mb-6">
-            {/* Popular Brands - Desktop Only */}
-            <div className="hidden md:flex items-center gap-4">
-              <span className="text-sm text-gray-500 font-medium">{t('popularBrands')}</span>
-              <div className="flex gap-3">
-                <Link href="/urunler?brand=dahua">
-                  <Image 
-                    src="/brands/zltyebjd_link.jpg" 
-                    alt="Dahua" 
-                    width={100} 
-                    height={100} 
-                    className="h-12 w-auto object-contain hover:scale-110 transition-transform duration-200"
-                    quality={100}
-                  />
+          {/* View Options and Breadcrumbs - Only show when category is selected */}
+          {selectedCategorySeo && (
+            <div className="flex justify-between items-center mb-6">
+              {/* Breadcrumbs*/}
+              <div className="hidden md:flex items-center gap-2">
+                <Link href="/urunler" className="text-gray-600 hover:text-gray-900">
+                  <Home className="h-5 w-5" />
                 </Link>
-                <Link href="/urunler?brand=uptech">
-                  <Image 
-                    src="/brands/trr6hf4w_link.jpg" 
-                    alt="Uptech" 
-                    width={100} 
-                    height={100} 
-                    className="h-12 w-auto object-contain hover:scale-110 transition-transform duration-200"
-                    quality={100}
-                  />
-                </Link>
-                <Link href="/urunler?brand=oring">
-                  <Image 
-                    src="/brands/3qgw7zly_hover.jpg" 
-                    alt="ORing" 
-                    width={100} 
-                    height={100} 
-                    className="h-12 w-auto object-contain hover:scale-110 transition-transform duration-200"
-                    quality={100}
-                  />
-                </Link>
-                <Link href="/urunler?brand=planet">
-                  <Image 
-                    src="/brands/ulxz8zg0_hover.png" 
-                    alt="Planet" 
-                    width={100} 
-                    height={100} 
-                    className="h-12 w-auto object-contain hover:scale-110 transition-transform duration-200"
-                    quality={100}
-                  />
-                </Link>
+                {categoryBreadcrumbs.map((category, index) => (
+                  <React.Fragment key={category.id}>
+                    <ChevronRight className="h-4 w-4 text-gray-500" />
+                    <Link 
+                      href={`/urunler/${category.seo_link}`} 
+                      className="text-sm text-gray-900 hover:text-gray-600"
+                    >
+                      {locale === 'tr' ? category.KategoriAdiTr : category.KategoriAdiEn}
+                    </Link>
+                  </React.Fragment>
+                ))}
               </div>
-            </div>
 
-            {/* Sort and View Options */}
-            <div className="flex items-center gap-4">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="gap-2">
-                    {t('sortBy')} <ChevronDown className="h-4 w-4" />
+              {/* Sort and View Options */}
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setViewMode('grid')}
+                    className={viewMode === 'grid' ? 'bg-gray-100' : ''}
+                  >
+                    <Grid className="h-4 w-4" />
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => setSortOption('newest')}>
-                    {t('newest')}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setSortOption('oldest')}>
-                    {t('oldest')}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setViewMode('grid')}
-                  className={viewMode === 'grid' ? 'bg-gray-100' : ''}
-                >
-                  <Grid className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setViewMode('list')}
-                  className={viewMode === 'list' ? 'bg-gray-100' : ''}
-                >
-                  <List className="h-4 w-4" />
-                </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setViewMode('list')}
+                    className={viewMode === 'list' ? 'bg-gray-100' : ''}
+                  >
+                    <List className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Products */}
-          <div className={`grid gap-4 ${
-            viewMode === 'grid' 
-              ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 auto-rows-fr' 
-              : 'grid-cols-1 gap-y-4'
+          {/* Products or Categories Grid */}
+          <div className={`grid gap-6 ${
+            !searchQuery && (!selectedCategorySeo || hasSubcategories)
+              ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3' // Categories grid
+              : viewMode === 'grid'
+                ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4' // Products grid
+                : 'grid-cols-1 gap-y-4' // List view
           }`}>
-            {products.map((product) => (
-              <div
-                key={product.id}
-              >
-                <ProductCard product={product} viewMode={viewMode} />
+            {/* Loading State */}
+            {isLoadingCategory && !searchQuery && (
+              <div className="col-span-full flex justify-center items-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
               </div>
-            ))}
+            )}
+
+            {/* Categories - Only show if no search query */}
+            {!isLoadingCategory && !searchQuery && (!selectedCategorySeo || hasSubcategories) && (
+              categories.map((category) => (
+                <CategoryCard key={category.id} category={category} locale={locale} />
+              ))
+            )}
+            
+            {/* Products - Show when in search mode or when category has no subcategories */}
+            {(searchQuery || (!isLoadingCategory && selectedCategorySeo && hasSubcategories === false)) && (
+              <>
+                {isLoading ? (
+                  <div className="col-span-full flex justify-center items-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  </div>
+                ) : products.length > 0 ? (
+                  products.map((product) => (
+                    <div key={product.id}>
+                      <ProductCard product={product} viewMode={viewMode} />
+                    </div>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-8 text-gray-500">
+                    {t('no_products_found')}
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
-          {/* Pagination */}
-          {!isLoading && products.length > 0 && (
+          {/* Pagination - Only show when displaying products */}
+          {(searchQuery || (!isLoadingCategory && selectedCategorySeo && hasSubcategories === false)) && !isLoading && products.length > 0 && (
             <div className="flex justify-center items-center gap-2 mt-8">
               <Button
                 variant="outline"
@@ -630,16 +710,9 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
           )}
 
           {/* Loading State */}
-          {isLoading && (
-            <div className="flex justify-center items-center my-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            </div>
-          )}
-
-          {/* No Results */}
-          {!isLoading && products.length === 0 && (
-            <div className="text-center py-8">
-              <p className="text-lg text-gray-600">{t('noProductsFound')}</p>
+          {isLoadingCategory && (
+            <div className="col-span-full flex justify-center items-center my-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             </div>
           )}
         </div>
@@ -718,8 +791,8 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
                               }}
                               className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
                                 selectedCategorySeo === category.seo_link
-                                  ? 'bg-primary/10 text-primary font-medium'
-                                  : 'hover:bg-white'
+                                  ? 'bg-blue-600 text-white'
+                                  : 'hover:bg-blue-100'
                               }`}
                             >
                               {renderCategoryName(category)}
@@ -747,17 +820,17 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
                           {brands.map((brand) => (
                             <label
                               key={brand.id}
-                              className="flex items-center gap-2 w-full px-3 py-2 rounded-md transition-colors hover:bg-white cursor-pointer"
+                              className="flex items-center gap-2 w-full px-3 py-2 rounded-md transition-colors hover:bg-blue-100 cursor-pointer"
                             >
                               <input
                                 type="checkbox"
                                 checked={selectedBrands.includes(brand.seo_link)}
                                 onChange={() => handleBrandClick(brand)}
-                                className="rounded border-gray-300 text-primary focus:ring-primary"
+                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-600"
                               />
                               <span className={`${
                                 selectedBrands.includes(brand.seo_link)
-                                  ? 'text-primary font-medium'
+                                  ? 'text-blue-600 font-medium'
                                   : ''
                               }`}>
                                 {brand.title}

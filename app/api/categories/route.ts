@@ -25,6 +25,7 @@ export async function GET(request: Request) {
         KategoriAdiEn: true,
         seo_link: true,
         parent_id: true,
+        img_path: true,
       },
       orderBy: {
         KategoriAdiTr: 'asc',
@@ -82,6 +83,7 @@ export async function POST(request: Request) {
         KategoriAdiEn: true,
         seo_link: true,
         parent_id: true,
+        img_path: true,
       }
     });
 

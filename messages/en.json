@@ -12,6 +12,7 @@
     "search": "Search",
     "addToCart": "Add to Cart",
     "viewDetails": "View Details",
+    "viewCategoryDescription": "View all products in this category",
     "price": "Price"
   },
   "iletisim": {
@@ -65,8 +66,9 @@
     "showFilters": "Show Filters",
     "hideFilters": "Hide Filters",
     "filters": "Filters",
-    "noProductsFound": "No products found.",
-    "noCategoriesFound": "No categories found"
+    "noCategoriesFound": "No categories found",
+    "viewCategoryDescription": "View all products in this category",
+    "no_products_found": "No products found"
   },
   "productDetail": {
     "stockCode": "Stock Code",
@@ -80,7 +82,11 @@
     "version": "Version",
     "fileType": "File type",
     "date": "Date",
-    "download": "Download"
+    "download": "Download",
+    "offerSuccess": "Offer Submitted Successfully",
+    "offerSuccessDescription": "We have received your offer request. Our team will contact you soon.",
+    "offerError": "Error Submitting Offer",
+    "offerErrorDescription": "There was a problem submitting your offer. Please try again later."
   },
   "arge": {
     "title": "R&D and Production",

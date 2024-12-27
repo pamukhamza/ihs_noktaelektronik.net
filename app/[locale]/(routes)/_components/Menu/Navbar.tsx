@@ -28,13 +28,17 @@ import { useTranslations } from 'next-intl'
 import Image from "next/image"
 
 interface SearchResult {
-  id: number
-  UrunAdiTR: string
-  UrunAdiEN: string
-  UrunKodu: string
-  seo_link: string
-  marka: string | null
-  KResim: string | null
+  id: number;
+  UrunAdiTR: string;
+  UrunAdiEN: string;
+  UrunKodu: string;
+  seo_link: string;
+  marka: {
+    id: number;
+    title: string;
+    seo_link: string;
+  } | null;
+  KResim: string | null;
 }
 
 const LOCALES = ["en", "tr", "ru", "de"] as const;
@@ -83,8 +87,17 @@ export default function Navbar() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
-      router.push(`/urunler?query=${encodeURIComponent(searchQuery)}`);
-      handleCloseSearch();
+      // Normalize and clean the search query
+      const normalizedQuery = searchQuery
+        .trim()
+        .toLowerCase()
+        .replace(/[^\w\s]/g, '') // Remove special characters
+        .replace(/\s+/g, ' ');    // Replace multiple spaces with single space
+
+      if (normalizedQuery) {
+        router.push(`/urunler?query=${encodeURIComponent(normalizedQuery)}`);
+        handleCloseSearch();
+      }
       e.preventDefault();
     }
   };
@@ -95,23 +108,15 @@ export default function Navbar() {
     if (query.length >= 2) {
       setIsLoading(true)
       try {
-        console.log('Fetching search results for:', query)
-        const response = await fetch(`/api/products/search?query=${encodeURIComponent(query)}&limit=5`)
+        // Normalize the query by trimming extra spaces
+        const normalizedQuery = query.trim().replace(/\s+/g, ' ');
+        const response = await fetch(`/api/products/search?query=${encodeURIComponent(normalizedQuery)}&limit=5`)
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
         
-        const text = await response.text()
-        console.log('Raw response:', text)
-        
-        let data
-        try {
-          data = JSON.parse(text)
-        } catch (e) {
-          console.error('JSON parse error:', e)
-          throw new Error('Invalid JSON response')
-        }
+        const data = await response.json()
         
         if (!data || !Array.isArray(data.products)) {
           console.error('Invalid data structure:', data)
@@ -228,7 +233,7 @@ export default function Navbar() {
                 )}
                 {result.marka && (
                   <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                    {result.marka}
+                    {result.marka.title}
                   </span>
                 )}
               </div>

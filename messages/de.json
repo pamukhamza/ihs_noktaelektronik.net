@@ -38,7 +38,7 @@
     "showFilters": "Filter anzeigen",
     "hideFilters": "Filter ausblenden",
     "filters": "Filter",
-    "noProductsFound": "Keine Produkte gefunden.",
+    "no_products_found": "Keine Produkte gefunden",
     "noCategoriesFound": "Keine Kategorien gefunden"
   },
   "productDetail": {

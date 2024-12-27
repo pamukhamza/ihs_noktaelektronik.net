@@ -116,6 +116,18 @@ model nokta_yuklemeler {
   is_active  Boolean?
 }
 
+model net_offers {
+  id          Int      @id @default(autoincrement())
+  name        String?  @db.VarChar(255)
+  company     String?  @db.VarChar(255)
+  phone       String?  @db.VarChar(255)
+  mail        String?  @db.VarChar(255)
+  description String?  @db.VarChar(255)
+  prod_id     Int?
+  date        DateTime @default(now()) @db.Timestamp(0)
+}
+
+
 model nokta_ebulten {
   id          Int      @id @default(autoincrement())
   email       String?  @db.VarChar(255)

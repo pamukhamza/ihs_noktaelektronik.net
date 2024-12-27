@@ -24,14 +24,19 @@ type Props = {
 
 export default async function LocaleLayout({
   children,
-  params: { locale }
+  params,
 }: Props) {
+  const locale = params.locale;
+  
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale)) {
+  if (!locales.includes(locale as typeof locales[number])) {
     notFound();
   }
 
+  // Set the locale for the request
   setRequestLocale(locale);
+
+  // Get messages for the locale
   const messages = await getMessages(locale);
 
   return (

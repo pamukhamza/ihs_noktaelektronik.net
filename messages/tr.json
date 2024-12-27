@@ -68,8 +68,10 @@
     "showFilters": "Filtreleri Göster",
     "hideFilters": "Filtreleri Gizle",
     "filters": "Filtreler",
-    "noProductsFound": "Ürün bulunamadı.",
-    "noCategoriesFound": "Kategori bulunamadı"
+    "no_products_found": "Ürün bulunamadı",
+    "noCategoriesFound": "Kategori bulunamadı",
+    "viewDetails": "İncele",
+    "viewCategoryDescription": "Bu kategorideki tüm ürünleri görüntüleyin"
   },
   "productDetail": {
     "home": "Ana Sayfa",
@@ -84,7 +86,11 @@
     "version": "Versiyon",
     "fileType": "Dosya tipi",
     "date": "Tarih",
-    "download": "İndir"
+    "download": "İndir",
+    "offerSuccess": "Teklif Başarıyla Gönderildi",
+    "offerSuccessDescription": "Teklif talebiniz alınmıştır. Ekibimiz en kısa sürede sizinle iletişime geçecektir.",
+    "offerError": "Teklif Gönderme Hatası",
+    "offerErrorDescription": "Teklifiniz gönderilirken bir sorun oluştu. Lütfen daha sonra tekrar deneyiniz."
   },
   "arge": {
     "title": "AR-GE & Üretim",

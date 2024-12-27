@@ -1,6 +1,4 @@
 -Düzelt
 
-Ürünler sayfasındaki kategori ve marka eşleşmesi düzgün çalışsın aynı zamanda sıralamada çalışsın
-Arama daha gelişmiş seviyede arasın
-Ürün detay fotoğraf galerisi
-Teklif iste çalıştır.
+Ürün detay mobilde tam responsive değil
+Teklif al butonu gönderdikten sonra mesaj göster ve mail gönder.

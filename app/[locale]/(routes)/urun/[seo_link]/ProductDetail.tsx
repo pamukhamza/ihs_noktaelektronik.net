@@ -17,23 +17,22 @@ import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
 import { Product } from "@/types/product"
 import { BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb"
+import Modal from "@/components/ui/Modal";
+import { useToast } from "@/components/ui/use-toast"
 
-type Download = {
-  id: number
-  name: string
-  url: string
-  version?: string
-  type?: string
-  date?: string | null
-}
 interface ProductDetailProps {
   product: Product
 }
 export default function ProductDetail({ product }: ProductDetailProps) {
+  const t = useTranslations('productDetail');
+  const { toast } = useToast();
+  const locale = useLocale();
   const [selectedImage, setSelectedImage] = useState(product.images[0] || '/gorsel_hazirlaniyor.jpg');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const t = useTranslations('productDetail');
-  const locale = useLocale();
+  const [startIndex, setStartIndex] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(5);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: '', company: '', phone: '', email: '', description: '' });
   const getTranslatedContent = (trContent: string, enContent: string) => {
     if (locale === 'de' || locale === 'ru') {
       return enContent || trContent || '';
@@ -74,6 +73,48 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         return <FileText className="w-8 h-8 text-gray-400" />
     }
   }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('/api/submitOffer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          company: formData.company,
+          mail: formData.email,
+          phone: formData.phone,
+          description: formData.description,
+          product_id: product.id
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit offer');
+      }
+      toast({
+        title: t('offerSuccess'),
+        description: t('offerSuccessDescription'),
+        variant: "default"
+      });
+      setIsModalOpen(false);
+      // Reset form data
+      setFormData({ name: '', company: '', phone: '', email: '', description: '' });
+    } catch (error) {
+      toast({
+        title: t('offerError'),
+        description: t('offerErrorDescription'),
+        variant: "destructive"
+      });
+    }
+  };
   return (
     <div className="bg-gray-100">
       <div className="container mx-auto md:px-4 px-2 py-8 ">
@@ -121,7 +162,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.1 }}
                   className="absolute inset-0"
                 >
                   <Image
@@ -154,35 +195,53 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             </div>
             {/* Improved Thumbnail Gallery */}
             {product.images.length > 1 && (
-              <ScrollArea className="w-full">
-                <div className="flex space-x-2 pb-2 p-2 md:p-5">
-                  {product.images.map((image, index) => (
-                    <motion.button
-                      key={index}
-                      onClick={() => {
-                        setSelectedImage(image);
-                        setCurrentImageIndex(index);
-                      }}
-                      className={`relative flex-shrink-0 w-20 h-20 rounded-md overflow-hidden ${
-                        selectedImage === image
-                          ? 'ring-2 ring-primary ring-offset-2'
-                          : 'hover:opacity-80'
-                      }`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <div className="absolute inset-0 bg-gray-200" />
-                      <Image
-                        src={image}
-                        alt={`${getTranslatedContent(product.name.UrunAdiTR, product.name.UrunAdiEN)} ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="80px"
-                      />
-                    </motion.button>
-                  ))}
-                </div>
-              </ScrollArea>
+              <div className="relative">
+                {/* Left Slide Button */}
+                <Button
+                  onClick={() => setStartIndex((prev) => Math.max(prev - visibleCount, 0))}
+                  className="absolute left-0 z-10 top-1/2 transform -translate-y-1/2"
+                  disabled={startIndex === 0} // Disable if at the start
+                >
+                  <ChevronLeft />
+                </Button>
+                <ScrollArea className="w-full">
+                  <div className="flex space-x-2 pb-2 p-2 md:p-5">
+                    {product.images.slice(startIndex, startIndex + visibleCount).map((image, index) => (
+                      <motion.button
+                        key={index}
+                        onClick={() => {
+                          setSelectedImage(image);
+                          setCurrentImageIndex(index);
+                        }}
+                        className={`relative flex-shrink-0 w-20 h-20 rounded-md overflow-hidden ${
+                          selectedImage === image
+                            ? 'ring-2 ring-primary ring-offset-2'
+                            : 'hover:opacity-80'
+                        }`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <div className="absolute inset-0 bg-gray-200" />
+                        <Image
+                          src={image}
+                          alt={`${getTranslatedContent(product.name.UrunAdiTR, product.name.UrunAdiEN)} ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
+                      </motion.button>
+                    ))}
+                  </div>
+                </ScrollArea>
+                {/* Right Slide Button */}
+                <Button
+                  onClick={() => setStartIndex((prev) => Math.min(prev + visibleCount, product.images.length - visibleCount))}
+                  className="absolute right-0 z-10 top-1/2 transform -translate-y-1/2"
+                  disabled={startIndex + visibleCount >= product.images.length} // Disable if at the end
+                >
+                  <ChevronRight />
+                </Button>
+              </div>
             )}
           </div>
           {/* Product Info Section */}
@@ -210,7 +269,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="space-y-4"
             >
-              <Button size="lg" className="w-full">
+              <Button size="lg" className="w-full" onClick={() => setIsModalOpen(true)}>
                 {t('requestQuote')}
               </Button>
             </motion.div>
@@ -393,6 +452,51 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           </motion.div>
         )}
       </div>
+      {/* Modal for Request Quote */}
+      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Your Name"
+          value={formData.name}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="text"
+          name="company"
+          placeholder="Company Name"
+          value={formData.company}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="text"
+          name="phone"
+          placeholder="Phone Number"
+          value={formData.phone}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded"
+        />
+        <textarea
+          name="description"
+          placeholder="Description"
+          value={formData.description}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded"
+        />
+        <button onClick={handleSubmit} className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition duration-200">
+          Send
+        </button>
+      </Modal>
     </div>
   );
 }

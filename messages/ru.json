@@ -38,7 +38,7 @@
     "showFilters": "Показать фильтры",
     "hideFilters": "Скрыть фильтры",
     "filters": "Фильтры",
-    "noProductsFound": "Товары не найдены.",
+    "no_products_found": "Товары не найдены",
     "noCategoriesFound": "Категории не найдены"
   },
   "productDetail": {
