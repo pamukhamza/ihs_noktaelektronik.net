@@ -19,6 +19,7 @@ import { Product } from "@/types/product"
 import { BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb"
 import Modal from "@/components/ui/Modal";
 import { useToast } from "@/components/ui/use-toast"
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface ProductDetailProps {
   product: Product
@@ -30,9 +31,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [selectedImage, setSelectedImage] = useState(product.images[0] || '/gorsel_hazirlaniyor.jpg');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [startIndex, setStartIndex] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(5);
+  const [visibleCount] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', company: '', phone: '', email: '', description: '' });
+  const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
   const getTranslatedContent = (trContent: string, enContent: string) => {
     if (locale === 'de' || locale === 'ru') {
       return enContent || trContent || '';
@@ -78,7 +80,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     setFormData({ ...formData, [name]: value });
   };
   const handleSubmit = async () => {
-    try {
+      if (!recaptchaValue) {
+        toast({
+          title: t('captchaRequired'),
+          description: t('pleaseCompleteCaptcha'),
+          variant: "destructive"
+        });
+        return;
+      }
+
       const response = await fetch('/api/submitOffer', {
         method: 'POST',
         headers: {
@@ -90,7 +100,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           mail: formData.email,
           phone: formData.phone,
           description: formData.description,
-          product_id: product.id
+          product_id: product.id,
+          recaptchaToken: recaptchaValue
         }),
       });
 
@@ -105,15 +116,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         variant: "default"
       });
       setIsModalOpen(false);
+      setRecaptchaValue(null);
       // Reset form data
       setFormData({ name: '', company: '', phone: '', email: '', description: '' });
-    } catch (error) {
-      toast({
-        title: t('offerError'),
-        description: t('offerErrorDescription'),
-        variant: "destructive"
-      });
-    }
   };
   return (
     <div className="bg-gray-100">
@@ -283,11 +288,31 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           className="mt-12 bg-white p-4 md:p-10 rounded-lg"
         >
           <Tabs defaultValue="features" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="features">{t('features')}</TabsTrigger>
-              <TabsTrigger value="technical">{t('technical')}</TabsTrigger>
-              <TabsTrigger value="applications">{t('applications')}</TabsTrigger>
-              <TabsTrigger value="downloads">{t('downloads')}</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 bg-transparent p-0 mb-12 md:mb-6">
+              <TabsTrigger 
+                value="features" 
+                className="text-sm md:text-base data-[state=active]:bg-primary data-[state=active]:text-black rounded-md border border-gray-200 hover:bg-gray-100 transition-colors"
+              >
+                {t('features')}
+              </TabsTrigger>
+              <TabsTrigger 
+                value="technical" 
+                className="text-sm md:text-base data-[state=active]:bg-primary data-[state=active]:text-black rounded-md border border-gray-200 hover:bg-gray-100 transition-colors"
+              >
+                {t('technical')}
+              </TabsTrigger>
+              <TabsTrigger 
+                value="applications" 
+                className="text-sm md:text-base data-[state=active]:bg-primary data-[state=active]:text-black rounded-md border border-gray-200 hover:bg-gray-100 transition-colors"
+              >
+                {t('applications')}
+              </TabsTrigger>
+              <TabsTrigger 
+                value="downloads" 
+                className="text-sm md:text-base data-[state=active]:bg-primary data-[state=active]:text-black rounded-md border border-gray-200 hover:bg-gray-100 transition-colors"
+              >
+                {t('downloads')}
+              </TabsTrigger>
             </TabsList>
             <div className="mt-6">
               <TabsContent value="features">
@@ -493,6 +518,12 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           onChange={handleInputChange}
           className="w-full p-2 border rounded"
         />
+        <div className="mt-4">
+          <ReCAPTCHA
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+            onChange={(value) => setRecaptchaValue(value)}
+          />
+        </div>
         <button onClick={handleSubmit} className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition duration-200">
           Send
         </button>

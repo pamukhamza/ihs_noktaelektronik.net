@@ -1,6 +1,20 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+interface Category {
+  id: number;
+  seo_link: string | null;
+  KategoriAdiTr: string | null;
+  KategoriAdiEn: string | null;
+  parent_id: number | null;
+  sira: number | null;
+  resim: string | null;
+  old_id: number | null;
+  is_active: boolean | null;
+  marka_id: number | null;
+  img_path: string | null;
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const seo_link = searchParams.get('seo_link');
@@ -20,7 +34,7 @@ export async function GET(request: Request) {
     }
 
     // Then recursively get all parent categories
-    const breadcrumbs: any[] = [];
+    const breadcrumbs: Category[] = [];
     async function getParentCategory(parentId: number | null) {
       if (!parentId) return;
       

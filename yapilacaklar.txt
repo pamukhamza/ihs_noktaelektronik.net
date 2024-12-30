@@ -1,4 +1,3 @@
 -Düzelt
 
-Ürün detay mobilde tam responsive değil
 Teklif al butonu gönderdikten sonra mesaj göster ve mail gönder.

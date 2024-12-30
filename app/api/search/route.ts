@@ -70,7 +70,7 @@ export async function GET(request: Request) {
                 select: { id: true, title: true }
               }) : null,
               prisma.nokta_urunler_resimler.findFirst({
-                where: { UrunID: product.id, Sira: 0 },
+                where: { UrunID: product.id, Sira: 1 },
                 select: { KResim: true }
               })
             ]);
