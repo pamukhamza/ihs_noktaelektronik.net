@@ -8,7 +8,6 @@ interface Category {
   KategoriAdiEn: string | null;
   parent_id: number | null;
   sira: number | null;
-  resim: string | null;
   old_id: number | null;
   is_active: boolean | null;
   marka_id: number | null;

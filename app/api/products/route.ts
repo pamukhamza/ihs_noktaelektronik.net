@@ -24,22 +24,22 @@ export async function GET(request: Request) {
     if (query) {
       const searchTerms = query
         .split(/\s+/)
-        .filter(term => term.length > 0)
-        .map(term => term.replace(/[^\w\s]/g, ''));
+        .filter(term => term.length > 0);
 
       if (searchTerms.length > 0) {
-        // Each term must match at least one field (AND condition between terms)
-        const termConditions = searchTerms.map(term => ({
-          OR: [
-            { UrunAdiTR: { contains: term } },
-            { UrunAdiEN: { contains: term } },
-            { UrunKodu: { contains: term } }
-          ]
-        }));
+        const searchConditions: any[] = [];
 
-        // Add AND condition between terms
-        whereConditions.push({
-          OR: termConditions
+        // Product direct search (name and code)
+        searchConditions.push({
+          OR: [
+            ...searchTerms.map(term => ({
+              OR: [
+                { UrunAdiTR: { contains: term } },
+                { UrunAdiEN: { contains: term } },
+                { UrunKodu: { contains: term } }
+              ]
+            }))
+          ]
         });
 
         // Brand search
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
           });
 
           if (brandResults.length > 0) {
-            whereConditions.push({
+            searchConditions.push({
               MarkaID: {
                 in: brandResults.map(b => b.id)
               }
@@ -68,7 +68,7 @@ export async function GET(request: Request) {
         try {
           const categoryResults = await prisma.nokta_kategoriler.findMany({
             where: {
-              AND: searchTerms.map(term => ({
+              OR: searchTerms.map(term => ({
                 OR: [
                   { KategoriAdiTr: { contains: term } },
                   { KategoriAdiEn: { contains: term } }
@@ -79,7 +79,7 @@ export async function GET(request: Request) {
           });
 
           if (categoryResults.length > 0) {
-            whereConditions.push({
+            searchConditions.push({
               KategoriID: {
                 in: categoryResults.map(c => c.id)
               }
@@ -88,6 +88,11 @@ export async function GET(request: Request) {
         } catch (categoryError) {
           console.error('Error searching categories:', categoryError instanceof Error ? categoryError.message : 'Unknown error');
         }
+
+        // Add the combined search conditions with OR
+        whereConditions.push({
+          OR: searchConditions
+        });
       }
     }
 

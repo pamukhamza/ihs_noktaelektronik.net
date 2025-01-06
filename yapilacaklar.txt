@@ -1,3 +1,11 @@
--Düzelt
+schema da nokta_urunler güncellendi.
+nokta_urunler tablosunda silinecek sütünları sil.
 
-Teklif al butonu gönderdikten sonra mesaj göster ve mail gönder.
+
+
+UPDATE `category_brand_rel` SET `marka_id`='41' WHERE `marka_id`='40';
+UPDATE `nokta_urunler` SET `MarkaID`='41' WHERE `MarkaID`='40';
+UPDATE `category_brand_rel` SET `marka_id`='1048' WHERE `marka_id`='1047';
+UPDATE `nokta_urunler` SET `MarkaID`='1048' WHERE `MarkaID`='1047';
+UPDATE `category_brand_rel` SET `marka_id`='1056' WHERE `marka_id`='1055';
+UPDATE `nokta_urunler` SET `MarkaID`='1056' WHERE `MarkaID`='1055';

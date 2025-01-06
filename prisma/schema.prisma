@@ -12,7 +12,6 @@ model nokta_kategoriler {
   KategoriAdiTr String?  @db.VarChar(250)
   KategoriAdiEn String?  @db.VarChar(250)
   sira          Int?
-  resim         String?  @db.VarChar(250)
   parent_id     Int?
   old_id        Int?
   is_active     Boolean?
@@ -50,19 +49,11 @@ model nokta_urunler {
   BilgiEN       String?   @db.LongText
   KategoriID    Int?
   MarkaID       Int?
-  SurucuIndir   String?   @db.VarChar(256)
   Vitrin        Boolean?
   YeniUrun      Boolean?
-  rdurum        Boolean?
-  ddurum        Boolean?
   tags          String?   @db.LongText
   aktif         Boolean?
   sira          Int?
-  sartname      String?   @db.VarChar(256)
-  sertifika     String?   @db.VarChar(256)
-  datasheet     String?   @db.VarChar(256)
-  manual        String?   @db.VarChar(256)
-  firmware      String?   @db.VarChar(256)
   stok_giren    Boolean?
   stok_fazla    Boolean?
   create_date   DateTime? @db.DateTime(0)

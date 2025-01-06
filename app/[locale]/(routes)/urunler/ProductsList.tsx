@@ -36,8 +36,6 @@ interface Category {
   id: number;
   KategoriAdiTr: string;
   KategoriAdiEn: string;
-  KategoriAdiDe: string;
-  KategoriAdiRu: string;
   seo_link: string;
   img_path?: string;
 }
@@ -49,28 +47,37 @@ interface CategoryCardProps {
 
 const CategoryCard = ({ category, locale }: CategoryCardProps) => {
   const [imageError, setImageError] = useState(false);
+  const searchParams = useSearchParams();
   const imageUrl = category.img_path 
     ? `https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/categories/${category.img_path}`
     : 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg';
 
+  // Build URL with brand parameter if it exists
+  const brandParam = searchParams?.get('brand');
+  const href = brandParam 
+    ? `/urunler/${category.seo_link}?brand=${brandParam}`
+    : `/urunler/${category.seo_link}`;
+
   return (
-    <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-      <Link href={`/urunler/${category.seo_link}`} className="block">
+    <div className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 group">
+      <Link href={href} className="block">
         {/* Image Container */}
-        <div className="relative aspect-[16/9] overflow-hidden rounded-t-lg bg-gray-100">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg bg-gray-50 flex items-center justify-center">
           <Image
             src={imageError ? 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg' : imageUrl}
             alt={locale === 'tr' ? category.KategoriAdiTr : category.KategoriAdiEn}
             fill
-            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover object-center transform group-hover:scale-105 transition-transform duration-300"
             onError={() => setImageError(true)}
+            priority
           />
         </div>
         
         {/* Content */}
-        <div className="p-4 flex flex-col">
-          <div className="mt-auto">
-            <span className="block w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-center rounded-md transition-colors text-sm font-medium">
+        <div className="p-5">
+          <div>
+            <span className="inline-block w-full px-4 py-2.5 bg-gray-700 group-hover:bg-gray-900 text-white text-center rounded-md transition-colors text-sm font-medium">
               {locale === 'tr' ? category.KategoriAdiTr : category.KategoriAdiEn}
             </span>
           </div>
@@ -165,7 +172,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     // Only fetch products if:
     // 1. There's a search query OR
     // 2. We're in a category with no subcategories
-    if ((!selectedCategorySeo || hasSubcategories !== false) && !searchQuery) {
+    if ((!selectedCategorySeo || hasSubcategories !== false) && !searchQuery && !brandParam) {
       return;
     }
 
@@ -228,7 +235,9 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   const fetchCategories = async (parentId: number = 0) => {
     try {
       setIsLoadingCategories(true);
-      const response = await fetch(`/api/categories?parent_id=${parentId}`);
+      const brandParam = searchParams?.get('brand');
+      const url = `/api/categories?parent_id=${parentId}${brandParam ? `&brand=${brandParam}` : ''}`;
+      const response = await fetch(url);
       const data = await response.json();
       if (data.categories) {
         setCategories(data.categories);
@@ -253,51 +262,149 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
 
   // Modified category click handler
   const handleCategoryClick = async (category: Category) => {
+    setIsLoadingCategory(true);
+    
     try {
-      setIsLoadingCategory(true);
-      setProducts([]); // Clear products immediately
+      // Always build the full category path
+      const fullPath = await buildCategoryPath(category);
+      setCategoryPath(fullPath);
       setSelectedCategorySeo(category.seo_link);
-      setHasSubcategories(null); // Reset subcategories state
       
-      // Update URL first
-      router.push(`/urunler/${category.seo_link}`);
+      // Update URL
+      const params = new URLSearchParams(searchParams?.toString() || '');
+      router.push(`/urunler/${category.seo_link}${params.get('brand') ? `?brand=${params.get('brand')}` : ''}`);
       
-      // Check for subcategories first
-      const hasSubcats = await checkForSubcategories(category.id);
-      setHasSubcategories(hasSubcats);
-      
-      if (hasSubcats) {
-        // If has subcategories, fetch and display them
-        const response = await fetch(`/api/categories?parent_id=${category.id}`);
-        const data = await response.json();
-        if (data.categories) {
-          setCategories(data.categories);
-        }
-      }
+      // Reset products and page
+      setProducts([]);
+      setPage(1);
+      setTotalPages(1);
     } catch (error) {
-      console.error('Error in handleCategoryClick:', error);
+      console.error('Error handling category click:', error);
     } finally {
       setIsLoadingCategory(false);
     }
   };
 
+  // Optimize back click handler
   const handleBackClick = async () => {
-    if (categoryPath.length <= 1) {
-      // If at root level, just go back to products page
-      router.push('/urunler');
-    } else {
-      // Go back to previous category
-      const newPath = [...categoryPath];
-      newPath.pop(); // Remove current category
-      const previousCategory = newPath[newPath.length - 1];
+    try {
+      const brandParam = searchParams?.get('brand');
       
-      if (previousCategory?.seo_link) {
-        router.push(`/urunler/${previousCategory.seo_link}`);
+      if (categoryPath.length <= 1) {
+        // Going back to root
+        const baseUrl = '/urunler';
+        const newUrl = brandParam ? `${baseUrl}?brand=${brandParam}` : baseUrl;
+        router.push(newUrl);
+        setSelectedCategorySeo(null);
+        setCategoryPath([]);
+        
+        // Fetch root data in parallel
+        const [categoriesData, brandsData] = await Promise.all([
+          fetch(`/api/categories?parent_id=0${brandParam ? `&brand=${brandParam}` : ''}`).then(res => res.json()),
+          fetch('/api/brands').then(res => res.json())
+        ]);
+        
+        setCategories(categoriesData.categories || []);
+        setBrands(brandsData.brands || []);
+        setHasSubcategories(null);
       } else {
-        router.push('/urunler');
+        // Going back to previous category
+        const newPath = [...categoryPath];
+        newPath.pop();
+        const previousCategory = newPath[newPath.length - 1];
+        setCategoryPath(newPath);
+        
+        if (previousCategory?.seo_link) {
+          const baseUrl = `/urunler/${previousCategory.seo_link}`;
+          const newUrl = brandParam ? `${baseUrl}?brand=${brandParam}` : baseUrl;
+          router.push(newUrl);
+          setSelectedCategorySeo(previousCategory.seo_link);
+          
+          // Fetch previous category data in parallel
+          const [categoriesData, brandsData] = await Promise.all([
+            fetch(`/api/categories?parent_id=${previousCategory.id}${brandParam ? `&brand=${brandParam}` : ''}`).then(res => res.json()),
+            fetch(`/api/brands?category_id=${previousCategory.id}`).then(res => res.json())
+          ]);
+          
+          setCategories(categoriesData.categories || []);
+          setBrands(brandsData.brands || []);
+          setHasSubcategories(categoriesData.categories && categoriesData.categories.length > 0);
+        }
       }
+    } catch (error) {
+      console.error('Error in handleBackClick:', error);
+      setCategories([]);
+      setBrands([]);
+      setHasSubcategories(null);
     }
   };
+
+  // Optimize initial load
+  const loadInitialData = async () => {
+    try {
+      const brandParam = searchParams?.get('brand');
+
+      if (selectedCategorySeo) {
+        const category = await fetchCategoryBySeoLink(selectedCategorySeo);
+        if (category) {
+          // Always build the full category path
+          const fullPath = await buildCategoryPath(category);
+          setCategoryPath(fullPath);
+
+          // Fetch category data in parallel
+          const [subcategoriesData, brandsData] = await Promise.all([
+            fetch(`/api/categories?parent_id=${category.id}${brandParam ? `&brand=${brandParam}` : ''}`).then(res => res.json()),
+            fetch(`/api/brands?category_id=${category.id}`).then(res => res.json())
+          ]);
+          
+          const hasSubcats = subcategoriesData.categories && subcategoriesData.categories.length > 0;
+          setHasSubcategories(hasSubcats);
+          setCategories(subcategoriesData.categories || []);
+          setBrands(brandsData.brands || []);
+        }
+      } else {
+        // Load root level data in parallel
+        const [categoriesData, brandsData] = await Promise.all([
+          fetch(`/api/categories?parent_id=0${brandParam ? `&brand=${brandParam}` : ''}`).then(res => res.json()),
+          fetch('/api/brands').then(res => res.json())
+        ]);
+        
+        setCategories(categoriesData.categories || []);
+        setBrands(brandsData.brands || []);
+        setHasSubcategories(null);
+        setCategoryPath([]);
+      }
+    } catch (error) {
+      console.error('Error in loadInitialData:', error);
+      setCategories([]);
+      setBrands([]);
+      setHasSubcategories(null);
+      setCategoryPath([]);
+    }
+  };
+
+  useEffect(() => {
+    loadInitialData();
+  }, [selectedCategorySeo, searchParams]);
+
+  useEffect(() => {
+    const loadInitialData = async () => {
+      if (initialCategory) {
+        try {
+          const category = await fetchCategoryBySeoLink(initialCategory);
+          if (category) {
+            const path = await buildCategoryPath(category);
+            setCategoryPath(path);
+            setSelectedCategorySeo(category.seo_link);
+          }
+        } catch (error) {
+          console.error('Error loading initial category:', error);
+        }
+      }
+    };
+
+    loadInitialData();
+  }, [initialCategory]);
 
   const getCategoryBySeoLink = async (seoLink: string) => {
     try {
@@ -327,108 +434,6 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     return path;
   };
 
-  // Initialize category path and fetch subcategories when initialCategory changes
-  useEffect(() => {
-    const initializeCategory = async () => {
-      if (initialCategory) {
-        try {
-          setIsLoadingCategories(true);
-          // Get current category
-          const category = await getCategoryBySeoLink(initialCategory);
-          
-          if (category) {
-            const hasSubcats = await checkForSubcategories(category.id);
-            setHasSubcategories(hasSubcats);
-            
-            if (hasSubcats) {
-              const response = await fetch(`/api/categories?parent_id=${category.id}`);
-              const data = await response.json();
-              if (data.categories) {
-                setCategories(data.categories);
-              }
-            }
-            
-            setSelectedCategorySeo(category.seo_link);
-            const path = await buildCategoryPath(category);
-            setCategoryPath(path);
-          }
-        } catch (error) {
-          console.error('Error initializing category:', error);
-        } finally {
-          setIsLoadingCategories(false);
-        }
-      } else {
-        // Reset to root categories if no initial category
-        fetchCategories(0);
-      }
-    };
-
-    initializeCategory();
-  }, [initialCategory]);
-
-  useEffect(() => {
-    const fetchCategoryBreadcrumbs = async () => {
-      if (!pathname) return;
-      
-      const categorySlug = pathname.split('/').pop();
-      if (!categorySlug) return;
-
-      try {
-        const response = await fetch(`/api/categories/breadcrumb?seo_link=${categorySlug}`);
-        const data = await response.json();
-        if (data.categories) {
-          setCategoryBreadcrumbs(data.categories);
-        }
-      } catch (error) {
-        console.error('Error fetching category breadcrumbs:', error);
-      }
-    };
-
-    if (pathname && pathname.split('/').length > 3) {
-      fetchCategoryBreadcrumbs();
-    } else {
-      setCategoryBreadcrumbs([]);
-    }
-  }, [pathname]);
-
-  useEffect(() => {
-    if (searchParams) {
-      const seoLink = searchParams.get('seo_link');
-      if (seoLink) {
-        setSelectedCategorySeo(seoLink);
-      }
-    }
-  }, [searchParams]);
-
-  const fetchBrands = async () => {
-    try {
-      setIsLoadingBrands(true);
-      const response = await fetch('/api/brands');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log('Brands data:', data); // Debug log
-      if (data.brands && Array.isArray(data.brands)) {
-        setBrands(data.brands);
-      } else {
-        console.error('Invalid brands data structure:', data);
-      }
-    } catch (error) {
-      console.error('Error fetching brands:', error);
-    } finally {
-      setIsLoadingBrands(false);
-    }
-  };
-
-  const handleBrandClick = async (brand: Brand) => {
-    handleBrandToggle(brand.seo_link);
-  };
-
-  useEffect(() => {
-    fetchBrands();
-  }, []);
-
   const renderCategoryName = (category: Category) => {
     // For German and Russian, use English translation
     const translationLocale = locale === 'de' || locale === 'ru' ? 'en' : locale;
@@ -452,6 +457,24 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
       'UrunAdi',
       locale
     ) || product.UrunAdiTR; // Fallback to Turkish if translation is missing
+  };
+
+  // Add fetchCategoryBySeoLink function
+  const fetchCategoryBySeoLink = async (seoLink: string) => {
+    try {
+      const response = await fetch(`/api/categories/by-seo-link?seo_link=${seoLink}`);
+      if (!response.ok) throw new Error('Failed to fetch category');
+      const data = await response.json();
+      return data.category;
+    } catch (error) {
+      console.error('Error fetching category:', error);
+      return null;
+    }
+  };
+
+  // Simplified brand click handler
+  const handleBrandClick = (brand: Brand) => {
+    handleBrandToggle(brand.seo_link);
   };
 
   return (
@@ -564,50 +587,58 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
             </Button>
           </div>
 
-          {/* View Options and Breadcrumbs - Only show when category is selected */}
-          {selectedCategorySeo && (
-            <div className="flex justify-between items-center mb-6">
-              {/* Breadcrumbs*/}
-              <div className="hidden md:flex items-center gap-2">
-                <Link href="/urunler" className="text-gray-600 hover:text-gray-900">
-                  <Home className="h-5 w-5" />
-                </Link>
-                {categoryBreadcrumbs.map((category, index) => (
-                  <React.Fragment key={category.id}>
-                    <ChevronRight className="h-4 w-4 text-gray-500" />
+          {/* View Options and Breadcrumbs */}
+          <div className="flex justify-between items-center mb-6">
+            {/* Breadcrumbs*/}
+            <div className="hidden md:flex items-center gap-2">
+              <Link 
+                href={searchParams?.get('brand') ? `/urunler?brand=${searchParams.get('brand')}` : '/urunler'} 
+                className="text-gray-600 hover:text-gray-900"
+              >
+                <Home className="h-5 w-5" />
+              </Link>
+              {categoryPath.map((category, index) => (
+                <React.Fragment key={category.id}>
+                  <ChevronRight className="h-4 w-4 text-gray-500" />
+                  {index === categoryPath.length - 1 ? (
+                    <span className="text-blue-600">{renderCategoryName(category)}</span>
+                  ) : (
                     <Link 
-                      href={`/urunler/${category.seo_link}`} 
-                      className="text-sm text-gray-900 hover:text-gray-600"
+                      href={searchParams?.get('brand') 
+                        ? `/urunler/${category.seo_link}?brand=${searchParams.get('brand')}`
+                        : `/urunler/${category.seo_link}`
+                      }
+                      className="text-gray-600 hover:text-gray-900"
                     >
-                      {locale === 'tr' ? category.KategoriAdiTr : category.KategoriAdiEn}
+                      {renderCategoryName(category)}
                     </Link>
-                  </React.Fragment>
-                ))}
-              </div>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
 
-              {/* Sort and View Options */}
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setViewMode('grid')}
-                    className={viewMode === 'grid' ? 'bg-gray-100' : ''}
-                  >
-                    <Grid className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setViewMode('list')}
-                    className={viewMode === 'list' ? 'bg-gray-100' : ''}
-                  >
-                    <List className="h-4 w-4" />
-                  </Button>
-                </div>
+            {/* Sort and View Options */}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setViewMode('grid')}
+                  className={viewMode === 'grid' ? 'bg-gray-100' : ''}
+                >
+                  <Grid className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setViewMode('list')}
+                  className={viewMode === 'list' ? 'bg-gray-100' : ''}
+                >
+                  <List className="h-4 w-4" />
+                </Button>
               </div>
             </div>
-          )}
+          </div>
 
           {/* Products or Categories Grid */}
           <div className={`grid gap-6 ${
@@ -818,24 +849,17 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
                       ) : (
                         <div className="space-y-1">
                           {brands.map((brand) => (
-                            <label
+                            <button
                               key={brand.id}
-                              className="flex items-center gap-2 w-full px-3 py-2 rounded-md transition-colors hover:bg-blue-100 cursor-pointer"
-                            >
-                              <input
-                                type="checkbox"
-                                checked={selectedBrands.includes(brand.seo_link)}
-                                onChange={() => handleBrandClick(brand)}
-                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-600"
-                              />
-                              <span className={`${
+                              onClick={() => handleBrandToggle(brand.seo_link)}
+                              className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
                                 selectedBrands.includes(brand.seo_link)
-                                  ? 'text-blue-600 font-medium'
-                                  : ''
-                              }`}>
-                                {brand.title}
-                              </span>
-                            </label>
+                                  ? 'bg-gray-900 text-white'
+                                  : 'hover:bg-gray-100'
+                              }`}
+                            >
+                              {brand.title}
+                            </button>
                           ))}
                         </div>
                       )}

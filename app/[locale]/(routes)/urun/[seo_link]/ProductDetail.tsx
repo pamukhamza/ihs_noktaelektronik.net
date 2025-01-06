@@ -18,8 +18,7 @@ import { useLocale } from 'next-intl';
 import { Product } from "@/types/product"
 import { BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb"
 import Modal from "@/components/ui/Modal";
-import { useToast } from "@/components/ui/use-toast"
-import ReCAPTCHA from 'react-google-recaptcha';
+import { useToast } from "@/hooks/use-toast"
 
 interface ProductDetailProps {
   product: Product
@@ -34,7 +33,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [visibleCount] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', company: '', phone: '', email: '', description: '' });
-  const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
   const getTranslatedContent = (trContent: string, enContent: string) => {
     if (locale === 'de' || locale === 'ru') {
       return enContent || trContent || '';
@@ -79,16 +77,20 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const handleSubmit = async () => {
-      if (!recaptchaValue) {
-        toast({
-          title: t('captchaRequired'),
-          description: t('pleaseCompleteCaptcha'),
-          variant: "destructive"
-        });
-        return;
-      }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validate all required fields
+    if (!formData.name || !formData.company || !formData.phone || !formData.email || !formData.description) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive"
+      });
+      return;
+    }
 
+    try {
       const response = await fetch('/api/submitOffer', {
         method: 'POST',
         headers: {
@@ -101,24 +103,38 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           phone: formData.phone,
           description: formData.description,
           product_id: product.id,
-          recaptchaToken: recaptchaValue
+          language: locale
         }),
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to submit offer');
       }
+
       toast({
-        title: t('offerSuccess'),
-        description: t('offerSuccessDescription'),
-        variant: "default"
+        title: locale === 'tr' ? 'Başarılı!' : 'Success!',
+        description: locale === 'tr' 
+          ? 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.' 
+          : 'Your message has been sent successfully. We will get back to you soon.',
+        duration: 5000,
+        variant: "default",
       });
+      
       setIsModalOpen(false);
-      setRecaptchaValue(null);
-      // Reset form data
       setFormData({ name: '', company: '', phone: '', email: '', description: '' });
+    } catch (error) {
+      console.error('Error submitting offer:', error);
+      toast({
+        title: locale === 'tr' ? 'Hata!' : 'Error!',
+        description: locale === 'tr'
+          ? 'Mesajınız gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
+          : 'An error occurred while sending your message. Please try again later.',
+        duration: 5000,
+        variant: "destructive",
+      });
+    }
   };
   return (
     <div className="bg-gray-100">
@@ -479,54 +495,58 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       </div>
       {/* Modal for Request Quote */}
       <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          value={formData.name}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="text"
-          name="company"
-          placeholder="Company Name"
-          value={formData.company}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="text"
-          name="phone"
-          placeholder="Phone Number"
-          value={formData.phone}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded"
-        />
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={formData.description}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded"
-        />
-        <div className="mt-4">
-          <ReCAPTCHA
-            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-            onChange={(value) => setRecaptchaValue(value)}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            value={formData.name}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+            required
           />
-        </div>
-        <button onClick={handleSubmit} className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition duration-200">
-          Send
-        </button>
+          <input
+            type="text"
+            name="company"
+            placeholder="Company Name"
+            value={formData.company}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+            required
+          />
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+            required
+          />
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={formData.description}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+            required
+          />
+          <button 
+            type="submit" 
+            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition duration-200"
+          >
+            Send
+          </button>
+        </form>
       </Modal>
     </div>
   );

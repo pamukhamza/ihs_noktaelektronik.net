@@ -45,8 +45,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode }) => {
   };
 
   return (
-    <div className={`group w-full h-full p-4 border rounded-lg shadow-md bg-white ${
-      viewMode === 'grid' ? 'max-w-full' : 'flex flex-row items-center'
+    <div className={`group w-full h-full p-4 border rounded-lg shadow-md bg-white overflow-hidden ${
+      viewMode === 'grid' ? 'max-w-full sm:max-w-[calc(100vw-2rem)]' : 'flex flex-row items-center'
     }`}>
       <Link href={`/urun/${product.seo_link}`} passHref>
         <div className={`cursor-pointer ${viewMode === 'grid' ? 'flex flex-col h-full' : 'flex flex-row items-center gap-4 w-full'}`}>

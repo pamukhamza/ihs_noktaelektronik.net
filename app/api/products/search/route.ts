@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     }
 
     // Split the search query into individual words and create patterns for each
-    const searchTerms = query.trim().split(/\s+/).filter(term => term.length > 0);
+    const searchTerms = query.trim().split(/\s+/).filter(term => term.length > 0).map(term => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
     const searchPatterns = searchTerms.map(term => `%${term}%`);
 
     // Create the dynamic WHERE clause for each search term

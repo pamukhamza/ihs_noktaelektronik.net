@@ -87,11 +87,9 @@ export default function Navbar() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
-      // Normalize and clean the search query
+      // Normalize the query by only trimming spaces
       const normalizedQuery = searchQuery
         .trim()
-        .toLowerCase()
-        .replace(/[^\w\s]/g, '') // Remove special characters
         .replace(/\s+/g, ' ');    // Replace multiple spaces with single space
 
       if (normalizedQuery) {
@@ -108,7 +106,7 @@ export default function Navbar() {
     if (query.length >= 2) {
       setIsLoading(true)
       try {
-        // Normalize the query by trimming extra spaces
+        // Normalize the query by only trimming spaces
         const normalizedQuery = query.trim().replace(/\s+/g, ' ');
         const response = await fetch(`/api/products/search?query=${encodeURIComponent(normalizedQuery)}&limit=5`)
         
@@ -129,7 +127,7 @@ export default function Navbar() {
         setSearchResults([])
       } finally {
         setIsLoading(false)
-      }
+    }
     } else {
       setSearchResults([])
     }
@@ -414,15 +412,15 @@ export default function Navbar() {
         <div className="container py-8">
           <div className="relative mx-auto max-w-2xl">
             <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              ref={inputRef}
-              type="search"
-              value={searchQuery}
+              <Input
+                ref={inputRef}
+                type="search"
+                value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ürün adı, stok kodu veya marka..."
-              className="w-full border-none bg-muted/50 pl-10 pr-10 py-6 text-lg shadow-none ring-0 focus-visible:ring-0"
-            />
+                placeholder="Ürün adı, stok kodu veya marka..."
+                className="w-full border-none bg-muted/50 pl-10 pr-10 py-6 text-lg shadow-none ring-0 focus-visible:ring-0"
+              />
             <Button
               variant="ghost"
               size="icon"

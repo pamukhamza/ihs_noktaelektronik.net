@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const parentId = parseInt(searchParams.get('parent_id') || '0');
+    const brandSeoLink = searchParams.get('brand');
 
     if (isNaN(parentId)) {
       return NextResponse.json({
@@ -14,103 +16,73 @@ export async function GET(request: Request) {
       }, { status: 400 });
     }
 
+    let whereClause: Prisma.nokta_kategorilerWhereInput = {
+      parent_id: parentId,
+      is_active: true
+    };
+
+    if (brandSeoLink) {
+      // Get the brand ID from seo_link
+      const brand = await prisma.nokta_urun_markalar.findFirst({
+        where: { seo_link: brandSeoLink },
+        select: { id: true }
+      });
+
+      if (!brand) {
+        return NextResponse.json({ categories: [] });
+      }
+
+      // Get all category IDs that are related to this brand
+      const categoryRelations = await prisma.category_brand_rel.findMany({
+        where: { marka_id: brand.id },
+        select: { kat_id: true }
+      });
+
+      const categoryIds = categoryRelations.map(rel => rel.kat_id).filter(id => id !== null) as number[];
+
+      if (parentId === 0) {
+        // For root level, get all parent categories that have relations
+        const rootCategories = await prisma.nokta_kategoriler.findMany({
+          where: {
+            id: { in: categoryIds },
+            parent_id: 0,
+            is_active: true
+          },
+          select: { id: true }
+        });
+
+        whereClause = {
+          is_active: true,
+          parent_id: 0,
+          id: { in: rootCategories.map(cat => cat.id) }
+        };
+      } else {
+        // For subcategories, get direct children of the specified parent
+        whereClause = {
+          is_active: true,
+          parent_id: parentId,
+          id: { in: categoryIds }
+        };
+      }
+    }
+
     const categories = await prisma.nokta_kategoriler.findMany({
-      where: {
-        parent_id: parentId,
-        is_active: true
-      },
+      where: whereClause,
       select: {
         id: true,
         KategoriAdiTr: true,
         KategoriAdiEn: true,
         seo_link: true,
-        parent_id: true,
-        img_path: true,
+        img_path: true
       },
       orderBy: {
-        KategoriAdiTr: 'asc',
-      },
-    });
-
-    if (!categories) {
-      return NextResponse.json({
-        categories: [],
-        success: true
-      });
-    }
-
-    // Ensure seo_link is not null
-    const validCategories = categories.map(cat => ({
-      ...cat,
-      KategoriAdiTr: cat.KategoriAdiTr || '',
-      KategoriAdiEn: cat.KategoriAdiEn || '',
-      seo_link: cat.seo_link || `category-${cat.id}` // Fallback if seo_link is null
-    }));
-
-    return NextResponse.json({
-      categories: validCategories,
-      success: true,
-    });
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch categories' },
-      { status: 500 }
-    );
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    const { parent_id } = await request.json();
-    
-    if (isNaN(parent_id)) {
-      return NextResponse.json({
-        categories: [],
-        success: false,
-        error: 'Invalid parent_id'
-      }, { status: 400 });
-    }
-
-    const categories = await prisma.nokta_kategoriler.findMany({
-      where: {
-        parent_id: parent_id,
-        is_active: true
-      },
-      select: {
-        id: true,
-        KategoriAdiTr: true,
-        KategoriAdiEn: true,
-        seo_link: true,
-        parent_id: true,
-        img_path: true,
+        sira: 'asc'
       }
     });
 
-    if (!categories) {
-      return NextResponse.json({
-        categories: [],
-        success: true
-      });
-    }
-
-    // Ensure seo_link is not null
-    const validCategories = categories.map(cat => ({
-      ...cat,
-      KategoriAdiTr: cat.KategoriAdiTr || '',
-      KategoriAdiEn: cat.KategoriAdiEn || '',
-      seo_link: cat.seo_link || `category-${cat.id}` // Fallback if seo_link is null
-    }));
-
-    return NextResponse.json({
-      categories: validCategories,
-      success: true,
-    });
+    return NextResponse.json({ categories });
   } catch (error) {
-    console.error('Error fetching categories:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch categories' },
-      { status: 500 }
-    );
+    console.error('Error in categories API:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

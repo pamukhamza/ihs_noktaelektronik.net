@@ -21,11 +21,6 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         BilgiEN: true,
         UygulamalarTr: true,
         UygulamalarEn: true,
-        datasheet: true,
-        manual: true,
-        SurucuIndir: true,
-        firmware: true,
-        sertifika: true,
         YeniUrun: true,
         aktif: true,
         create_date: true,
@@ -43,7 +38,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
     // Fetch categories
     const categories = await prisma.nokta_kategoriler.findMany({
       where: {
-        id: product.KategoriID ?? undefined,  // Use nullish coalescing to handle null
+        id: product.KategoriID ?? undefined,
         is_active: true
       },
       select: {
@@ -94,85 +89,72 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
       }
     })
 
-    // Fetch downloads with category information
-    const downloads = await prisma.nokta_urunler_yuklemeler.findMany({
-      where: { urun_id: product.id },
-      select: {
-        id: true,
-        aciklama: true,
-        aciklamaEn: true,
-        url_path: true,
-        dosya_adi: true,
-        version: true,
-        type: true,
-        datetime: true,
-        yukleme_id: true
-      },
-      orderBy: {
-        order_by: 'asc'
-      }
-    })
-
-    // Fetch download categories (headers)
-    const downloadCategories = await prisma.nokta_yuklemeler.findMany({
-      select: {
-        id: true,
-        baslik: true,
-        baslikEn: true
-      }
-    })
-
-    // Create a map of download categories for easy lookup
-    const categoryMap = new Map(downloadCategories.map(cat => [cat.id, cat]))
+    // Fetch product downloads and their categories in a single query
+    const downloadData = await prisma.$queryRaw`
+      SELECT 
+        uy.id,
+        uy.aciklama,
+        uy.aciklamaEn,
+        uy.url_path,
+        uy.dosya_adi,
+        uy.version,
+        uy.type,
+        uy.datetime,
+        y.id as category_id,
+        y.baslik as category_name,
+        y.baslikEn as category_name_en,
+        y.dosya_yolu
+      FROM nokta_urunler_yuklemeler uy
+      LEFT JOIN nokta_yuklemeler y ON uy.yukleme_id = y.id
+      WHERE uy.urun_id = ${product.id}
+      AND uy.is_active = true
+      ORDER BY y.order_by ASC, uy.order_by ASC
+    ` as Array<{
+      id: number;
+      aciklama: string | null;
+      aciklamaEn: string | null;
+      url_path: string | null;
+      dosya_adi: string | null;
+      version: string | null;
+      type: string | null;
+      datetime: Date | null;
+      category_id: number;
+      category_name: string | null;
+      category_name_en: string | null;
+      dosya_yolu: string | null;
+    }>;
 
     // Group downloads by category
-    const groupedDownloads: Product['downloads'] = []
-    downloads.forEach(download => {
-      const categoryId = download.yukleme_id
-      const category = categoryId ? categoryMap.get(categoryId) : null
-      const categoryName = category ? (category.baslik || category.baslikEn || 'Unknown') : 'Unknown'
+    const groupedDownloads: Product['downloads'] = [];
+    const processedCategories = new Set<string>();
 
-      let categoryGroup = groupedDownloads.find(group => group.name === categoryName)
-      if (!categoryGroup) {
-        categoryGroup = { name: categoryName, items: [] }
-        groupedDownloads.push(categoryGroup)
+    downloadData.forEach(download => {
+      const categoryName = download.category_name || download.category_name_en || 'Other';
+      
+      if (!processedCategories.has(categoryName)) {
+        processedCategories.add(categoryName);
+        groupedDownloads.push({
+          name: categoryName,
+          items: []
+        });
       }
 
-      categoryGroup.items.push({
-        id: download.id,
-        name: download.aciklama || download.aciklamaEn || download.dosya_adi || 'Unknown',
-        url: download.url_path ? `https://noktanet.s3.eu-central-1.amazonaws.com${download.url_path}` : '#',
-        version: download.version || '',
-        type: download.type || '',
-        date: download.datetime ? download.datetime.toISOString() : null
-      })
-    })
-
-    // Add existing downloads to appropriate categories
-    const addToCategory = (name: string, item: Product['downloads'][0]['items'][0]) => {
-      let category = groupedDownloads.find(cat => cat.name === name)
-      if (!category) {
-        category = { name, items: [] }
-        groupedDownloads.push(category)
+      const categoryGroup = groupedDownloads.find(group => group.name === categoryName);
+      if (categoryGroup) {
+        categoryGroup.items.push({
+          id: download.id,
+          name: download.aciklama || download.aciklamaEn || download.dosya_adi || 'Unknown',
+          url: download.url_path 
+            ? `https://noktanet.s3.eu-central-1.amazonaws.com${download.url_path}`
+            : (download.dosya_yolu 
+              ? `https://noktanet.s3.eu-central-1.amazonaws.com${download.dosya_yolu}`
+              : '#'),
+          version: download.version || '',
+          type: download.type || '',
+          date: download.datetime ? download.datetime.toISOString() : null
+        });
       }
-      category.items.push(item)
-    }
-
-    if (product.datasheet) {
-      addToCategory('Data Sheet', { id: 0, name: 'Data Sheet', url: `https://noktanet.s3.eu-central-1.amazonaws.com${product.datasheet}` })
-    }
-    if (product.manual) {
-      addToCategory('User Manual', { id: 0, name: 'User Manual', url: `https://noktanet.s3.eu-central-1.amazonaws.com${product.manual}` })
-    }
-    if (product.SurucuIndir) {
-      addToCategory('Driver', { id: 0, name: 'Driver', url: `https://noktanet.s3.eu-central-1.amazonaws.com${product.SurucuIndir}` })
-    }
-    if (product.firmware) {
-      addToCategory('Firmware', { id: 0, name: 'Firmware', url: `https://noktanet.s3.eu-central-1.amazonaws.com${product.firmware}` })
-    }
-    if (product.sertifika) {
-      addToCategory('Certificate', { id: 0, name: 'Certificate', url: `https://noktanet.s3.eu-central-1.amazonaws.com/${product.sertifika}` })
-    }
+    });
 
     // Fetch images for similar products
     const similarProductsWithImages = await Promise.all(
@@ -200,6 +182,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         UrunAdiTR: product.UrunAdiTR || '',
         UrunAdiEN: product.UrunAdiEN || ''
       },
+      seo_link: product.seo_link || '',
       stockCode: product.UrunKodu || '',
       brand: brand?.title || 'Unknown',
       categories: categories.map(cat => ({
@@ -210,34 +193,35 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         },
         seo_link: cat.seo_link || ''
       })),
-      images: images.map(img => img.KResim ? `${BASE_IMAGE_URL}${img.KResim}` : '').filter(Boolean),
-      generalFeatures: {
-        OzelliklerTR: product.OzelliklerTR || '',
-        OzelliklerEN: product.OzelliklerEN || ''
-      },
+      images: images.map(img => 
+        img.KResim ? `${BASE_IMAGE_URL}${img.KResim}` : DEFAULT_IMAGE
+      ),
       technicalSpecs: {
         BilgiTR: product.BilgiTR || '',
         BilgiEN: product.BilgiEN || ''
+      },
+      generalFeatures: {
+        OzelliklerTR: product.OzelliklerTR || '',
+        OzelliklerEN: product.OzelliklerEN || ''
       },
       applications: {
         UygulamalarTr: product.UygulamalarTr || '',
         UygulamalarEn: product.UygulamalarEn || ''
       },
-      downloads: groupedDownloads,
-      similarProducts: similarProductsWithImages.map(prod => ({
-        id: prod.id,
-        name: {
-          UrunAdiTR: prod.UrunAdiTR || '',
-          UrunAdiEN: prod.UrunAdiEN || ''
-        },
-        image: prod.image || '', 
-        seo_link: prod.seo_link || ''
-      })),
-      seo_link: product.seo_link || '',
       isNew: product.YeniUrun || false,
       isActive: product.aktif || false,
-      createdAt: product.create_date ? new Date(product.create_date).toISOString() : null,
-      modifiedAt: product.modify_date ? new Date(product.modify_date).toISOString() : null
+      createdAt: product.create_date?.toISOString() || null,
+      modifiedAt: product.modify_date?.toISOString() || null,
+      downloads: groupedDownloads,
+      similarProducts: similarProductsWithImages.map(product => ({
+        id: product.id,
+        name: {
+          UrunAdiTR: product.UrunAdiTR || '',
+          UrunAdiEN: product.UrunAdiEN || ''
+        },
+        image: product.image,
+        seo_link: product.seo_link || ''
+      }))
     }
 
     return transformedProduct
