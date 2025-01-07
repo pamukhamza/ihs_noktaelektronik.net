@@ -54,8 +54,6 @@ model nokta_urunler {
   tags          String?   @db.LongText
   aktif         Boolean?
   sira          Int?
-  stok_giren    Boolean?
-  stok_fazla    Boolean?
   create_date   DateTime? @db.DateTime(0)
   modify_date   DateTime? @db.DateTime(0)
   UygulamalarTr String?   @db.LongText
