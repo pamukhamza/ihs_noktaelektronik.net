@@ -88,9 +88,7 @@ export default function Navbar() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
       // Normalize the query by only trimming spaces
-      const normalizedQuery = searchQuery
-        .trim()
-        .replace(/\s+/g, ' ');    // Replace multiple spaces with single space
+      const normalizedQuery = searchQuery.trim().replace(/\s+/g, ' ');
 
       if (normalizedQuery) {
         router.push(`/urunler?query=${encodeURIComponent(normalizedQuery)}`);

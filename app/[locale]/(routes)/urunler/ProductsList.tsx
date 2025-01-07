@@ -59,10 +59,10 @@ const CategoryCard = ({ category, locale }: CategoryCardProps) => {
     : `/urunler/${category.seo_link}`;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 group">
+    <div className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 group border">
       <Link href={href} className="block">
         {/* Image Container */}
-        <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg bg-gray-50 flex items-center justify-center">
+        <div className="relative aspect-[1/1] overflow-hidden rounded-t-lg bg-gray-50 flex items-center justify-center">
           <Image
             src={imageError ? 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg' : imageUrl}
             alt={locale === 'tr' ? category.KategoriAdiTr : category.KategoriAdiEn}
@@ -267,19 +267,30 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     try {
       // Always build the full category path
       const fullPath = await buildCategoryPath(category);
+      if (fullPath.length === 0) {
+        throw new Error('Failed to build category path');
+      }
+      
       setCategoryPath(fullPath);
       setSelectedCategorySeo(category.seo_link);
       
       // Update URL
       const params = new URLSearchParams(searchParams?.toString() || '');
-      router.push(`/urunler/${category.seo_link}${params.get('brand') ? `?brand=${params.get('brand')}` : ''}`);
+      const brandParam = params.get('brand');
+      const newPath = `/urunler/${category.seo_link}${brandParam ? `?brand=${brandParam}` : ''}`;
       
-      // Reset products and page
+      // Reset products and page before navigation
       setProducts([]);
       setPage(1);
       setTotalPages(1);
+      
+      await router.push(newPath);
     } catch (error) {
       console.error('Error handling category click:', error);
+      // Optionally show an error message to the user
+      setProducts([]); // Clear products on error
+      setPage(1);
+      setTotalPages(1);
     } finally {
       setIsLoadingCategory(false);
     }
@@ -350,7 +361,8 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
           // Always build the full category path
           const fullPath = await buildCategoryPath(category);
           setCategoryPath(fullPath);
-
+          setSelectedCategorySeo(category.seo_link);
+          
           // Fetch category data in parallel
           const [subcategoriesData, brandsData] = await Promise.all([
             fetch(`/api/categories?parent_id=${category.id}${brandParam ? `&brand=${brandParam}` : ''}`).then(res => res.json()),
@@ -424,11 +436,22 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     
     while (currentCat) {
       path.unshift(currentCat);
-      if (currentCat.parent_id === 0) break;
+      if (!currentCat.parent_id || currentCat.parent_id === 0) break;
       
-      const response = await fetch(`/api/categories/by-id?id=${currentCat.parent_id}`);
-      const data = await response.json();
-      currentCat = data.category;
+      try {
+        const response = await fetch(`/api/categories/by-id?id=${currentCat.parent_id}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (!data.success || !data.category) {
+          throw new Error('Category not found');
+        }
+        currentCat = data.category;
+      } catch (error) {
+        console.error('Error fetching parent category:', error);
+        break; // Stop the loop but return what we have so far
+      }
     }
     
     return path;
@@ -588,37 +611,39 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
           </div>
 
           {/* View Options and Breadcrumbs */}
+          {categoryPath.length > 0 && (
           <div className="flex justify-between items-center mb-6">
             {/* Breadcrumbs*/}
-            <div className="hidden md:flex items-center gap-2">
-              <Link 
-                href={searchParams?.get('brand') ? `/urunler?brand=${searchParams.get('brand')}` : '/urunler'} 
-                className="text-gray-600 hover:text-gray-900"
-              >
-                <Home className="h-5 w-5" />
-              </Link>
-              {categoryPath.map((category, index) => (
-                <React.Fragment key={category.id}>
-                  <ChevronRight className="h-4 w-4 text-gray-500" />
-                  {index === categoryPath.length - 1 ? (
-                    <span className="text-blue-600">{renderCategoryName(category)}</span>
-                  ) : (
-                    <Link 
-                      href={searchParams?.get('brand') 
-                        ? `/urunler/${category.seo_link}?brand=${searchParams.get('brand')}`
-                        : `/urunler/${category.seo_link}`
-                      }
-                      className="text-gray-600 hover:text-gray-900"
-                    >
-                      {renderCategoryName(category)}
-                    </Link>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
+            
+              <div className="hidden md:flex items-center gap-2">
+                <Link 
+                  href={searchParams?.get('brand') ? `/urunler?brand=${searchParams.get('brand')}` : '/urunler'} 
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  <Home className="h-5 w-5" />
+                </Link>
+                {categoryPath.map((category, index) => (
+                  <React.Fragment key={category.id}>
+                    <ChevronRight className="h-4 w-4 text-gray-500" />
+                    {index === categoryPath.length - 1 ? (
+                      <span className="text-blue-600">{renderCategoryName(category)}</span>
+                    ) : (
+                      <Link 
+                        href={searchParams?.get('brand') 
+                          ? `/urunler/${category.seo_link}?brand=${searchParams.get('brand')}`
+                          : `/urunler/${category.seo_link}`
+                        }
+                        className="text-gray-600 hover:text-gray-900"
+                      >
+                        {renderCategoryName(category)}
+                      </Link>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
 
             {/* Sort and View Options */}
-            <div className="flex items-center gap-4">
+            <div className={`flex items-center gap-4 ${categoryPath.length === 0 ? 'ml-auto' : ''}`}>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
@@ -639,11 +664,11 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
               </div>
             </div>
           </div>
-
+        )}
           {/* Products or Categories Grid */}
           <div className={`grid gap-6 ${
             !searchQuery && (!selectedCategorySeo || hasSubcategories)
-              ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3' // Categories grid
+              ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4' // Categories grid
               : viewMode === 'grid'
                 ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4' // Products grid
                 : 'grid-cols-1 gap-y-4' // List view

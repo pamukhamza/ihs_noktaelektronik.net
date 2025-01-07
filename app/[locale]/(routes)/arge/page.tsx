@@ -18,7 +18,7 @@ const ArgeFabrika = () => {
       transition={{ duration: 1 }}
     >
       {/* Header with Image */}
-      <div className="relative bg-gradient-to-r from-blue-500 to-green-500 text-white py-12 mb-8">
+      <div className="relative bg-gradient-to-r from-blue-900 to-sky-600 text-white py-12 mb-8">
         <div className="container mx-auto text-center">
           <motion.h1 
             className="text-4xl font-bold mb-4"

@@ -31,7 +31,7 @@ export async function GET(request: Request) {
 
         // Product direct search (name and code)
         searchConditions.push({
-          OR: [
+          AND: [
             ...searchTerms.map(term => ({
               OR: [
                 { UrunAdiTR: { contains: term } },
@@ -46,7 +46,7 @@ export async function GET(request: Request) {
         try {
           const brandResults = await prisma.nokta_urun_markalar.findMany({
             where: {
-              OR: searchTerms.map(term => ({
+              AND: searchTerms.map(term => ({
                 title: { contains: term }
               }))
             },
@@ -68,7 +68,7 @@ export async function GET(request: Request) {
         try {
           const categoryResults = await prisma.nokta_kategoriler.findMany({
             where: {
-              OR: searchTerms.map(term => ({
+              AND: searchTerms.map(term => ({
                 OR: [
                   { KategoriAdiTr: { contains: term } },
                   { KategoriAdiEn: { contains: term } }

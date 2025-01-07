@@ -46,7 +46,7 @@ const Iletisim = () => {
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-12 mb-8">
+      <div className="bg-gradient-to-r from-blue-900 to-sky-600 text-white py-12 mb-8">
         <div className="container mx-auto text-center">
           <h1 className="text-4xl font-bold mb-4">{navigationT('contact')}</h1>
         </div>

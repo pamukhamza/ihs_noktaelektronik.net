@@ -39,7 +39,7 @@ const AboutUs = () => {
     >
       {/* Header */}
       <motion.div
-        className="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-12 mb-8"
+        className="bg-gradient-to-r from-blue-900 to-sky-600 text-white py-12 mb-8"
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1 }}

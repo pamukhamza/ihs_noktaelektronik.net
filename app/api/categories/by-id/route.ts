@@ -21,10 +21,19 @@ export async function GET(request: Request) {
       select: {
         id: true,
         KategoriAdiTr: true,
+        KategoriAdiEn: true,
         seo_link: true,
         parent_id: true,
+        img_path: true,
       },
     });
+
+    if (!category) {
+      return NextResponse.json(
+        { error: 'Category not found', success: false },
+        { status: 404 }
+      );
+    }
 
     return NextResponse.json({
       category,
