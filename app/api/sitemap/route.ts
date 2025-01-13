@@ -47,6 +47,7 @@ function generateSiteMap(
  `;
 }
 
+
 export async function GET() {
   try {
     // Fetch all active products
