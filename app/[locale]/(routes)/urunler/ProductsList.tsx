@@ -38,6 +38,7 @@ interface Category {
   KategoriAdiEn: string;
   seo_link: string;
   img_path?: string;
+  parent_id?: number;
 }
 
 interface CategoryCardProps {

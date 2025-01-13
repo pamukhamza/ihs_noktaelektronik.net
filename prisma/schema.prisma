@@ -129,6 +129,12 @@ model category_brand_rel {
   kat_id   Int?
 }
 
+model category_product_rel {
+  id       Int  @id @default(autoincrement())
+  p_id     Int?
+  cat_id   Int?
+}
+
 model slider {
   id        Int      @id @default(autoincrement())
   link      String?  @db.Text

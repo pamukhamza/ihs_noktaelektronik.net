@@ -1,4 +1,1 @@
-schema da nokta_urunler güncellendi.
-nokta_urunler tablosunda silinecek sütünları sil.
 kategori isimlerini kısalt
-npx prisma generate yap aws de
