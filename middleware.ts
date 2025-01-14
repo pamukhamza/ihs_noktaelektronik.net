@@ -30,6 +30,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/tr', request.url));
   }
 
+  // Handle paths without locale prefix
+  if (!pathname.startsWith('/api') && 
+      !pathname.startsWith('/_next') && 
+      !pathname.match(/\..*$/) &&
+      !pathname.startsWith(`/${defaultLocale}`) &&
+      !locales.some(locale => pathname.startsWith(`/${locale}`))) {
+    return NextResponse.redirect(new URL(`/${defaultLocale}${pathname}`, request.url));
+  }
+
   // For all other routes, use the intl middleware
   return intlMiddleware(request);
 }
