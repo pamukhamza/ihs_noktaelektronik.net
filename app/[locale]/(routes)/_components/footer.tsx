@@ -30,29 +30,29 @@ const Footer = () => {
           <div>
             <h2 className="mb-6 text-sm font-semibold  text-white uppercase ">{t('cozumler')}</h2>
             <ul className="text-white text-sm">
-              <li className="mb-4"><a href="/urunler/cctv-cozumleri-326" className="hover:underline">{t('cctv-cozumleri')}</a></li>
-              <li className="mb-4"><a href="/urunler/aktif-network-urunleri-2384" className="hover:underline">{t('aktif-network')}</a></li>
-              <li className="mb-4"><a href="/urunler/pasif-network-urunleri-2389" className="hover:underline">{t('pasif-network')}</a></li>
-              <li className="mb-4"><a href="/urunler/medikal-urun-cozumleri-10556" className="hover:underline">{t('medikal-urun')}</a></li>
-              <li className="mb-4"><a href="/urunler/yangin-algilama-sistemleri-10629" className="hover:underline">{t('yangin-algilama')}</a></li>
-              <li className="mb-4"><a href="/urunler/bariyer-ve-otopark-cozumleri-10638" className="hover:underline">{t('bariyer-otopark')}</a></li>
-              <li className="mb-4"><a href="/software" className="hover:underline">{t('yazilim-cozumleri')}</a></li>
+              <li className="mb-4"><a href="urunler/cctv-cozumleri-326" className=" hover:underline">{t('cctv-cozumleri')}</a></li>
+              <li className="mb-4"><a href="urunler/aktif-network-urunleri-2384" className=" hover:underline">{t('aktif-network')}</a></li>
+              <li className="mb-4"><a href="urunler/pasif-network-urunleri-2389" className=" hover:underline">{t('pasif-network')}</a></li>
+              <li className="mb-4"><a href="urunler/medikal-urun-cozumleri-10556" className=" hover:underline">{t('medikal-urun')}</a></li>
+              <li className="mb-4"><a href="urunler/yangin-algilama-sistemleri-10629" className=" hover:underline">{t('yangin-algilama')}</a></li>
+              <li className="mb-4"><a href="urunler/bariyer-ve-otopark-cozumleri-10638" className=" hover:underline">{t('bariyer-otopark')}</a></li>
+              <li className="mb-4"><a href="software" className=" hover:underline">{t('yazilim-cozumleri')}</a></li>
             </ul>
           </div>
           <div>
             <h2 className="mb-6 text-sm font-semibold  uppercase text-white">{t('destek')}</h2>
             <ul className="text-white text-sm">
               <li className="mb-4"><a href="https://www.noktaelektronik.com.tr/tr/teknik-destek" className="hover:underline">{t('teknik-destek-prog')}</a></li>
-              <li className="mb-4"><a href="/arge" className="hover:underline">{t('arge-uretim')}</a></li>
-              <li className="mb-4"><a href="/software" className="hover:underline">{t('yazilim')}</a></li>
-              <li className="mb-4"><a href="/hakkimizda" className="hover:underline">{t('hakkimizda')}</a></li>
-              <li className="mb-4"><a href="/iletisim" className="hover:underline">{t('iletisim')}</a></li>
+              <li className="mb-4"><a href="arge" className="hover:underline">{t('arge-uretim')}</a></li>
+              <li className="mb-4"><a href="software" className="hover:underline">{t('yazilim')}</a></li>
+              <li className="mb-4"><a href="hakkimizda" className="hover:underline">{t('hakkimizda')}</a></li>
+              <li className="mb-4"><a href="iletisim" className="hover:underline">{t('iletisim')}</a></li>
             </ul>
           </div>
           <div>
             <h2 className="mb-6 text-sm font-semibold uppercase text-white">{t('bize-ulasin')}</h2>
             <ul className=" text-white text-sm">
-              <li className="mb-4"><a href="/iletisim" className="hover:underline">{t('adreslerimiz')}</a></li>
+              <li className="mb-4"><a href="iletisim" className="hover:underline">{t('adreslerimiz')}</a></li>
               <li className="mb-4">{t('tel')}<a href="tel:02122228780" className="hover:underline"> 0212 222 87 80</a></li>
               <li className="mb-4">{t('e-posta')}: <a href="mailto:nokta@noktaelektronik.net" className="hover:underline">nokta@noktaelektronik.net</a></li>
             </ul>
@@ -83,7 +83,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="px-4 py-6 md:flex md:items-center md:justify-between border-t borderone">
-          <span className="text-sm text-white sm:text-center"> 2024 <a href="https://www.noktaelektronik.net/">Nokta Elektronik</a>. {t('tum-haklar')}.</span>
+          <span className="text-sm text-white sm:text-center">© 2024 <a href="https://www.noktaelektronik.net/">Nokta Elektronik</a>. {t('tum-haklar')}.</span>
           <div className="flex mt-4 sm:justify-center md:mt-0 space-x-5 rtl:space-x-reverse">
             <a href="https://www.facebook.com/nebsis/" className="text-white">
               <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 8 19">
@@ -111,7 +111,8 @@ const Footer = () => {
             </a>
             <a href="#" className="text-white">
               <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                <path fillRule="evenodd" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" clipRule="evenodd"/>
+                <path fillRule="evenodd" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.
+505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" clipRule="evenodd"/>
               </svg>
               <span className="sr-only">YouTube channel</span>
             </a>
@@ -123,3 +124,4 @@ const Footer = () => {
 }
 
 export default Footer
+
