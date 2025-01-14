@@ -59,7 +59,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const navItems = [
-    { href: "/urunler", label: t('products') },
+    { href: `/${locale}/urunler`, label: t('products') },
     { href: "/arge", label: t('rAndD') },
     { href: "/software", label: t('software') },
     { href: "/markalar", label: t('brands') },
@@ -91,7 +91,7 @@ export default function Navbar() {
       const normalizedQuery = searchQuery.trim().replace(/\s+/g, ' ');
 
       if (normalizedQuery) {
-        router.push(`/urunler?query=${encodeURIComponent(normalizedQuery)}`);
+        router.push(`/${locale}/urunler?query=${encodeURIComponent(normalizedQuery)}`);
         handleCloseSearch();
       }
       e.preventDefault();
@@ -133,7 +133,7 @@ export default function Navbar() {
 
   const handleSeeAll = () => {
     if (searchQuery) {
-      router.push(`/urunler?search=${encodeURIComponent(searchQuery)}`);
+      router.push(`/${locale}/urunler?search=${encodeURIComponent(searchQuery)}`);
       handleCloseSearch();
     }
   }
