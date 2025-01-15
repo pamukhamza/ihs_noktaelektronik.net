@@ -19,7 +19,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Menu, Search, Languages, X } from 'lucide-react'
+import { Menu, Search, Languages, X, Building2, Wrench } from 'lucide-react'
 import Logo from '@/components/Logo'
 import { useRouter as useNextRouter } from 'next/navigation'
 import { useLocale } from 'next-intl';
@@ -44,6 +44,15 @@ interface SearchResult {
 const LOCALES = ["en", "tr", "ru", "de"] as const;
 type Locale = typeof LOCALES[number];
 
+const MENU_ITEMS = [
+  { href: "/urunler", label: 'products' },
+  { href: "/arge", label: 'rAndD' },
+  { href: "/software", label: 'software' },
+  { href: "/markalar", label: 'brands' },
+  { href: "/hakkimizda", label: 'about' },
+  { href: "/iletisim", label: 'contact' },
+]
+
 export default function Navbar() {
   const t = useTranslations('navigation');
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -57,15 +66,6 @@ export default function Navbar() {
   const locale = useLocale();
   const intlRouter = useRouter();
   const pathname = usePathname();
-
-  const navItems = [
-    { href: "/urunler", label: t('products') },
-    { href: "/arge", label: t('rAndD') },
-    { href: "/software", label: t('software') },
-    { href: "/markalar", label: t('brands') },
-    { href: "/hakkimizda", label: t('about') },
-    { href: "/iletisim", label: t('contact') },
-  ]
 
   const switchLocale = (newLocale: Locale) => {
     localStorage.setItem('selectedLanguage', newLocale); 
@@ -243,82 +243,185 @@ export default function Navbar() {
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b navbgone backdrop-blur">
-        <div className="container flex h-16 items-center justify-between">
-        <ScrollProgressBar />
-            <div className="w-[150px] md:w-[205px] flex-shrink-0 mr-4">
-              <Logo />
-            </div>
-            <nav className="hidden lg:flex items-center space-x-6">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="text-sm font-medium transition-colors hover:text-primary"
-                >
-                  {item.label}
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+          <div className="w-[120px] md:w-[150px] lg:w-[205px] flex-shrink-0">
+            <Logo />
+          </div>
+          <nav className="hidden items-center space-x-3 md:space-x-4 lg:space-x-6 lg:flex">
+            {MENU_ITEMS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`text-xs md:text-sm font-medium transition-colors hover:text-foreground/80 ${
+                  pathname.startsWith(item.href)
+                    ? 'text-foreground'
+                    : 'text-foreground/60'
+                }`}
+              >
+                {t(item.label)}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center space-x-2 md:space-x-3">
+            <div className="hidden items-center gap-1.5 md:gap-2 lg:flex">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex h-7 md:h-8 items-center gap-1.5 rounded-full px-2.5 md:px-3 text-xs font-medium transition-colors bg-blue-500 text-white hover:bg-blue-600"
+                asChild
+              >
+                <Link href="https://www.noktaelektronik.com.tr/tr/giris">
+                  <Building2 className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">{t('b2bLogin')}</span>
                 </Link>
-              ))}
-            </nav>
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              aria-label="Toggle search"
-              className="hover:bg-transparent"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="hover:bg-transparent">
-                  <Languages className="h-5 w-5" />
-                  <span className="sr-only">Select language</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => switchLocale('tr')} className={locale === 'tr' ? 'bg-accent' : ''}>
-                  <Image
-                    src="/flags/tr.svg"
-                    alt="Turkish Flag"
-                    width={24}
-                    height={16}
-                    className="mr-2"
-                  />
-                  Türkçe
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => switchLocale('en')} className={locale === 'en' ? 'bg-accent' : ''}>
-                  <Image
-                    src="/flags/gb.svg"
-                    alt="British Flag"
-                    width={24}
-                    height={16}
-                    className="mr-2"
-                  />
-                  English
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => switchLocale('ru')} className={locale === 'ru' ? 'bg-accent' : ''}>
-                  <Image
-                    src="/flags/ru.svg"
-                    alt="Russian Flag"
-                    width={24}
-                    height={16}
-                    className="mr-2"
-                  />
-                  Русский
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => switchLocale('de')} className={locale === 'de' ? 'bg-accent' : ''}>
-                  <Image
-                    src="/flags/de.svg"
-                    alt="German Flag"
-                    width={24}
-                    height={16}
-                    className="mr-2"
-                  />
-                  Deutsch
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex h-7 md:h-8 items-center gap-1.5 rounded-full px-2.5 md:px-3 text-xs font-medium transition-colors bg-emerald-500 text-white hover:bg-emerald-600"
+                asChild
+              >
+                <Link href="https://www.noktaelektronik.com.tr/tr/teknik-destek">
+                  <Wrench className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">{t('technicalService')}</span>
+                </Link>
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 hover:bg-muted/50"
+                onClick={() => {
+                  setIsSearchOpen(true)
+                  setTimeout(() => {
+                    inputRef.current?.focus()
+                  }, 200)
+                }}
+              >
+                <Search className="h-4 w-4" />
+              </Button>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-transparent">
+                    <Languages className="h-4 w-4" />
+                    <span className="sr-only">Select language</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-[180px]">
+                  <DropdownMenuItem onClick={() => switchLocale('tr')} className={locale === 'tr' ? 'bg-accent' : ''}>
+                    <Image
+                      src="/flags/tr.svg"
+                      alt="Turkish Flag"
+                      width={24}
+                      height={16}
+                      className="mr-2"
+                    />
+                    Türkçe
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => switchLocale('en')} className={locale === 'en' ? 'bg-accent' : ''}>
+                    <Image
+                      src="/flags/gb.svg"
+                      alt="British Flag"
+                      width={24}
+                      height={16}
+                      className="mr-2"
+                    />
+                    English
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => switchLocale('ru')} className={locale === 'ru' ? 'bg-accent' : ''}>
+                    <Image
+                      src="/flags/ru.svg"
+                      alt="Russian Flag"
+                      width={24}
+                      height={16}
+                      className="mr-2"
+                    />
+                    Русский
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => switchLocale('de')} className={locale === 'de' ? 'bg-accent' : ''}>
+                    <Image
+                      src="/flags/de.svg"
+                      alt="German Flag"
+                      width={24}
+                      height={16}
+                      className="mr-2"
+                    />
+                    Deutsch
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Mobile Search and Menu */}
+            <div className="flex lg:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-muted/50"
+                onClick={() => {
+                  setIsSearchOpen(true)
+                  setTimeout(() => {
+                    inputRef.current?.focus()
+                  }, 200)
+                }}
+              >
+                <Search className="h-5 w-5" />
+              </Button>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="hover:bg-transparent">
+                    <Languages className="h-5 w-5" />
+                    <span className="sr-only">Select language</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => switchLocale('tr')} className={locale === 'tr' ? 'bg-accent' : ''}>
+                    <Image
+                      src="/flags/tr.svg"
+                      alt="Turkish Flag"
+                      width={24}
+                      height={16}
+                      className="mr-2"
+                    />
+                    Türkçe
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => switchLocale('en')} className={locale === 'en' ? 'bg-accent' : ''}>
+                    <Image
+                      src="/flags/gb.svg"
+                      alt="British Flag"
+                      width={24}
+                      height={16}
+                      className="mr-2"
+                    />
+                    English
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => switchLocale('ru')} className={locale === 'ru' ? 'bg-accent' : ''}>
+                    <Image
+                      src="/flags/ru.svg"
+                      alt="Russian Flag"
+                      width={24}
+                      height={16}
+                      className="mr-2"
+                    />
+                    Русский
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => switchLocale('de')} className={locale === 'de' ? 'bg-accent' : ''}>
+                    <Image
+                      src="/flags/de.svg"
+                      alt="German Flag"
+                      width={24}
+                      height={16}
+                      className="mr-2"
+                    />
+                    Deutsch
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="lg:hidden hover:bg-transparent">
@@ -326,73 +429,103 @@ export default function Navbar() {
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <SheetHeader>
-                  <SheetTitle className="text-left">Menu</SheetTitle>
+              <SheetContent side="right" className="w-full sm:w-[540px]">
+                <SheetHeader className="mb-8">
+                  <SheetTitle>Menu</SheetTitle>
                 </SheetHeader>
-                <nav className="flex flex-col space-y-4 mt-6">
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="text-lg font-medium transition-colors hover:text-primary"
-                      onClick={() => setIsMobileMenuOpen(false)}
+                <div className="flex flex-col space-y-6">
+                  
+
+                  <div className="flex flex-col space-y-4">
+                    {MENU_ITEMS.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="text-lg font-medium transition-colors hover:text-primary"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {t(item.label)}
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="mt-6 space-y-4">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="w-full justify-start">
+                          <Languages className="mr-2 h-4 w-4" />
+                          <span>Language</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-full sm:w-[540px]">
+                        <DropdownMenuItem onClick={() => switchLocale('tr')} className={locale === 'tr' ? 'bg-accent' : ''}>
+                          <Image
+                            src="/flags/tr.svg"
+                            alt="Turkish Flag"
+                            width={24}
+                            height={16}
+                            className="mr-2"
+                          />
+                          Türkçe
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => switchLocale('en')} className={locale === 'en' ? 'bg-accent' : ''}>
+                          <Image
+                            src="/flags/gb.svg"
+                            alt="British Flag"
+                            width={24}
+                            height={16}
+                            className="mr-2"
+                          />
+                          English
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => switchLocale('ru')} className={locale === 'ru' ? 'bg-accent' : ''}>
+                          <Image
+                            src="/flags/ru.svg"
+                            alt="Russian Flag"
+                            width={24}
+                            height={16}
+                            className="mr-2"
+                          />
+                          Русский
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => switchLocale('de')} className={locale === 'de' ? 'bg-accent' : ''}>
+                          <Image
+                            src="/flags/de.svg"
+                            alt="German Flag"
+                            width={24}
+                            height={16}
+                            className="mr-2"
+                          />
+                          Deutsch
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  {/* Add mobile buttons at the top */}
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="flex w-full items-center justify-start gap-2 rounded-lg px-4 py-2 text-left text-sm font-medium transition-colors hover:bg-primary hover:text-primary-foreground"
+                      asChild
                     >
-                      {item.label}
-                    </Link>
-                  ))}
-                </nav>
-                <div className="mt-6 space-y-4">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="w-full justify-start">
-                        <Languages className="mr-2 h-4 w-4" />
-                        <span>Language</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-[300px] sm:w-[400px]">
-                      <DropdownMenuItem onClick={() => switchLocale('tr')} className={locale === 'tr' ? 'bg-accent' : ''}>
-                        <Image
-                          src="/flags/tr.svg"
-                          alt="Turkish Flag"
-                          width={24}
-                          height={16}
-                          className="mr-2"
-                        />
-                        Türkçe
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => switchLocale('en')} className={locale === 'en' ? 'bg-accent' : ''}>
-                        <Image
-                          src="/flags/gb.svg"
-                          alt="British Flag"
-                          width={24}
-                          height={16}
-                          className="mr-2"
-                        />
-                        English
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => switchLocale('ru')} className={locale === 'ru' ? 'bg-accent' : ''}>
-                        <Image
-                          src="/flags/ru.svg"
-                          alt="Russian Flag"
-                          width={24}
-                          height={16}
-                          className="mr-2"
-                        />
-                        Русский
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => switchLocale('de')} className={locale === 'de' ? 'bg-accent' : ''}>
-                        <Image
-                          src="/flags/de.svg"
-                          alt="German Flag"
-                          width={24}
-                          height={16}
-                          className="mr-2"
-                        />
-                        Deutsch
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                      <Link href="https://www.noktaelektronik.com.tr/tr/giris">
+                        <Building2 className="h-4 w-4" />
+                        <span>{t('b2bLogin')}</span>
+                      </Link>
+                    </Button>
+                    
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="flex w-full items-center justify-start gap-2 rounded-lg px-4 py-2 text-left text-sm font-medium transition-colors hover:bg-primary hover:text-primary-foreground"
+                      asChild
+                    >
+                      <Link href="https://www.noktaelektronik.com.tr/tr/teknik-destek">
+                        <Wrench className="h-4 w-4" />
+                        <span>{t('technicalService')}</span>
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>

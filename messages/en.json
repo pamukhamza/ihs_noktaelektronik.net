@@ -6,7 +6,9 @@
     "software": "Software",
     "brands": "Brands",
     "about": "About Us",
-    "contact": "Contact"
+    "contact": "Contact",
+    "b2bLogin": "B2B Login",
+    "technicalService": "Technical Service"
   },
   "common": {
     "search": "Search",

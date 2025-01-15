@@ -6,7 +6,9 @@
     "software": "Программное обеспечение",
     "brands": "Бренды",
     "about": "О нас",
-    "contact": "Контакты"
+    "contact": "Контакты",
+    "b2bLogin": "B2B Вход",
+    "technicalService": "Техническая служба"
   },
   "common": {
     "search": "Поиск",

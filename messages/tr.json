@@ -6,7 +6,9 @@
     "software": "Yazılım",
     "brands": "Markalar",
     "about": "Hakkımızda",
-    "contact": "İletişim"
+    "contact": "İletişim",
+    "b2bLogin": "B2B Giriş",
+    "technicalService": "Teknik Servis"
   },
   "common": {
     "search": "Ara",
