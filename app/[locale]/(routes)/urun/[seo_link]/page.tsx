@@ -29,18 +29,16 @@ export async function generateMetadata(
     }
 
     const productName = locale === 'tr' ? product.name.UrunAdiTR : product.name.UrunAdiEN;
-    const productDescription = locale === 'tr' 
-      ? product.generalFeatures.OzelliklerTR 
-      : product.generalFeatures.OzelliklerEN;
+    const productCode = locale === 'tr' ? product.stockCode : '';
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.noktaelektronik.net';
 
     return {
       title: productName,
-      description: productDescription,
+      description: productCode,
       openGraph: {
         title: productName,
-        description: productDescription,
+        description: productCode,
         images: product.images.map(image => ({
           url: image.startsWith('http') ? image : `${baseUrl}${image}`,
           width: 800,
