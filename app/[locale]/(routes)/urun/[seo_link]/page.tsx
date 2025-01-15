@@ -3,7 +3,7 @@ import ProductDetail from './ProductDetail'
 import { getProduct } from '@/app/actions/get-product'
 import { Suspense } from 'react'
 import Loading from './loading'
-import { Metadata, ResolvingMetadata } from 'next'
+import { Metadata } from 'next'
 
 interface PageParams {
   seo_link: string;
@@ -15,8 +15,7 @@ interface Props {
 }
 
 export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
+  { params }: Props
 ): Promise<Metadata> {
   const { seo_link, locale } = await params;
   
@@ -53,7 +52,7 @@ export async function generateMetadata(
         locale: locale,
       },
     }
-  } catch (error) {
+  } catch {
     return {
       title: 'Error',
       description: 'Error loading product',
