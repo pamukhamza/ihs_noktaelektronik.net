@@ -53,14 +53,15 @@ export async function GET(request: Request) {
         n.UrunKodu,
         n.seo_link,
         n.MarkaID,
-        r.KResim,
+        COALESCE(r0.KResim, r1.KResim) as KResim,
         m.id as marka_id,
         m.title as marka_title,
         m.seo_link as marka_seo_link,
         1 as relevance
       FROM nokta_urunler n
       LEFT JOIN nokta_urun_markalar m ON n.MarkaID = m.id
-      LEFT JOIN nokta_urunler_resimler r ON n.id = r.UrunID AND r.sira = 1
+      LEFT JOIN nokta_urunler_resimler r0 ON n.id = r0.UrunID AND r0.sira = 0
+      LEFT JOIN nokta_urunler_resimler r1 ON n.id = r1.UrunID AND r1.sira = 1
       WHERE 
         n.aktif = true
         AND (${whereConditions})

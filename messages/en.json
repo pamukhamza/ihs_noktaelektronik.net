@@ -2,13 +2,14 @@
   "navigation": {
     "home": "Home",
     "products": "Products",
-    "rAndD": "R&D - Production",
+    "rAndD": "R&D & Production",
     "software": "Software",
     "brands": "Brands",
-    "about": "About Us",
+    "about": "About",
     "contact": "Contact",
     "b2bLogin": "B2B Login",
-    "technicalService": "Technical Service"
+    "technicalService": "Technical Service",
+    "language": "Select Language"
   },
   "common": {
     "search": "Search",

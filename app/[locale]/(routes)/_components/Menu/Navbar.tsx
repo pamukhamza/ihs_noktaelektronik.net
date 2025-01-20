@@ -104,7 +104,7 @@ export default function Navbar() {
     if (query.length >= 2) {
       setIsLoading(true)
       try {
-        // Normalize the query by only trimming spaces
+        // Use the AI-powered search endpoint
         const normalizedQuery = query.trim().replace(/\s+/g, ' ');
         const response = await fetch(`/api/products/search?query=${encodeURIComponent(normalizedQuery)}&limit=5`)
         
@@ -125,7 +125,7 @@ export default function Navbar() {
         setSearchResults([])
       } finally {
         setIsLoading(false)
-    }
+      }
     } else {
       setSearchResults([])
     }
@@ -198,7 +198,7 @@ export default function Navbar() {
                   alt={result.UrunAdiTR}
                   width={64}
                   height={64}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               ) : (
                 <div className="w-full h-full bg-gray-200 flex items-center justify-center">
@@ -207,7 +207,7 @@ export default function Navbar() {
                     alt="No image available"
                     width={64}
                     height={64}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               )}
@@ -422,111 +422,122 @@ export default function Navbar() {
               </DropdownMenu>
             </div>
 
-            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="lg:hidden hover:bg-transparent">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-full sm:w-[540px]">
-                <SheetHeader className="mb-8">
-                  <SheetTitle>Menu</SheetTitle>
-                </SheetHeader>
-                <div className="flex flex-col space-y-6">
-                  
+              <SheetContent 
+                side="right" 
+                className="w-[320px] sm:w-[400px] p-0 bg-white/95 backdrop-blur-lg duration-300 transition-all ease-in-out"
+              >
+                <motion.div 
+                  className="flex flex-col h-full"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                >
+                  {/* Header with Logo and Close Button */}
+                  <div className="border-b p-3">
+                    <SheetHeader className="flex items-center justify-between">
+                      <SheetTitle className="sr-only">Menu</SheetTitle>
+                      <div className="w-[100px]">
+                        <Logo />
+                      </div>
+                    </SheetHeader>
+                  </div>
 
-                  <div className="flex flex-col space-y-4">
-                    {MENU_ITEMS.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="text-lg font-medium transition-colors hover:text-primary"
-                        onClick={() => setIsMobileMenuOpen(false)}
+                  {/* Main Content */}
+                  <motion.div 
+                    className="flex-1 overflow-y-auto"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.1, duration: 0.2 }}
+                  >
+
+                    {/* Navigation Links */}
+                    <nav className="px-2">
+                      {MENU_ITEMS.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={`flex items-center space-x-2 w-full rounded-lg px-3 py-2 text-sm font-medium transition-all hover:bg-gray-100 ${
+                            pathname.startsWith(item.href)
+                              ? 'bg-gray-100 text-blue-600'
+                              : 'text-gray-700'
+                          }`}
+                        >
+                          <span>{t(item.label)}</span>
+                        </Link>
+                      ))}
+                    </nav>
+
+                    {/* Quick Actions */}
+                    <div className="grid grid-cols-2 gap-2 p-3">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center justify-center gap-1.5 rounded-lg bg-blue-500 text-white hover:bg-blue-600 border-none shadow-sm h-9"
+                        asChild
                       >
-                        {t(item.label)}
-                      </Link>
-                    ))}
-                  </div>
-                  <div className="mt-6 space-y-4">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="w-full justify-start">
-                          <Languages className="mr-2 h-4 w-4" />
-                          <span>Language</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-full sm:w-[540px]">
-                        <DropdownMenuItem onClick={() => switchLocale('tr')} className={locale === 'tr' ? 'bg-accent' : ''}>
-                          <Image
-                            src="/flags/tr.svg"
-                            alt="Turkish Flag"
-                            width={24}
-                            height={16}
-                            className="mr-2"
-                          />
-                          Türkçe
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => switchLocale('en')} className={locale === 'en' ? 'bg-accent' : ''}>
-                          <Image
-                            src="/flags/gb.svg"
-                            alt="British Flag"
-                            width={24}
-                            height={16}
-                            className="mr-2"
-                          />
-                          English
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => switchLocale('ru')} className={locale === 'ru' ? 'bg-accent' : ''}>
-                          <Image
-                            src="/flags/ru.svg"
-                            alt="Russian Flag"
-                            width={24}
-                            height={16}
-                            className="mr-2"
-                          />
-                          Русский
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => switchLocale('de')} className={locale === 'de' ? 'bg-accent' : ''}>
-                          <Image
-                            src="/flags/de.svg"
-                            alt="German Flag"
-                            width={24}
-                            height={16}
-                            className="mr-2"
-                          />
-                          Deutsch
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                  {/* Add mobile buttons at the top */}
-                  <div className="flex flex-col gap-2">
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="flex w-full items-center justify-start gap-2 rounded-lg px-4 py-2 text-left text-sm font-medium transition-colors hover:bg-primary hover:text-primary-foreground"
-                      asChild
-                    >
-                      <Link href="https://www.noktaelektronik.com.tr/tr/giris">
-                        <Building2 className="h-4 w-4" />
-                        <span>{t('b2bLogin')}</span>
-                      </Link>
-                    </Button>
-                    
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="flex w-full items-center justify-start gap-2 rounded-lg px-4 py-2 text-left text-sm font-medium transition-colors hover:bg-primary hover:text-primary-foreground"
-                      asChild
-                    >
-                      <Link href="https://www.noktaelektronik.com.tr/tr/teknik-destek">
-                        <Wrench className="h-4 w-4" />
-                        <span>{t('technicalService')}</span>
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
+                        <Link href="https://www.noktaelektronik.com.tr/tr/giris">
+                          <Building2 className="h-3.5 w-3.5" />
+                          <span className="text-xs">{t('b2bLogin')}</span>
+                        </Link>
+                      </Button>
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center justify-center gap-1.5 rounded-lg bg-emerald-500 text-white hover:bg-emerald-600 border-none shadow-sm h-9"
+                        asChild
+                      >
+                        <Link href="https://www.noktaelektronik.com.tr/tr/teknik-destek">
+                          <Wrench className="h-3.5 w-3.5" />
+                          <span className="text-xs">{t('technicalService')}</span>
+                        </Link>
+                      </Button>
+                    </div>
+
+                    {/* Language Selector */}
+                    <div className="mt-4 px-2">
+                      <div className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        {t('language')}
+                      </div>
+                      <div className="space-y-0.5">
+                        {[
+                          { code: 'tr', label: 'Türkçe', flag: '/flags/tr.svg' },
+                          { code: 'en', label: 'English', flag: '/flags/gb.svg' },
+                          { code: 'ru', label: 'Русский', flag: '/flags/ru.svg' },
+                          { code: 'de', label: 'Deutsch', flag: '/flags/de.svg' }
+                        ].map((lang) => (
+                          <button
+                            key={lang.code}
+                            onClick={() => {
+                              intlRouter.replace(pathname, { locale: lang.code as Locale });
+                              localStorage.setItem('selectedLanguage', lang.code);
+                            }}
+                            className={`flex items-center w-full px-3 py-1.5 text-sm transition-colors hover:bg-gray-100 rounded-lg ${
+                              locale === lang.code ? 'bg-gray-100 text-blue-600 font-medium' : 'text-gray-700'
+                            }`}
+                          >
+                            <Image
+                              src={lang.flag}
+                              alt={`${lang.label} Flag`}
+                              width={20}
+                              height={15}
+                              className="mr-2"
+                            />
+                            <span>{lang.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                </motion.div>
               </SheetContent>
             </Sheet>
           </div>

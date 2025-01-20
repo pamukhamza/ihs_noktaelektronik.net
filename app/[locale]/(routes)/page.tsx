@@ -29,12 +29,12 @@ interface Product {
 }
 
 const solutions = [
-  { id: 1, nameKey: "solutions.cctv", icon: "🎥", link: "urunler/cctv-cozumleri-326" },
-  { id: 2, nameKey: "solutions.fireAlarms", icon: "🚨", link: "urunler/yangin-algilama-sistemleri-10629"  },
-  { id: 3, nameKey: "solutions.accessControl", icon: "🔐", link: "software"  },
-  { id: 4, nameKey: "solutions.hemsirecagri", icon: "💓", link: "urunler/hemsire-cagri-sistemleri-10558"  },
-  { id: 5, nameKey: "solutions.sistemsaat", icon: "🏥", link: "urunler/merkezi-sistem-saat-cozumleri-10626"  },
-  { id: 6, nameKey: "solutions.bariyerotopark", icon: "📊", link: "urunler/bariyer-ve-otopark-cozumleri-10638"  },
+  { id: 1, nameKey: "solutions.cctv", icon: "⚡", link: "urunler/cctv-cozumleri-326" },
+  { id: 2, nameKey: "solutions.fireAlarms", icon: "🔥", link: "urunler/yangin-algilama-sistemleri-10629"  },
+  { id: 3, nameKey: "solutions.accessControl", icon: "🛡️", link: "software"  },
+  { id: 4, nameKey: "solutions.hemsirecagri", icon: "🏥", link: "urunler/hemsire-cagri-sistemleri-10558"  },
+  { id: 5, nameKey: "solutions.sistemsaat", icon: "⌚", link: "urunler/merkezi-sistem-saat-cozumleri-10626"  },
+  { id: 6, nameKey: "solutions.bariyerotopark", icon: "🅿️", link: "urunler/bariyer-ve-otopark-cozumleri-10638"  },
   { id: 7, nameKey: "solutions.customSoftware", icon: "💻", link: "software"  },
   { id: 8, nameKey: "solutions.mobileApps", icon: "📱", link: "software"  },
   { id: 9, nameKey: "solutions.cloudSolutions", icon: "☁️", link: "software"  },
