@@ -19,6 +19,10 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Nokta Elektronik",
   description: "Nokta Elektronik ve Bilişim Sistemleri A.Ş.",
+  metadataBase: new URL('https://noktaelektronik.com.tr'),
+  verification: {
+    google: '47W-WhSQrS5lfoRb-hsqDu86McCee-cPghZ1N9y9zkY',
+  },
 };
 
 export default function RootLayout({
