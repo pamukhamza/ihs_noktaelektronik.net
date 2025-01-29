@@ -2,16 +2,10 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { nokta_urunler, nokta_kategoriler } from '@prisma/client';
 
-type ProductWithDetails = Pick<nokta_urunler, 'seo_link' | 'UrunAdiTR' | 'UrunAdiEN' | 'UrunKodu'> & {
-  resimler?: {
-    KResim: string | null;
-  }[];
-};
-type CategoryWithDetails = Pick<nokta_kategoriler, 'seo_link' | 'KategoriAdiTr' | 'img_path'>;
+type ProductWithDetails = Pick<nokta_urunler, 'seo_link' | 'UrunAdiTR' | 'UrunAdiEN'>;
+type CategoryWithDetails = Pick<nokta_kategoriler, 'seo_link' | 'KategoriAdiTr'>;
 
 const BASE_URL = 'https://www.noktaelektronik.net';
-const BASE_IMAGE_URL = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/';
-const DEFAULT_IMAGE = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg';
 
 function generateSiteMap(
   products: ProductWithDetails[],
@@ -19,7 +13,6 @@ function generateSiteMap(
 ): string {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <!-- Static pages -->
   <url>
@@ -28,6 +21,7 @@ function generateSiteMap(
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="tr" href="${BASE_URL}/tr"/>
     <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/en"/>
+    <lastmod>${new Date().toISOString()}</lastmod>
   </url>
   <url>
     <loc>${BASE_URL}/tr</loc>
@@ -35,6 +29,7 @@ function generateSiteMap(
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="tr" href="${BASE_URL}/tr"/>
     <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/en"/>
+    <lastmod>${new Date().toISOString()}</lastmod>
   </url>
   <url>
     <loc>${BASE_URL}/tr/urunler</loc>
@@ -42,6 +37,7 @@ function generateSiteMap(
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="tr" href="${BASE_URL}/tr/urunler"/>
     <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/en/products"/>
+    <lastmod>${new Date().toISOString()}</lastmod>
   </url>
   <url>
     <loc>${BASE_URL}/tr/arge</loc>
@@ -49,6 +45,7 @@ function generateSiteMap(
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="tr" href="${BASE_URL}/tr/arge"/>
     <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/en/rnd"/>
+    <lastmod>${new Date().toISOString()}</lastmod>
   </url>
   <url>
     <loc>${BASE_URL}/tr/software</loc>
@@ -56,6 +53,7 @@ function generateSiteMap(
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="tr" href="${BASE_URL}/tr/software"/>
     <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/en/software"/>
+    <lastmod>${new Date().toISOString()}</lastmod>
   </url>
   <url>
     <loc>${BASE_URL}/tr/markalar</loc>
@@ -63,6 +61,7 @@ function generateSiteMap(
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="tr" href="${BASE_URL}/tr/markalar"/>
     <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/en/brands"/>
+    <lastmod>${new Date().toISOString()}</lastmod>
   </url>
   <url>
     <loc>${BASE_URL}/tr/hakkimizda</loc>
@@ -70,6 +69,7 @@ function generateSiteMap(
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="tr" href="${BASE_URL}/tr/hakkimizda"/>
     <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/en/about"/>
+    <lastmod>${new Date().toISOString()}</lastmod>
   </url>
   <url>
     <loc>${BASE_URL}/tr/iletisim</loc>
@@ -77,6 +77,7 @@ function generateSiteMap(
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="tr" href="${BASE_URL}/tr/iletisim"/>
     <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/en/contact"/>
+    <lastmod>${new Date().toISOString()}</lastmod>
   </url>
   <!-- Products -->
   ${products
@@ -88,19 +89,7 @@ function generateSiteMap(
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="tr" href="${BASE_URL}/tr/urun/${product.seo_link}"/>
     <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/en/product/${product.seo_link}"/>
-    ${product.resimler && product.resimler.length > 0 ? product.resimler.map(img => 
-      img.KResim ? `
-    <image:image>
-      <image:loc>${BASE_IMAGE_URL}${img.KResim}</image:loc>
-      <image:title>${product.UrunAdiTR || ''}</image:title>
-      <image:caption>${product.UrunKodu || ''} - ${product.UrunAdiTR || ''}</image:caption>
-    </image:image>`
-    : '').join('') : `
-    <image:image>
-      <image:loc>${DEFAULT_IMAGE}</image:loc>
-      <image:title>${product.UrunAdiTR || ''}</image:title>
-      <image:caption>${product.UrunKodu || ''} - ${product.UrunAdiTR || ''}</image:caption>
-    </image:image>`}
+    <lastmod>${new Date().toISOString()}</lastmod>
   </url>`
     )
     .join('\n')}
@@ -114,12 +103,7 @@ function generateSiteMap(
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="tr" href="${BASE_URL}/tr/urunler/${category.seo_link}"/>
     <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/en/products/${category.seo_link}"/>
-    ${category.img_path ? `
-    <image:image>
-      <image:loc>${BASE_IMAGE_URL}${category.img_path}</image:loc>
-      <image:title>${category.KategoriAdiTr || ''}</image:title>
-      <image:caption>${category.KategoriAdiTr || ''}</image:caption>
-    </image:image>` : ''}
+    <lastmod>${new Date().toISOString()}</lastmod>
   </url>`
     )
     .join('\n')}
@@ -130,7 +114,7 @@ function generateSiteMap(
 
 export async function GET() {
   try {
-    // Fetch all active products with images
+    // Fetch all active products
     const products = await prisma.nokta_urunler.findMany({
       where: {
         aktif: true,
@@ -139,20 +123,10 @@ export async function GET() {
         seo_link: true,
         UrunAdiTR: true,
         UrunAdiEN: true,
-        UrunKodu: true,
-        resimler: {
-          select: {
-            KResim: true,
-          },
-          orderBy: {
-            Sira: 'asc',
-          },
-          take: 5, // Limit to first 5 images per product
-        },
       },
     });
 
-    // Fetch all categories with images
+    // Fetch all categories
     const categories = await prisma.nokta_kategoriler.findMany({
       where: {
         is_active: true,
@@ -160,7 +134,6 @@ export async function GET() {
       select: {
         seo_link: true,
         KategoriAdiTr: true,
-        img_path: true,
       },
     });
 
