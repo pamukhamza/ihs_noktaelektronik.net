@@ -172,8 +172,8 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   const fetchProducts = useCallback(async () => {
     // Only fetch products if:
     // 1. There's a search query OR
-    // 2. We're in a category with no subcategories
-    if ((!selectedCategorySeo || hasSubcategories !== false) && !searchQuery && !brandParam) {
+    // 2. We're in a category
+    if (!selectedCategorySeo && !searchQuery && !brandParam) {
       return;
     }
 
@@ -182,6 +182,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
       const queryParams = new URLSearchParams();
       queryParams.set('page', page.toString());
       queryParams.set('limit', ITEMS_PER_PAGE.toString());
+      queryParams.set('exclude_subcategories', 'true');
       
       if (selectedCategorySeo && !searchQuery) {
         queryParams.set('seo_link', selectedCategorySeo);
@@ -212,14 +213,14 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     } finally {
       setIsLoading(false);
     }
-  }, [page, selectedCategorySeo, selectedBrands, searchQuery, ITEMS_PER_PAGE, hasSubcategories]);
+  }, [page, selectedCategorySeo, selectedBrands, searchQuery, ITEMS_PER_PAGE, brandParam]);
 
-  // Fetch products when search query changes or when we know there are no subcategories
+  // Fetch products when search query changes or when category is selected
   useEffect(() => {
-    if (searchQuery || (!isLoadingCategory && selectedCategorySeo && hasSubcategories === false)) {
+    if (searchQuery || (!isLoadingCategory && selectedCategorySeo)) {
       fetchProducts();
     }
-  }, [fetchProducts, selectedCategorySeo, hasSubcategories, isLoadingCategory, searchQuery]);
+  }, [fetchProducts, selectedCategorySeo, isLoadingCategory, searchQuery]);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -681,16 +682,35 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
               </div>
             )}
 
-            {/* Categories - Only show if no search query */}
-            {!isLoadingCategory && !searchQuery && (!selectedCategorySeo || hasSubcategories) && (
-              categories.map((category) => (
-                <CategoryCard key={category.id} category={category} locale={locale} />
-              ))
+            {/* Categories - Show if no search query and either no selected category or has subcategories */}
+            {!isLoadingCategory && !searchQuery && (!selectedCategorySeo || categories.length > 0) && (
+              <>
+                {categories.length > 0 && (
+                  <>
+                    {/* Subcategories Header */}
+                    {selectedCategorySeo && (
+                      <div className="col-span-full mb-2">
+                        <h2 className="text-xl font-semibold">{t('categories')}</h2>
+                      </div>
+                    )}
+                    {/* Categories Grid */}
+                    {categories.map((category) => (
+                      <CategoryCard key={category.id} category={category} locale={locale} />
+                    ))}
+                  </>
+                )}
+              </>
             )}
             
-            {/* Products - Show when in search mode or when category has no subcategories */}
-            {(searchQuery || (!isLoadingCategory && selectedCategorySeo && hasSubcategories === false)) && (
+            {/* Products - Show when in search mode or when category is selected */}
+            {(searchQuery || (!isLoadingCategory && selectedCategorySeo)) && (
               <>
+                {/* Products Header when showing both */}
+                {!searchQuery && categories.length > 0 && !isLoading && products.length > 0 && (
+                  <div className="col-span-full mt-8 mb-2">
+                    <h2 className="text-xl font-semibold">{t('products')}</h2>
+                  </div>
+                )}
                 {isLoading ? (
                   <div className="col-span-full flex justify-center items-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -701,17 +721,13 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
                       <ProductCard product={product} viewMode={viewMode} />
                     </div>
                   ))
-                ) : (
-                  <div className="col-span-full text-center py-8 text-gray-500">
-                    {t('no_products_found')}
-                  </div>
-                )}
+                ) : null}
               </>
             )}
           </div>
 
           {/* Pagination - Only show when displaying products */}
-          {(searchQuery || (!isLoadingCategory && selectedCategorySeo && hasSubcategories === false)) && !isLoading && products.length > 0 && (
+          {(searchQuery || (!isLoadingCategory && selectedCategorySeo)) && !isLoading && products.length > 0 && (
             <div className="flex justify-center items-center gap-2 mt-8">
               <Button
                 variant="outline"

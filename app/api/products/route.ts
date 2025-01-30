@@ -16,6 +16,7 @@ export async function GET(request: Request) {
   const brand = searchParams.get('brand');
   const query = searchParams.get('query')?.toLowerCase();
   const limit = parseInt(searchParams.get('limit') || '10');
+  const excludeSubcategories = searchParams.get('exclude_subcategories') === 'true';
 
   try {
     const whereConditions: any[] = [{ aktif: true }];
@@ -105,22 +106,28 @@ export async function GET(request: Request) {
         });
 
         if (category) {
-          const allCategories = await prisma.nokta_kategoriler.findMany({
-            select: { id: true, parent_id: true }
-          });
+          if (excludeSubcategories) {
+            // Only include products from the selected category
+            whereConditions.push({ KategoriID: category.id });
+          } else {
+            // Include products from subcategories
+            const allCategories = await prisma.nokta_kategoriler.findMany({
+              select: { id: true, parent_id: true }
+            });
 
-          const getSubcategoryIds = (parentId: number): number[] => {
-            const subcategoryIds = [parentId];
-            allCategories
-              .filter(cat => cat.parent_id === parentId)
-              .forEach(cat => {
-                subcategoryIds.push(...getSubcategoryIds(cat.id));
-              });
-            return subcategoryIds;
-          };
+            const getSubcategoryIds = (parentId: number): number[] => {
+              const subcategoryIds = [parentId];
+              allCategories
+                .filter(cat => cat.parent_id === parentId)
+                .forEach(cat => {
+                  subcategoryIds.push(...getSubcategoryIds(cat.id));
+                });
+              return subcategoryIds;
+            };
 
-          const categoryIds = getSubcategoryIds(category.id);
-          whereConditions.push({ KategoriID: { in: categoryIds } });
+            const categoryIds = getSubcategoryIds(category.id);
+            whereConditions.push({ KategoriID: { in: categoryIds } });
+          }
         }
       } catch (categoryError) {
         console.error('Error processing category:', categoryError instanceof Error ? categoryError.message : 'Unknown error');
