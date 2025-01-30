@@ -244,7 +244,6 @@ export default function Home() {
                     <Link 
                       href="https://www.noktaelektronik.com.tr/?ref=nokta" 
                       target="_blank"
-                      rel="noopener"
                     >
                       {t('b2b.cta')} <ArrowRight className="ml-2" />
                     </Link>
@@ -350,8 +349,7 @@ export default function Home() {
               </ul>
               <Button size="lg" className="bg-red-500 hover:bg-red-600 text-white">
                 <Link 
-                  href="/urunler?brand=dahua-41" 
-                  rel="noopener"
+                  href="/urunler?brand=dahua-41"
                 >
                   {t('exploreSecurityProducts')}
                 </Link>
@@ -422,8 +420,7 @@ export default function Home() {
               </ul>
               <Button size="lg" className="bg-green-500 hover:bg-green-600 text-white">
                 <Link 
-                  href="/urunler/hemsire-cagri-sistemleri-0" 
-                  rel="noopener"
+                  href="/urunler/hemsire-cagri-sistemleri-0"
                 >
                   {t('discoverMedicalProducts')}
                 </Link>
@@ -477,8 +474,7 @@ export default function Home() {
               </ul>
               <Button size="lg" className="bg-blue-500 hover:bg-blue-600 text-white">
                 <Link 
-                  href="/software" 
-                  rel="noopener"
+                  href="/software"
                 >
                   {t('exploreSoftwareServices')} 
                 </Link>
