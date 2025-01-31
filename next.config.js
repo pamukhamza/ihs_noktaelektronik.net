@@ -3,7 +3,7 @@ const withNextIntl = require('next-intl/plugin')('./i18n.ts');
 
 const nextConfig = {
   images: {
-    domains: ['noktaelektronik.net'], // Add your domain here
+    domains: ['www.noktaelektronik.net', 'noktaelektronik.net'], // Her iki versiyonu da ekledik
     remotePatterns: [
       {
         protocol: 'https',
