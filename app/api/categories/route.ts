@@ -2,6 +2,92 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 
+const BASE_IMAGE_URL = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/';
+const DEFAULT_IMAGE = 'gorsel_hazirlaniyor.jpg';
+const CATEGORY_IMAGE_URL = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/categories/';
+
+async function getCategoryImage(categoryId: number): Promise<string | null> {
+  try {
+    // First try to get an image from a direct product
+    const productWithImage = await prisma.nokta_urunler.findFirst({
+      where: {
+        KategoriID: categoryId,
+        aktif: true,
+      },
+      select: {
+        id: true,
+        resimler: {
+          where: { Sira: 1 },
+          select: { KResim: true },
+          take: 1
+        }
+      }
+    });
+
+    if (productWithImage?.resimler[0]?.KResim) {
+      return `${BASE_IMAGE_URL}${productWithImage.resimler[0].KResim}`;
+    }
+
+    // If no direct product image, get subcategories
+    const subcategories = await prisma.nokta_kategoriler.findMany({
+      where: { parent_id: categoryId },
+      select: { id: true }
+    });
+
+    // If there are no subcategories, try to get more products from the current category
+    if (subcategories.length === 0) {
+      const moreProducts = await prisma.nokta_urunler.findMany({
+        where: {
+          KategoriID: categoryId,
+          aktif: true,
+        },
+        select: {
+          id: true,
+          resimler: {
+            where: { Sira: 1 },
+            select: { KResim: true },
+            take: 1
+          }
+        },
+        take: 5 // Try a few more products in case the first one didn't have an image
+      });
+
+      for (const product of moreProducts) {
+        if (product.resimler[0]?.KResim) {
+          return `${BASE_IMAGE_URL}${product.resimler[0].KResim}`;
+        }
+      }
+    }
+
+    // If still no image and there are subcategories, try them
+    for (const subcat of subcategories) {
+      const subcatProductImage = await prisma.nokta_urunler.findFirst({
+        where: {
+          KategoriID: subcat.id,
+          aktif: true,
+        },
+        select: {
+          id: true,
+          resimler: {
+            where: { Sira: 1 },
+            select: { KResim: true },
+            take: 1
+          }
+        }
+      });
+
+      if (subcatProductImage?.resimler[0]?.KResim) {
+        return `${BASE_IMAGE_URL}${subcatProductImage.resimler[0].KResim}`;
+      }
+    }
+
+    return `${BASE_IMAGE_URL}${DEFAULT_IMAGE}`;
+  } catch (error) {
+    console.error('Error getting category image:', error);
+    return `${BASE_IMAGE_URL}${DEFAULT_IMAGE}`;
+  }
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -73,14 +159,38 @@ export async function GET(request: Request) {
         KategoriAdiTr: true,
         KategoriAdiEn: true,
         seo_link: true,
-        img_path: true
+        img_path: true,
+        parent_id: true
       },
       orderBy: {
         sira: 'asc'
       }
     });
 
-    return NextResponse.json({ categories });
+    // Get product images for non-root categories
+    const categoriesWithImages = await Promise.all(
+      categories.map(async (category) => {
+        if (category.parent_id === 0) {
+          // For root categories, use the original img_path
+          return {
+            ...category,
+            img_path: category.img_path ? 
+              `${CATEGORY_IMAGE_URL}${category.img_path}` : 
+              `${BASE_IMAGE_URL}${DEFAULT_IMAGE}`
+          };
+        }
+
+        // For non-root categories, try to get a product image
+        const productImage = await getCategoryImage(category.id);
+        
+        return {
+          ...category,
+          img_path: productImage || `${BASE_IMAGE_URL}${DEFAULT_IMAGE}`
+        };
+      })
+    );
+
+    return NextResponse.json({ categories: categoriesWithImages });
   } catch (error) {
     console.error('Error in categories API:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

@@ -15,7 +15,17 @@ console.log(`Fetching sitemap from ${PROTOCOL}://${HOST}/api/sitemap`);
 setTimeout(() => {
   const client = PROTOCOL === 'https' ? https : http;
   
-  client.get(`${PROTOCOL}://${HOST}/api/sitemap`, (res) => {
+  const options = {
+    hostname: HOST.split(':')[0],
+    port: HOST.includes(':') ? HOST.split(':')[1] : (PROTOCOL === 'https' ? 443 : 80),
+    path: '/api/sitemap',
+    method: 'GET',
+    headers: {
+      'Accept': 'application/xml'
+    }
+  };
+  
+  const req = client.request(options, (res) => {
     if (res.statusCode !== 200) {
       console.error(`Failed to fetch sitemap: HTTP ${res.statusCode}`);
       process.exit(1);
@@ -34,7 +44,12 @@ setTimeout(() => {
           throw new Error('Invalid XML response received');
         }
 
-        fs.writeFileSync(OUTPUT_PATH, data);
+        // Format the XML data with proper indentation
+        const formattedXml = data
+          .replace(/></g, '>\n<')  // Add newlines between tags
+          .replace(/\n\s*\n/g, '\n'); // Remove empty lines
+
+        fs.writeFileSync(OUTPUT_PATH, formattedXml);
         console.log(`Sitemap has been successfully written to ${OUTPUT_PATH}`);
         process.exit(0);
       } catch (err) {
@@ -42,8 +57,12 @@ setTimeout(() => {
         process.exit(1);
       }
     });
-  }).on('error', (err) => {
+  });
+
+  req.on('error', (err) => {
     console.error('Error fetching sitemap:', err);
     process.exit(1);
   });
+
+  req.end();
 }, WAIT_TIME);
