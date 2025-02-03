@@ -49,7 +49,9 @@ interface CategoryCardProps {
 const CategoryCard = ({ category, locale }: CategoryCardProps) => {
   const [imageError, setImageError] = useState(false);
   const searchParams = useSearchParams();
-  const imageUrl = category.img_path || 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg';
+  const imageUrl = category.img_path 
+    ? `https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/categories/${category.img_path}`
+    : 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg';
 
   // Build URL with brand parameter if it exists
   const brandParam = searchParams?.get('brand');
