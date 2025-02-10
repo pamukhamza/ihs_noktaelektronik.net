@@ -17,9 +17,9 @@ import Link from 'next/link'
 import { WhatsAppButton } from "@/components/whatsapp-button"
 
 const mainSliderItems = [
-  { id: 1, image: "/slider/1.jpg?height=600&width=1600", titleKey: "slider.innovative.title", subtitleKey: "slider.innovative.subtitle", link: "urunler/adreslenebilir-539" },
-  { id: 2, image: "/slider/2.jpg?height=600&width=1600", titleKey: "slider.security.title", subtitleKey: "slider.security.subtitle", link: "urunler/yonetilemeyen-poe-switch-12" },
-  { id: 3, image: "/slider/3.jpg?height=600&width=1600", titleKey: "slider.medical.title", subtitleKey: "slider.medical.subtitle", link: "urunler?brand=uptech" },
+  { id: 1, image: "/slider/1.jpg?height=600&width=1600", titleKey: "slider.innovative.title", subtitleKey: "slider.innovative.subtitle", link: "urunler/adreslenebilir-yangin-algilama-538" },
+  { id: 2, image: "/slider/2.jpg?height=600&width=1600", titleKey: "slider.security.title", subtitleKey: "slider.security.subtitle", link: "urunler/yonetilemeyen-poe-switch-12?brand=uptech" },
+  { id: 3, image: "/slider/3.jpg?height=600&width=1600", titleKey: "slider.medical.title", subtitleKey: "slider.medical.subtitle", link: "urunler/aktif-network-urunleri-3?brand=uptech" },
 ]
 
 interface Product {
