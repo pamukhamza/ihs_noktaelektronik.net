@@ -22,7 +22,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         UygulamalarTr: true,
         UygulamalarEn: true,
         YeniUrun: true,
-        aktif: true,
+        web_net: true,
         create_date: true,
         modify_date: true,
         KategoriID: true,
@@ -35,19 +35,54 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
       return null
     }
 
-    // Fetch categories
-    const categories = await prisma.nokta_kategoriler.findMany({
-      where: {
-        id: product.KategoriID ?? undefined,
-        is_active: true
-      },
-      select: {
-        id: true,
-        KategoriAdiTr: true,
-        KategoriAdiEn: true,
-        seo_link: true,
+    // Fetch categories with their parent hierarchy
+    const getParentCategories = async (categoryId: number): Promise<{
+      id: number;
+      parent_id: number | null;
+      name: {
+        KategoriAdiTR: string;
+        KategoriAdiEN: string;
+      };
+      seo_link: string;
+    }[]> => {
+      const categories = [];
+      let currentCategoryId = categoryId;
+      
+      while (currentCategoryId) {
+        const category = await prisma.nokta_kategoriler.findFirst({
+          where: {
+            id: currentCategoryId,
+            is_active: true
+          },
+          select: {
+            id: true,
+            parent_id: true,
+            KategoriAdiTr: true,
+            KategoriAdiEn: true,
+            seo_link: true,
+          }
+        });
+        
+        if (!category) break;
+        
+        categories.unshift({
+          id: category.id,
+          parent_id: category.parent_id,
+          name: {
+            KategoriAdiTR: category.KategoriAdiTr || '',
+            KategoriAdiEN: category.KategoriAdiEn || ''
+          },
+          seo_link: category.seo_link || ''
+        });
+        
+        currentCategoryId = category.parent_id || 0;
+        if (currentCategoryId === 0) break;
       }
-    });
+      
+      return categories;
+    };
+
+    const categoryHierarchy = await getParentCategories(product.KategoriID || 0);
 
     // Fetch images
     const images = await prisma.nokta_urunler_resimler.findMany({
@@ -74,7 +109,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         AND: [
           { KategoriID: product.KategoriID },
           { id: { not: product.id } },
-          { aktif: true }
+          { web_net: true }
         ]
       },
       take: 4,
@@ -185,14 +220,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
       seo_link: product.seo_link || '',
       stockCode: product.UrunKodu || '',
       brand: brand?.title || 'Unknown',
-      categories: categories.map(cat => ({
-        id: cat.id,
-        name: {
-          KategoriAdiTR: cat.KategoriAdiTr || '',
-          KategoriAdiEN: cat.KategoriAdiEn || ''
-        },
-        seo_link: cat.seo_link || ''
-      })),
+      categories: categoryHierarchy,
       images: images.map(img => 
         img.KResim ? `${BASE_IMAGE_URL}${img.KResim}` : DEFAULT_IMAGE
       ),
@@ -209,7 +237,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         UygulamalarEn: product.UygulamalarEn || ''
       },
       isNew: product.YeniUrun || false,
-      isActive: product.aktif || false,
+      isActive: product.web_net || false,
       createdAt: product.create_date?.toISOString() || null,
       modifiedAt: product.modify_date?.toISOString() || null,
       downloads: groupedDownloads,

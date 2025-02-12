@@ -19,7 +19,7 @@ export async function GET(request: Request) {
   const excludeSubcategories = searchParams.get('exclude_subcategories') === 'true';
 
   try {
-    const whereConditions: any[] = [{ aktif: true }];
+    const whereConditions: any[] = [{ web_net: true }];
     let whereClause = {};
 
     if (query) {
@@ -169,7 +169,7 @@ export async function GET(request: Request) {
           UrunKodu: true,
           UrunAdiTR: true,
           UrunAdiEN: true,
-          aktif: true,
+          web_net: true,
           MarkaID: true,
           marka: {
             select: {
@@ -180,7 +180,7 @@ export async function GET(request: Request) {
           }
         },
         orderBy: {
-          id: 'desc'
+          sira: 'asc'
         },
         skip: offset,
         take: limit

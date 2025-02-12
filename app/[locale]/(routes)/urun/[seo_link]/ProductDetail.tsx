@@ -18,6 +18,7 @@ import { useLocale } from 'next-intl';
 import { Product } from "@/types/product"
 import { BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb"
 import Modal from "@/components/ui/Modal";
+import ImageModal from "@/components/ui/ImageModal";
 import { useToast } from "@/hooks/use-toast"
 
 interface ProductDetailProps {
@@ -32,6 +33,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [startIndex, setStartIndex] = useState(0);
   const [visibleCount] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', company: '', phone: '', email: '', description: '' });
   const getTranslatedContent = (trContent: string, enContent: string) => {
     if (locale === 'de' || locale === 'ru') {
@@ -149,17 +151,28 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <span className="text-muted-foreground/40 mx-1">›</span>
-              {Array.isArray(product.categories) && product.categories.length > 0 ? (
+              {Array.isArray(product.categories) && product.categories.length > 0 && (
                 <>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink 
-                      href={`/urunler/${product.categories[0].seo_link}`}
-                      className="hover:text-primary transition-colors"
-                    >
-                      {getTranslatedContent(product.categories[0].name.KategoriAdiTR, product.categories[0].name.KategoriAdiEN)}
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <span className="text-muted-foreground/40 mx-1">›</span>
+                  {product.categories
+                    .sort((a, b) => {
+                      // Sort categories by parent_id to ensure parent categories come first
+                      if (a.parent_id === null) return -1;
+                      if (b.parent_id === null) return 1;
+                      return a.parent_id - b.parent_id;
+                    })
+                    .map((category) => (
+                      <div key={category.id} className="flex items-center">
+                        <BreadcrumbItem>
+                          <BreadcrumbLink 
+                            href={`/urunler/${category.seo_link}`}
+                            className="hover:text-primary transition-colors"
+                          >
+                            {getTranslatedContent(category.name.KategoriAdiTR, category.name.KategoriAdiEN)}
+                          </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <span className="text-muted-foreground/40 mx-1">›</span>
+                      </div>
+                    ))}
                   <BreadcrumbItem>
                     <BreadcrumbLink 
                       href={`/urun/${product.seo_link ?? ''}`} 
@@ -169,7 +182,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </BreadcrumbLink>
                   </BreadcrumbItem>
                 </>
-              ) : null}
+              )}
             </nav>
           </div>
 
@@ -184,7 +197,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.1 }}
-                  className="absolute inset-0"
+                  className="absolute inset-0 cursor-zoom-in"
+                  onClick={() => setIsImageModalOpen(true)}
                 >
                   <Image
                     src={selectedImage}
@@ -548,6 +562,17 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           </button>
         </form>
       </Modal>
+
+      {/* Image Zoom Modal */}
+      <ImageModal
+        open={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        src={selectedImage}
+        alt={getTranslatedContent(product.name.UrunAdiTR, product.name.UrunAdiEN)}
+        onPrevious={prevImage}
+        onNext={nextImage}
+        hasNavigation={product.images.length > 1}
+      />
     </div>
   );
 }

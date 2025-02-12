@@ -15,6 +15,7 @@ export type DownloadCategory = {
 export type Product = {
   categories: {
     id: number
+    parent_id: number | null
     name: {
       KategoriAdiTR: string
       KategoriAdiEN: string

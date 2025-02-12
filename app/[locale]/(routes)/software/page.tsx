@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { BrainCircuit, Cpu, Database, Network, Microscope, Code, Fingerprint, Gamepad2, Film, ChevronRight, Globe, Shield, Zap, Users, BarChart, Rocket } from 'lucide-react';
 import useThreeScene from '@/hooks/useThreeScene';
@@ -33,7 +33,7 @@ export default function EnhancedSoftwarePage() {
   ];
 
   const [currentSection, setCurrentSection] = useState(0);
-  const sections = ['hero', 'services', 'expertise', 'technologies'];
+  const sections = useMemo(() => ['hero', 'services', 'expertise', 'technologies'], []);
   const threeRef = useThreeScene();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {

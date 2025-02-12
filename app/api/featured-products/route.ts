@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const products = await prisma.nokta_urunler.findMany({
       where: {
-        aktif: true,
+        web_net: true,
         YeniUrun: true,
       },
       take: 8,

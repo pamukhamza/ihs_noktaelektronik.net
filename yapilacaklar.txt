@@ -1,1 +1,5 @@
-kategori isimlerini kısalt
+urun detay da resimler büyütülebilir olsun. -- YAPILDI
+urun detay da breadcrumblar en baş kategoriye kadar olsun. -- YAPILDI
+urunler site aktiflerine göre gelsin. -- YAPILDI
+sliderlar veritabanından gelsin.
+urunler sayfasında order by sira ekle -- YAPILDI

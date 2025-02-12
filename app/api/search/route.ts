@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     }
 
     const whereClause = {
-      aktif: true,
+      web_net: true,
       OR: [
         { UrunAdiTR: { contains: query } },
         { UrunAdiEN: { contains: query } },

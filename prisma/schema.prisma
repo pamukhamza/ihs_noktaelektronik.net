@@ -162,6 +162,7 @@ model slider {
   is_active Int
   order_by  Int?
   date      DateTime @default(now()) @db.Timestamp(0)
+  site      String?  @db.Text
 }
 
 model catalogs {

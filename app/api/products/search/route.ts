@@ -63,7 +63,7 @@ export async function GET(request: Request) {
       LEFT JOIN nokta_urunler_resimler r0 ON n.id = r0.UrunID AND r0.sira = 0
       LEFT JOIN nokta_urunler_resimler r1 ON n.id = r1.UrunID AND r1.sira = 1
       WHERE 
-        n.aktif = true
+        n.web_net = true
         AND (${whereConditions})
       LIMIT ?
     `, ...queryParams);
