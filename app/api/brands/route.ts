@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
 
     const brands = await prisma.nokta_urun_markalar.findMany({
       where: {
-        is_active: true,
+        web_net: true,
         ...(brandIds.length > 0 && {
           id: {
             in: brandIds

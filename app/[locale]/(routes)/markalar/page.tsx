@@ -23,7 +23,7 @@ const cardVariants = {
 };
 
 const getImageUrl = (path: string | null) => {
-  if (!path) return '/placeholder.jpg';
+  if (!path) return 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg';
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
   if (path.startsWith('/')) return path;
   return `/brands/${path}`;

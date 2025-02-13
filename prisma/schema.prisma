@@ -18,6 +18,9 @@ model nokta_kategoriler {
   marka_id      Int?
   img_path      String?  @db.VarChar(250)
   seo_link      String?  @unique(map: "seo_link") @db.VarChar(250)
+  web_net       Int?
+  web_comtr     Int?
+  web_cn        Int?
 
   @@index([sira], map: "idx_kategori_sira")
   @@index([parent_id, is_active], map: "idx_parent_active")
@@ -168,6 +171,9 @@ model slider {
 model catalogs {
   id        Int     @id @default(autoincrement())
   title     String? @db.VarChar(255)
+  title_en  String? @db.VarChar(255)
+  sira      String? @db.VarChar(255)
+  img       String? @db.VarChar(255)
   file      String? @db.VarChar(255)
   web_net   Int?
   web_comtr Int?

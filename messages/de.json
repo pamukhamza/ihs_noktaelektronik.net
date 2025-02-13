@@ -368,5 +368,10 @@
       }
     },
     "exploreSoftwareServices": "Softwaredienstleistungen entdecken"
+  },
+  "catalogs": {
+    "title": "Unsere Kataloge",
+    "viewCatalog": "Katalog Ansehen",
+    "noCatalogs": "Derzeit sind keine Kataloge verfügbar"
   }
 }

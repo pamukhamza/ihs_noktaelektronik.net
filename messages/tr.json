@@ -375,5 +375,10 @@
       }
     },
     "exploreSoftwareServices": "Yazılım Hizmetlerini Keşfedin"
+  },
+  "catalogs": {
+    "title": "Kataloglarımız",
+    "viewCatalog": "Kataloğu Görüntüle",
+    "noCatalogs": "Şu anda mevcut katalog bulunmamaktadır"
   }
 }

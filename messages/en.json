@@ -374,5 +374,10 @@
   },
   "markalar": {
     "title": "Our Brands"
+  },
+  "catalogs": {
+    "title": "Our Catalogs",
+    "viewCatalog": "View Catalog",
+    "noCatalogs": "No catalogs available at the moment"
   }
 }

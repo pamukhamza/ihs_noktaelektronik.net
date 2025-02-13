@@ -35,7 +35,7 @@ export async function getBrands() {
         link_img: true,
       },
       where: {
-        is_active: true,
+        web_net: true,
       },
       orderBy: {
         order_by: 'asc',

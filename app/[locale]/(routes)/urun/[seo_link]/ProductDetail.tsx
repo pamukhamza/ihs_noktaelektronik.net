@@ -35,6 +35,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', company: '', phone: '', email: '', description: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const getTranslatedContent = (trContent: string, enContent: string) => {
     if (locale === 'de' || locale === 'ru') {
       return enContent || trContent || '';
@@ -92,6 +93,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       return;
     }
 
+    setIsSubmitting(true); // Disable button when form submission starts
+
     try {
       const response = await fetch('/api/submitOffer', {
         method: 'POST',
@@ -136,6 +139,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         duration: 5000,
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false); // Re-enable button after form submission completes
     }
   };
   return (
@@ -513,7 +518,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           <input
             type="text"
             name="name"
-            placeholder="Your Name"
+            placeholder={locale === 'tr' ? 'Adınız' : 'Your Name'}
             value={formData.name}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
@@ -522,7 +527,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           <input
             type="text"
             name="company"
-            placeholder="Company Name"
+            placeholder={locale === 'tr' ? 'Firma Adı' : 'Company Name'}
             value={formData.company}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
@@ -531,7 +536,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           <input
             type="text"
             name="phone"
-            placeholder="Phone Number"
+            placeholder={locale === 'tr' ? 'Telefon' : 'Phone Number'}
             value={formData.phone}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
@@ -540,7 +545,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder={locale === 'tr' ? 'E-posta' : 'Email'}
             value={formData.email}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
@@ -548,7 +553,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           />
           <textarea
             name="description"
-            placeholder="Description"
+            placeholder={locale === 'tr' ? 'Açıklama' : 'Description'}
             value={formData.description}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
@@ -556,9 +561,21 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           />
           <button 
             type="submit" 
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition duration-200"
+            disabled={isSubmitting}
+            className={`w-full p-2 rounded transition duration-200 ${
+              isSubmitting 
+                ? 'bg-blue-400 cursor-not-allowed' 
+                : 'bg-blue-600 hover:bg-blue-700'
+            } text-white flex items-center justify-center`}
           >
-            Send
+            {isSubmitting ? (
+              <>
+                <div className="w-5 h-5 border-t-2 border-white rounded-full animate-spin mr-2" />
+                {locale === 'tr' ? 'Gönderiliyor...' : 'Sending...'}
+              </>
+            ) : (
+              locale === 'tr' ? 'Gönder' : 'Send'
+            )}
           </button>
         </form>
       </Modal>

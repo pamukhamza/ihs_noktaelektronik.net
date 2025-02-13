@@ -18,7 +18,7 @@ export async function GET(request: Request) {
 
     let whereClause: Prisma.nokta_kategorilerWhereInput = {
       parent_id: parentId,
-      is_active: true
+      web_net: 1
     };
 
     if (brandSeoLink) {
@@ -46,20 +46,20 @@ export async function GET(request: Request) {
           where: {
             id: { in: categoryIds },
             parent_id: 0,
-            is_active: true
+            web_net: 1
           },
           select: { id: true }
         });
 
         whereClause = {
-          is_active: true,
+          web_net: 1,
           parent_id: 0,
           id: { in: rootCategories.map(cat => cat.id) }
         };
       } else {
         // For subcategories, get direct children of the specified parent
         whereClause = {
-          is_active: true,
+          web_net: 1,
           parent_id: parentId,
           id: { in: categoryIds }
         };

@@ -16,16 +16,12 @@ import Autoplay from 'embla-carousel-autoplay'
 import Link from 'next/link'
 import { WhatsAppButton } from "@/components/whatsapp-button"
 
-const mainSliderItems = [
-  { id: 1, image: "/slider/1.jpg?height=600&width=1600", titleKey: "slider.innovative.title", subtitleKey: "slider.innovative.subtitle", link: "urunler/adreslenebilir-yangin-algilama-538" },
-  { id: 2, image: "/slider/2.jpg?height=600&width=1600", titleKey: "slider.security.title", subtitleKey: "slider.security.subtitle", link: "urunler/yonetilemeyen-poe-switch-12?brand=uptech" },
-  { id: 3, image: "/slider/3.jpg?height=600&width=1600", titleKey: "slider.medical.title", subtitleKey: "slider.medical.subtitle", link: "urunler/aktif-network-urunleri-3?brand=uptech" },
-]
+const DEFAULT_PLACEHOLDER = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg';
 
-interface Product {
+interface Slider {
   id: number;
-  name: string;
-  image: string;
+  link: string | null;
+  photo: string | null;
 }
 
 const solutions = [
@@ -41,13 +37,32 @@ const solutions = [
   { id: 10, nameKey: "solutions.aiIntegration", icon: "🤖", link: "software"  },
 ]
 
-
 export default function Home() {
   const t = useTranslations('home')
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
+  const [sliders, setSliders] = useState<Slider[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [solutionsApi, setSolutionsApi] = useState<CarouselApi>()
   const [currentSolution, setCurrentSolution] = useState(0)
+
+  useEffect(() => {
+    const fetchSliders = async () => {
+      try {
+        const response = await fetch('/api/sliders')
+        const data = await response.json()
+        if (data.sliders) {
+          setSliders(data.sliders)
+        }
+      } catch (error) {
+        console.error('Error fetching sliders:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchSliders()
+  }, [])
 
   useEffect(() => {
     if (!api) {
@@ -89,43 +104,67 @@ export default function Home() {
             ]}
           >
             <CarouselContent>
-              {mainSliderItems.map((item, index) => (
-                <CarouselItem key={item.id}>
+              {sliders.map((slider, index) => (
+                <CarouselItem key={slider.id}>
                   {/* Desktop Version */}
                   <div className="hidden md:block relative aspect-[16/6] overflow-hidden">
-                    <a href={item.link} className="block">
+                    {slider.link ? (
+                      <a href={slider.link} className="block">
+                        <Image
+                          src={slider.photo || DEFAULT_PLACEHOLDER}
+                          alt={`Slider ${index + 1}`}
+                          fill
+                          priority={index === 0}
+                          className="object-contain"
+                          sizes="(max-width: 1600px) 100vw, 1600px"
+                          quality={100}
+                        />
+                      </a>
+                    ) : (
                       <Image
-                        src={item.image}
-                        alt={t(item.titleKey)}
+                        src={slider.photo || DEFAULT_PLACEHOLDER}
+                        alt={`Slider ${index + 1}`}
                         fill
                         priority={index === 0}
                         className="object-contain"
                         sizes="(max-width: 1600px) 100vw, 1600px"
                         quality={100}
                       />
-                    </a>
+                    )}
                   </div>
                   {/* Mobile Version */}
                   <div className="md:hidden relative aspect-[16/6] overflow-hidden">
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <a href={item.link} className="block">
+                      {slider.link ? (
+                        <a href={slider.link} className="block">
+                          <Image
+                            src={slider.photo || DEFAULT_PLACEHOLDER}
+                            alt={`Slider ${index + 1}`}
+                            fill
+                            priority={index === 0}
+                            className="object-contain"
+                            sizes="100vw"
+                            quality={100}
+                          />
+                        </a>
+                      ) : (
                         <Image
-                          src={item.image}
-                          alt={t(item.titleKey)}
+                          src={slider.photo || DEFAULT_PLACEHOLDER}
+                          alt={`Slider ${index + 1}`}
                           fill
                           priority={index === 0}
                           className="object-contain"
                           sizes="100vw"
                           quality={100}
                         />
-                      </a>
+                      )}
                     </div>
                   </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 px-2 md:px-4 py-1 md:py-2 rounded-full bg-black/20 backdrop-blur-sm">
-              {mainSliderItems.map((_, index) => (
+              {sliders.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => api?.scrollTo(index)}
