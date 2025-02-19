@@ -17,6 +17,10 @@ export async function GET(request: Request) {
   const query = searchParams.get('query')?.toLowerCase();
   const limit = parseInt(searchParams.get('limit') || '10');
   const excludeSubcategories = searchParams.get('exclude_subcategories') === 'true';
+  
+  // Get filter parameters
+  const filterTitleIds = searchParams.getAll('filter_title_id');
+  const filterValueIdsStr = searchParams.getAll('filter_value_ids');
 
   try {
     const whereConditions: any[] = [{ web_net: true }];
@@ -152,10 +156,46 @@ export async function GET(request: Request) {
       }
     }
 
+    // Add filter conditions
+    if (filterTitleIds.length > 0 && filterValueIdsStr.length > 0) {
+      console.log('Processing filters:', { filterTitleIds, filterValueIdsStr });
+
+      // First, let's check if these filter values exist in products_filter_rel
+      const filterValueIds = filterValueIdsStr.flatMap(valueStr => 
+        valueStr.split(',').map(id => parseInt(id))
+      );
+
+      console.log('Looking for products with filter values:', filterValueIds);
+
+      // Debug query to see which products have these filter values
+      const productsWithFilters = await prisma.products_filter_rel.findMany({
+        where: {
+          filter_value_id: {
+            in: filterValueIds
+          }
+        },
+        select: {
+          product_id: true,
+          filter_value_id: true
+        }
+      });
+
+      console.log('Found products with these filters:', productsWithFilters);
+
+      // Add the filter condition
+      whereConditions.push({
+        id: {
+          in: productsWithFilters.map(p => p.product_id)
+        }
+      });
+    }
+
     // Combine all conditions with AND
     whereClause = whereConditions.length > 1
       ? { AND: whereConditions }
       : whereConditions[0] || {};
+
+    console.log('Final where clause:', JSON.stringify(whereClause, null, 2));
 
     const offset = (page - 1) * limit;
 

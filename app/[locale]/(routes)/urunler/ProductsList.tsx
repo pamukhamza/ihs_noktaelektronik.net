@@ -94,6 +94,20 @@ interface Brand {
   seo_link: string;
 }
 
+interface FilterTitle {
+  id: number;
+  title: string;
+  title_en: string;
+  values: FilterValue[];
+}
+
+interface FilterValue {
+  id: number;
+  filter_title_id: number;
+  name: string;
+  name_cn: string;
+}
+
 export default function ProductsList({ initialCategory }: { initialCategory?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -119,6 +133,9 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
   const [isLoadingBrands, setIsLoadingBrands] = useState(false);
   const [categoryBreadcrumbs, setCategoryBreadcrumbs] = useState<Category[]>([]);
   const [hasSubcategories, setHasSubcategories] = useState<boolean | null>(null);
+  const [filters, setFilters] = useState<FilterTitle[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<{[key: number]: number[]}>({});
+  const [isLoadingFilters, setIsLoadingFilters] = useState(false);
   const searchQuery = searchParams ? searchParams.get('query') || '' : '';
   const brandParam = searchParams ? searchParams.get('brand') : null;
   
@@ -126,7 +143,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      
+      // Handle brand parameter
       if (brandParam && brandParam !== selectedBrands[0]) {
         setSelectedBrands([brandParam]);
         setProducts([]);
@@ -134,6 +151,38 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
         setTotalPages(1);
       } else if (!brandParam && selectedBrands.length > 0) {
         setSelectedBrands([]);
+        setProducts([]);
+        setPage(1);
+        setTotalPages(1);
+      }
+
+      // Handle filter parameters
+      const newFilters: {[key: number]: number[]} = {};
+      if (searchParams) {
+        Array.from(searchParams.entries()).forEach(([key, value]) => {
+          if (key.startsWith('filter_')) {
+            const titleId = parseInt(key.replace('filter_', ''));
+            const valueIds = value.split(',').map(id => parseInt(id));
+            if (!isNaN(titleId) && valueIds.length > 0) {
+              newFilters[titleId] = valueIds;
+            }
+          }
+        });
+      }
+
+      // Only update if filters have changed
+      const currentFilterKeys = Object.keys(selectedFilters);
+      const newFilterKeys = Object.keys(newFilters);
+      if (
+        currentFilterKeys.length !== newFilterKeys.length ||
+        currentFilterKeys.some(key => {
+          const current = selectedFilters[parseInt(key)] || [];
+          const next = newFilters[parseInt(key)] || [];
+          return current.length !== next.length ||
+            !current.every(id => next.includes(id));
+        })
+      ) {
+        setSelectedFilters(newFilters);
         setProducts([]);
         setPage(1);
         setTotalPages(1);
@@ -168,6 +217,56 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     setTotalPages(1);
   };
 
+  const handleFilterToggle = (titleId: number, valueId: number) => {
+    console.log('Filter value clicked:', { titleId, valueId });
+    const currentValues = selectedFilters[titleId] || [];
+    const newValues = currentValues.includes(valueId)
+      ? currentValues.filter(v => v !== valueId)
+      : [...currentValues, valueId];
+    
+    const newFilters = {
+      ...selectedFilters,
+      [titleId]: newValues
+    };
+
+    // If no values selected for this title, remove it from filters
+    if (newValues.length === 0) {
+      delete newFilters[titleId];
+    }
+
+    // Update URL with new filters
+    const params = new URLSearchParams(searchParams?.toString() || '');
+    
+    // Clear existing filters from URL
+    const existingParams = Array.from(params.keys());
+    existingParams.forEach(key => {
+      if (key.startsWith('filter_')) {
+        params.delete(key);
+      }
+    });
+
+    // Add new filters to URL
+    Object.entries(newFilters).forEach(([titleId, valueIds]) => {
+      if (valueIds.length > 0) {
+        params.set(`filter_${titleId}`, valueIds.join(','));
+      }
+    });
+
+    // Update URL
+    const newPathname = selectedCategorySeo 
+      ? `/urunler/${selectedCategorySeo}` 
+      : '/urunler';
+    router.replace(`${newPathname}?${params.toString()}`, { scroll: false });
+    
+    console.log('New selected filters:', newFilters);
+    setSelectedFilters(newFilters);
+    
+    // Reset products and fetch with new filters
+    setProducts([]);
+    setPage(1);
+    setTotalPages(1);
+  };
+
   // Fetch products only if category has no subcategories or if there's a search query
   const fetchProducts = useCallback(async () => {
     // Only fetch products if:
@@ -196,6 +295,16 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
         queryParams.set('query', searchQuery);
       }
 
+      // Add filter parameters
+      Object.entries(selectedFilters).forEach(([titleId, valueIds]) => {
+        if (valueIds.length > 0) {
+          queryParams.append('filter_title_id', titleId);
+          queryParams.append('filter_value_ids', valueIds.join(','));
+        }
+      });
+
+      console.log('Fetching products with params:', queryParams.toString());
+
       const response = await fetch(`/api/products?${queryParams.toString()}`);
       const data = await response.json();
 
@@ -213,14 +322,14 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     } finally {
       setIsLoading(false);
     }
-  }, [page, selectedCategorySeo, selectedBrands, searchQuery, ITEMS_PER_PAGE, brandParam]);
+  }, [page, selectedCategorySeo, selectedBrands, searchQuery, ITEMS_PER_PAGE, brandParam, selectedFilters]);
 
   // Fetch products when search query changes or when category is selected
   useEffect(() => {
     if (searchQuery || (!isLoadingCategory && selectedCategorySeo)) {
       fetchProducts();
     }
-  }, [fetchProducts, selectedCategorySeo, isLoadingCategory, searchQuery]);
+  }, [fetchProducts, selectedCategorySeo, isLoadingCategory, searchQuery, selectedFilters]);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -262,7 +371,31 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     }
   };
 
-  // Modified category click handler
+  const fetchFilters = async (categoryId: number) => {
+    try {
+      console.log('Fetching filters for category ID:', categoryId);
+      setIsLoadingFilters(true);
+      const response = await fetch(`/api/filters?category_id=${categoryId}`);
+      const data = await response.json();
+      
+      console.log('Filter response:', data);
+      
+      if (data.success && data.filters) {
+        console.log('Setting filters:', data.filters);
+        setFilters(data.filters);
+      } else {
+        console.log('No filters found or error in response');
+        setFilters([]);
+      }
+    } catch (error) {
+      console.error('Error fetching filters:', error);
+      setFilters([]);
+    } finally {
+      setIsLoadingFilters(false);
+    }
+  };
+
+  // Modified handleCategoryClick to include filter fetching
   const handleCategoryClick = async (category: Category) => {
     setIsLoadingCategory(true);
     
@@ -286,11 +419,25 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
       setPage(1);
       setTotalPages(1);
       
+      // Check for subcategories
+      const subcategoriesResponse = await fetch(`/api/categories?parent_id=${category.id}`);
+      const subcategoriesData = await subcategoriesResponse.json();
+      const hasSubcats = subcategoriesData.categories && subcategoriesData.categories.length > 0;
+      setHasSubcategories(hasSubcats);
+
+      // If this is a leaf category (no subcategories), fetch filters
+      if (!hasSubcats) {
+        console.log('No subcategories found, fetching filters');
+        await fetchFilters(category.id);
+      } else {
+        console.log('Has subcategories, clearing filters');
+        setFilters([]);
+      }
+      
       await router.push(newPath);
     } catch (error) {
       console.error('Error handling category click:', error);
-      // Optionally show an error message to the user
-      setProducts([]); // Clear products on error
+      setProducts([]);
       setPage(1);
       setTotalPages(1);
     } finally {
@@ -352,7 +499,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
     }
   };
 
-  // Optimize initial load
+  // Update loadInitialData to include filter fetching
   const loadInitialData = async () => {
     try {
       const brandParam = searchParams?.get('brand');
@@ -375,6 +522,19 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
           setHasSubcategories(hasSubcats);
           setCategories(subcategoriesData.categories || []);
           setBrands(brandsData.brands || []);
+
+          // Fetch filters if we're in a subcategory or showing products
+          if (!hasSubcats) {
+            await fetchFilters(category.id);
+          }
+
+          // If we have a category and brand, trigger product fetch
+          if (brandParam) {
+            setProducts([]);
+            setPage(1);
+            setTotalPages(1);
+            await fetchProducts();
+          }
         }
       } else {
         // Load root level data in parallel
@@ -387,6 +547,15 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
         setBrands(brandsData.brands || []);
         setHasSubcategories(null);
         setCategoryPath([]);
+        setFilters([]); // Clear filters at root level
+
+        // If we have a brand but no category, trigger product fetch
+        if (brandParam) {
+          setProducts([]);
+          setPage(1);
+          setTotalPages(1);
+          await fetchProducts();
+        }
       }
     } catch (error) {
       console.error('Error in loadInitialData:', error);
@@ -394,6 +563,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
       setBrands([]);
       setHasSubcategories(null);
       setCategoryPath([]);
+      setFilters([]);
     }
   };
 
@@ -559,7 +729,7 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
           </div>
 
           {/* Brands */}
-          <div className="bg-white rounded-lg shadow-md p-4">
+          <div className="bg-white rounded-lg shadow-md p-4 mb-4">
             <h2 className="text-lg font-semibold mb-4">{t('brands')}</h2>
             {isLoadingBrands ? (
               <div className="animate-pulse space-y-2">
@@ -592,6 +762,62 @@ export default function ProductsList({ initialCategory }: { initialCategory?: st
               </div>
             )}
           </div>
+
+          {/* Filters */}
+          {filters.length > 0 && (
+            <div className="bg-white rounded-lg shadow-md p-4">
+              <h2 className="text-lg font-semibold mb-4">
+                {t('filters')} ({filters.length})
+              </h2>
+              {isLoadingFilters ? (
+                <div className="animate-pulse space-y-4">
+                  {[1, 2].map((n) => (
+                    <div key={n}>
+                      <div className="h-6 bg-gray-200 rounded w-1/2 mb-2"></div>
+                      <div className="space-y-2">
+                        {[1, 2, 3].map((i) => (
+                          <div key={i} className="h-8 bg-gray-200 rounded"></div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {filters.map((filterTitle) => (
+                    <div key={filterTitle.id} className="border-b pb-4 last:border-b-0">
+                      <h3 className="font-medium mb-2">
+                        {locale === 'tr' ? filterTitle.title : filterTitle.title_en}
+                        {' '}({filterTitle.values.length})
+                      </h3>
+                      <div className="space-y-2">
+                        {filterTitle.values.map((value) => (
+                          <label
+                            key={value.id}
+                            className="flex items-center gap-2 w-full px-3 py-2 rounded-md transition-colors hover:bg-blue-100 cursor-pointer"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedFilters[filterTitle.id]?.includes(value.id) || false}
+                              onChange={() => handleFilterToggle(filterTitle.id, value.id)}
+                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+                            />
+                            <span className={`${
+                              selectedFilters[filterTitle.id]?.includes(value.id)
+                                ? 'text-blue-600 font-medium'
+                                : ''
+                            }`}>
+                              {locale === 'tr' ? value.name : value.name_cn || value.name}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Button */}

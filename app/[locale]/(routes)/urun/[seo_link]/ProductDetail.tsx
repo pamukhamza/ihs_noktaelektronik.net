@@ -15,15 +15,24 @@ import { motion, AnimatePresence } from "framer-motion"
 import {Carousel,CarouselContent,CarouselItem,CarouselNext,CarouselPrevious,} from "@/components/ui/carousel"
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
-import { Product } from "@/types/product"
+import type { Product } from "@/types/product"
 import { BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb"
 import Modal from "@/components/ui/Modal";
 import ImageModal from "@/components/ui/ImageModal";
 import { useToast } from "@/hooks/use-toast"
 
-interface ProductDetailProps {
-  product: Product
+interface ExtendedProduct extends Product {
+  icons?: Array<{
+    id: number;
+    img: string;
+    title: string;
+  }>;
 }
+
+interface ProductDetailProps {
+  product: ExtendedProduct;
+}
+
 export default function ProductDetail({ product }: ProductDetailProps) {
   const t = useTranslations('productDetail');
   const { toast } = useToast();
@@ -219,18 +228,18 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               <Button
                 variant="outline"
                 size="icon"
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-100"
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-50 border-blue-200 hover:border-blue-300 transition-colors"
                 onClick={prevImage}
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-4 w-4 text-blue-700" />
               </Button>
               <Button
                 variant="outline"
                 size="icon"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-100"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white hover:bg-blue-50 border-blue-200 hover:border-blue-300 transition-colors"
                 onClick={nextImage}
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-4 w-4 text-blue-700" />
               </Button>
             </div>
             {/* Improved Thumbnail Gallery */}
@@ -292,7 +301,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               transition={{ duration: 0.5 }}
               className="space-y-4"
             >
-              <Badge variant="secondary" className="text-sm font-medium">
+              <Badge variant="secondary" className="text-sm font-medium bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white shadow-md hover:shadow-lg">
                 {product.brand}
               </Badge>
               <h1 className="text-3xl font-bold tracking-tight">
@@ -301,6 +310,30 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               <p className="text-lg text-muted-foreground">
                 {t('stockCode')}: {product.stockCode}
               </p>
+              {product.icons && product.icons.length > 0 && (
+                <div className="flex flex-wrap gap-4 mt-4">
+                  {product.icons.map((icon) => (
+                    <TooltipProvider key={icon.id}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="relative w-12 h-12">
+                            <Image
+                              src={icon.img}
+                              alt={icon.title}
+                              fill
+                              className="object-contain"
+                              sizes="64px"
+                            />
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{icon.title}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))}
+                </div>
+              )}
             </motion.div>
             <Separator />
             <motion.div
@@ -309,7 +342,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="space-y-4"
             >
-              <Button size="lg" className="w-full" onClick={() => setIsModalOpen(true)}>
+              <Button size="lg" className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white shadow-lg hover:shadow-xl transition-all duration-200" onClick={() => setIsModalOpen(true)}>
                 {t('requestQuote')}
               </Button>
             </motion.div>
@@ -326,25 +359,25 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 bg-transparent p-0 mb-12 md:mb-6">
               <TabsTrigger 
                 value="features" 
-                className="text-sm md:text-base data-[state=active]:bg-primary data-[state=active]:text-black rounded-md border border-gray-200 hover:bg-gray-100 transition-colors"
+                className="text-sm md:text-base data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-800 data-[state=active]:text-white rounded-md border border-gray-200 hover:bg-gray-100 transition-all duration-200"
               >
                 {t('features')}
               </TabsTrigger>
               <TabsTrigger 
                 value="technical" 
-                className="text-sm md:text-base data-[state=active]:bg-primary data-[state=active]:text-black rounded-md border border-gray-200 hover:bg-gray-100 transition-colors"
+                className="text-sm md:text-base data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-800 data-[state=active]:text-white rounded-md border border-gray-200 hover:bg-gray-100 transition-all duration-200"
               >
                 {t('technical')}
               </TabsTrigger>
               <TabsTrigger 
                 value="applications" 
-                className="text-sm md:text-base data-[state=active]:bg-primary data-[state=active]:text-black rounded-md border border-gray-200 hover:bg-gray-100 transition-colors"
+                className="text-sm md:text-base data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-800 data-[state=active]:text-white rounded-md border border-gray-200 hover:bg-gray-100 transition-all duration-200"
               >
                 {t('applications')}
               </TabsTrigger>
               <TabsTrigger 
                 value="downloads" 
-                className="text-sm md:text-base data-[state=active]:bg-primary data-[state=active]:text-black rounded-md border border-gray-200 hover:bg-gray-100 transition-colors"
+                className="text-sm md:text-base data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-800 data-[state=active]:text-white rounded-md border border-gray-200 hover:bg-gray-100 transition-all duration-200"
               >
                 {t('downloads')}
               </TabsTrigger>
@@ -562,10 +595,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           <button 
             type="submit" 
             disabled={isSubmitting}
-            className={`w-full p-2 rounded transition duration-200 ${
+            className={`w-full p-2 rounded-lg transition duration-200 ${
               isSubmitting 
                 ? 'bg-blue-400 cursor-not-allowed' 
-                : 'bg-blue-600 hover:bg-blue-700'
+                : 'bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white shadow-md hover:shadow-lg'
             } text-white flex items-center justify-center`}
           >
             {isSubmitting ? (

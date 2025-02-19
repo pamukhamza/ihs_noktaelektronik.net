@@ -83,6 +83,9 @@ model nokta_urunler {
   seo_link      String?   @unique(map: "seo_link") @db.VarChar(255)
   cok_satan     Int?
   cok_goren     Int?
+  filtre        String?   @db.Text
+  birlikte_al   String?   @db.Text
+  ikon          String?   @db.Text
   marka         nokta_urun_markalar? @relation("UrunMarka", fields: [MarkaID], references: [id])
   resimler      nokta_urunler_resimler[] @relation("UrunResimler")
 }
@@ -111,6 +114,12 @@ model nokta_urunler_yuklemeler {
   datetime   DateTime? @db.DateTime(0)
   urun_id    Int?
   yukleme_id Int?
+}
+
+model nokta_urunler_ikonlar {
+  id         Int       @id @default(autoincrement())
+  img        String?   @db.Text
+  title      String?   @db.VarChar(255)
 }
 
 model nokta_yukleme_dosya_tipleri {

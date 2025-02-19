@@ -1,5 +1,2 @@
-kataloglar yap. - YAPILDI
-Teklif isteye basınca form gidene kadar butona tekrar basılmasın. --YAPILDI
 ürünler sayfasında filteler ekle.
-
-ürün detay iconlarını yap.
+Distrübütörlükler sayfası yap.

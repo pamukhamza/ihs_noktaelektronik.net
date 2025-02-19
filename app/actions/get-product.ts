@@ -1,10 +1,19 @@
 import { prisma } from "@/lib/prisma"
-import { Product } from "@/types/product"
+import type { Product } from "@/types/product"
+
+interface ExtendedProduct extends Product {
+  icons: Array<{
+    id: number;
+    img: string;
+    title: string;
+  }>;
+}
 
 const BASE_IMAGE_URL = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/';
 const DEFAULT_IMAGE = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/products/gorsel_hazirlaniyor.jpg';
+const ICON_BASE_URL = 'https://noktanet.s3.eu-central-1.amazonaws.com/uploads/images/ikons/';
 
-export async function getProduct(seo_link: string): Promise<Product | null> {
+export async function getProduct(seo_link: string): Promise<ExtendedProduct | null> {
   const productSeolink = seo_link
   try {
     // Fetch the product
@@ -27,12 +36,38 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         modify_date: true,
         KategoriID: true,
         MarkaID: true,
-        seo_link: true
+        seo_link: true,
+        ikon: true
       }
     })
 
     if (!product) {
       return null
+    }
+
+    // Fetch icons if product has any
+    let productIcons: Array<{ id: number; img: string; title: string }> = [];
+    if (product.ikon) {
+      const iconIds = product.ikon.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+      if (iconIds.length > 0) {
+        const icons = await prisma.nokta_urunler_ikonlar.findMany({
+          where: {
+            id: {
+              in: iconIds
+            }
+          },
+          select: {
+            id: true,
+            img: true,
+            title: true
+          }
+        });
+        productIcons = icons.map(icon => ({
+          id: icon.id,
+          img: icon.img ? `${ICON_BASE_URL}${icon.img}` : '',
+          title: icon.title || ''
+        }));
+      }
     }
 
     // Fetch categories with their parent hierarchy
@@ -211,7 +246,7 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
     )
 
     // Transform the data to match our frontend needs
-    const transformedProduct: Product = {
+    const transformedProduct: ExtendedProduct = {
       id: product.id,
       name: {
         UrunAdiTR: product.UrunAdiTR || '',
@@ -221,9 +256,8 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
       stockCode: product.UrunKodu || '',
       brand: brand?.title || 'Unknown',
       categories: categoryHierarchy,
-      images: images.map(img => 
-        img.KResim ? `${BASE_IMAGE_URL}${img.KResim}` : DEFAULT_IMAGE
-      ),
+      images: images.map(img => img.KResim ? `${BASE_IMAGE_URL}${img.KResim}` : DEFAULT_IMAGE),
+      icons: productIcons,
       technicalSpecs: {
         BilgiTR: product.BilgiTR || '',
         BilgiEN: product.BilgiEN || ''
@@ -236,20 +270,20 @@ export async function getProduct(seo_link: string): Promise<Product | null> {
         UygulamalarTr: product.UygulamalarTr || '',
         UygulamalarEn: product.UygulamalarEn || ''
       },
+      downloads: groupedDownloads,
+      similarProducts: similarProductsWithImages.map(p => ({
+        id: p.id,
+        name: {
+          UrunAdiTR: p.UrunAdiTR || '',
+          UrunAdiEN: p.UrunAdiEN || ''
+        },
+        image: p.image || DEFAULT_IMAGE,
+        seo_link: p.seo_link || ''
+      })),
       isNew: product.YeniUrun || false,
       isActive: product.web_net || false,
       createdAt: product.create_date?.toISOString() || null,
-      modifiedAt: product.modify_date?.toISOString() || null,
-      downloads: groupedDownloads,
-      similarProducts: similarProductsWithImages.map(product => ({
-        id: product.id,
-        name: {
-          UrunAdiTR: product.UrunAdiTR || '',
-          UrunAdiEN: product.UrunAdiEN || ''
-        },
-        image: product.image,
-        seo_link: product.seo_link || ''
-      }))
+      modifiedAt: product.modify_date?.toISOString() || null
     }
 
     return transformedProduct

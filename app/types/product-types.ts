@@ -1,8 +1,8 @@
-export interface ProductIcon {
+export type ProductIcon = {
   id: number;
   img: string;
   title: string;
-}
+};
 
 export type Product = {
   id: number;
@@ -12,7 +12,7 @@ export type Product = {
   };
   stockCode: string;
   brand: string;
-  categories: Array<{
+  categories: {
     id: number;
     parent_id: number | null;
     name: {
@@ -20,13 +20,9 @@ export type Product = {
       KategoriAdiEN: string;
     };
     seo_link: string;
-  }>;
+  }[];
   images: string[];
-  icons: Array<{
-    id: number;
-    img: string;
-    title: string;
-  }>;
+  icons: ProductIcon[];
   technicalSpecs: {
     BilgiTR: string;
     BilgiEN: string;
@@ -39,18 +35,18 @@ export type Product = {
     UygulamalarTr: string;
     UygulamalarEn: string;
   };
-  downloads: Array<{
+  downloads: {
     name: string;
-    items: Array<{
+    items: {
       id: number;
       name: string;
       url: string;
       version?: string;
       type?: string;
       date?: string | null;
-    }>;
-  }>;
-  similarProducts: Array<{
+    }[];
+  }[];
+  similarProducts: {
     id: number;
     name: {
       UrunAdiTR: string;
@@ -58,10 +54,10 @@ export type Product = {
     };
     image: string | null;
     seo_link: string;
-  }>;
+  }[];
   seo_link?: string;
   isNew: boolean;
   isActive: boolean;
   createdAt: string | null;
   modifiedAt: string | null;
-};
+}; 
