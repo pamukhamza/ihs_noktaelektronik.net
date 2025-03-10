@@ -61,12 +61,13 @@ export default function CatalogsPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="container mx-auto px-4 py-8">
       <div className="bg-gradient-to-r from-blue-900 to-sky-600 text-white py-12 mb-8">
-          <div className="container mx-auto text-center">
-            <h1 className="text-4xl font-bold mb-4">{t('title')}</h1>
-          </div>
+        <div className="container mx-auto text-center">
+          <h1 className="text-4xl font-bold mb-4">{t('title')}</h1>
         </div>
+      </div>
+      <div className="container mx-auto px-4 py-8">
+  
         
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {catalogs.map((catalog) => (
