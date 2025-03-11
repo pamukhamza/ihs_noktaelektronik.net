@@ -63,7 +63,7 @@ export default function CatalogsPage() {
     <div className="min-h-screen bg-gray-100">
       <div className="bg-gradient-to-r from-blue-900 to-sky-600 text-white py-12 mb-8">
         <div className="container mx-auto text-center">
-          <h1 className="text-4xl font-bold mb-4">{t('title')}</h1>
+          <h1 className="text-4xl font-bold mb-4">{t('title')}ı İnceleyin</h1>
         </div>
       </div>
       <div className="container mx-auto px-4 py-8">
