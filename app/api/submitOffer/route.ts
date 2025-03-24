@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
         // Get product details for the email
         const product = await prisma.nokta_urunler.findUnique({
             where: { id: parseInt(product_id) },
-            select: { UrunAdiTR: true }
+            select: { UrunAdiTR: true, UrunKodu: true }
         });
 
         const formData = {
@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
             html: `
                 ${emailService.generateFormEmailTemplate(formData)}
                 <p><strong>${language === 'tr' ? 'Ürün' : 'Product'}:</strong> ${product?.UrunAdiTR || (language === 'tr' ? 'Bilinmeyen Ürün' : 'Unknown Product')}</p>
+                 <p><strong>${language === 'tr' ? 'Ürün Kodu' : 'Product Code'}:</strong> ${product?.UrunKodu || '-'}</p>
             `
         });
 
