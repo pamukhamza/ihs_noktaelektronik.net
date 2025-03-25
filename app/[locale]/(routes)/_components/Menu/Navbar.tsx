@@ -51,6 +51,7 @@ const MENU_ITEMS = [
   { href: "/markalar", label: 'brands' },
   { href: "/hakkimizda", label: 'about' },
   { href: "/iletisim", label: 'contact' },
+  { href: "/kataloglar", label: 'catalogs' },
 ]
 
 export default function Navbar() {
