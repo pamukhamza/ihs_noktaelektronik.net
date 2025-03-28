@@ -48,6 +48,18 @@ export default function RootLayout({
           `}
         </script>
         {/* End Google Tag Manager */}
+
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1066607795"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-1066607795');
+          `}
+        </script>
+        {/* End Google tag */}
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {/* Google Tag Manager (noscript) */}
