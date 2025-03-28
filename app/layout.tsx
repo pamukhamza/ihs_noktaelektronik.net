@@ -72,7 +72,7 @@ export default function RootLayout({
           ></iframe>
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-
+ 
         {children}
         <Toaster />
       </body>
