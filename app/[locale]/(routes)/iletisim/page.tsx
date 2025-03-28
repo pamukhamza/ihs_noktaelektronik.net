@@ -79,8 +79,10 @@ const Iletisim = () => {
                         <p className="text-sm">{item.address}</p>
                       </div>
                       <div className="flex items-center">
-                        <Phone className="mr-2 h-5 w-5 text-muted-foreground" />
-                        <p className="text-sm">{phoneNumber}</p>
+                        <a href="tel:+902122228780" >
+                          <Phone className="mr-2 h-5 w-5 text-muted-foreground" />
+                          <p className="text-sm">{phoneNumber}</p>
+                        </a>
                       </div>
                       <div className="flex items-center">
                         <Mail className="mr-2 h-5 w-5 text-muted-foreground" />
