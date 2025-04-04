@@ -369,12 +369,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               >
                 {t('technical')}
               </TabsTrigger>
-              <TabsTrigger 
-                value="applications" 
-                className="text-sm md:text-base data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-800 data-[state=active]:text-white rounded-md border border-gray-200 hover:bg-gray-100 transition-all duration-200"
-              >
-                {t('applications')}
-              </TabsTrigger>
+
               <TabsTrigger 
                 value="downloads" 
                 className="text-sm md:text-base data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-800 data-[state=active]:text-white rounded-md border border-gray-200 hover:bg-gray-100 transition-all duration-200"
@@ -413,21 +408,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </ScrollArea>
                 </Card>
               </TabsContent>
-              <TabsContent value="applications">
-                <Card>
-                  <ScrollArea className=" p-6">
-                    <div
-                      className="prose max-w-none"
-                      dangerouslySetInnerHTML={{ 
-                        __html: getTranslatedContent(
-                          product.applications.UygulamalarTr, 
-                          product.applications.UygulamalarEn
-                        ) 
-                      }}
-                    />
-                  </ScrollArea>
-                </Card>
-              </TabsContent>
+
               <TabsContent value="downloads">
                 <Card>
                   <CardContent>
