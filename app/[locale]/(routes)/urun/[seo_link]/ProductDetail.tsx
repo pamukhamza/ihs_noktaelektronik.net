@@ -356,7 +356,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           className="mt-12 bg-white p-4 md:p-10 rounded-lg"
         >
           <Tabs defaultValue="features" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 bg-transparent p-0 mb-12 md:mb-6">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 gap-2 bg-transparent p-0 mb-12 md:mb-6">
               <TabsTrigger 
                 value="features" 
                 className="text-sm md:text-base data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-800 data-[state=active]:text-white rounded-md border border-gray-200 hover:bg-gray-100 transition-all duration-200"
