@@ -33,7 +33,13 @@ const Iletisim = () => {
     ],
   }
   
-  // Function to generate Google Maps embed URL
+  // Function to generate Google Maps embed URL for iframe
+  const generateEmbedUrl = (addressMaps: string) => {
+    const encodedAddress = encodeURIComponent(addressMaps);
+    return `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
+  };
+
+  // Function to generate Google Maps URL for direct link
   const generateMapUrl = (addressMaps: string) => {
     const encodedAddress = encodeURIComponent(addressMaps);
     return `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
@@ -60,7 +66,7 @@ const Iletisim = () => {
                 <Card key={index} className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                   <div className="relative h-48">
                     <iframe
-                      src={generateMapUrl(item.addressMaps)}
+                      src={generateEmbedUrl(item.addressMaps)}
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
