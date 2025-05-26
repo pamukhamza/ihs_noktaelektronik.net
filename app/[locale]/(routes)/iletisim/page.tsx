@@ -36,7 +36,7 @@ const Iletisim = () => {
   // Function to generate Google Maps embed URL
   const generateMapUrl = (addressMaps: string) => {
     const encodedAddress = encodeURIComponent(addressMaps);
-    return `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
+    return `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
   };
 
   return (
