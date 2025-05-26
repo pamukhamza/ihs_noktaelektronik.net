@@ -89,7 +89,7 @@ const Iletisim = () => {
                         <p className="text-sm">{sirketMail}</p>
                       </div>
                       <a
-                        href={generateMapUrl(item.address)}
+                        href={generateMapUrl(item.addressMaps)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center text-sm text-primary hover:underline mt-2"
