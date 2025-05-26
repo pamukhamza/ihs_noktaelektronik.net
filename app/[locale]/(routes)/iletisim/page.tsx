@@ -25,7 +25,7 @@ const Iletisim = () => {
       { title: t('ankara-bolge-ofisi'), address: "Timko İş Yerleri Sitesi Timko Sk. E Blok No.4 06200 Yenimahalle / Ankara", addressMaps: "Nokta Elektronik - Ankara" },
     ],
     [t('arge-uretim-merkezi')]: [
-      { title: t('arge-uretim-merkezi') + " (İzmir)", address: "Tuna Mah. Sanat Cad. No. 17/220 Bornova / İzmir", addressMaps: "Nokta Elektronik İzmir Fabrika" },
+      { title: t('arge-uretim-merkezi') + " (İzmir)", address: "Egemenlik Mah. 6108/1 Sk. No.15/A Işıkkent - Bornova / İzmir", addressMaps: "Nokta Elektronik İzmir Fabrika" },
       { title: t('arge-uretim-merkezi') + " (Ankara)", address: "Çamlıca Mah. Anadolu Bulvarı 28/10 Gimat / Yenimahalle / Ankara", addressMaps: "Çamlıca, Anadolu Blv No:28, 06200 Yenimahalle/Ankara, Türkiye" },
     ],
     [t('teknik-servisler')]: [
