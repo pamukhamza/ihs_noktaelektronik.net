@@ -496,7 +496,7 @@ export default function Navbar() {
                         className="flex items-center justify-center gap-1.5 rounded-lg bg-emerald-500 text-white hover:bg-emerald-600 border-none shadow-sm h-9"
                         asChild
                       >
-                        <Link href="https://www.noktaelektronik.com.tr/tr/teknik-destek">
+                        <Link href="https://www.noktaelektronik.com.tr/tr/tdp">
                           <Wrench className="h-3.5 w-3.5" />
                           <span className="text-xs">{t('technicalService')}</span>
                         </Link>
