@@ -1,11 +1,6 @@
-import React from 'react'
+import { redirect } from 'next/navigation'
 
-const OnlineKatalog = () => {
-  return (
-    <div className='container'>
-        OnlineKatalog
-    </div>
-  )
+export default function OnlineKatalog({ params }: { params: { locale: string } }) {
+  redirect(`/${params.locale}/kataloglar`)
+  return null
 }
-
-export default OnlineKatalog
