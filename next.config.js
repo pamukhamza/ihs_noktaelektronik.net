@@ -15,6 +15,15 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/tr',
+        permanent: true,
+      },
+    ];
+  },
 }
 
 module.exports = withNextIntl(nextConfig);
