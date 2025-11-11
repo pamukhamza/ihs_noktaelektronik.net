@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import { WhatsAppButton } from "@/components/whatsapp-button"
 
 const phoneNumber = "+90 (212) 222 87 80"
+const ankaraPhoneNumber = "+90 (312) 387 55 00" // ✅ yeni eklendi
 const sirketMail = "nokta@noktaelektronik.net"
 
 const Iletisim = () => {
@@ -33,17 +34,23 @@ const Iletisim = () => {
     ],
   }
   
-  // Function to generate Google Maps embed URL for iframe
   const generateEmbedUrl = (addressMaps: string) => {
     const encodedAddress = encodeURIComponent(addressMaps);
     return `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
   };
 
-  // Function to generate Google Maps URL for direct link
   const generateMapUrl = (addressMaps: string) => {
     const encodedAddress = encodeURIComponent(addressMaps);
     return `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
   };
+
+  // ✅ Yardımcı fonksiyon: hangi numara gösterilecek
+  const getPhoneNumber = (address: string) => {
+    if (address.includes("Ankara")) {
+      return ankaraPhoneNumber
+    }
+    return phoneNumber
+  }
 
   return (
     <motion.div
@@ -84,16 +91,20 @@ const Iletisim = () => {
                         <MapPin className="mr-2 h-5 w-5 text-muted-foreground flex-shrink-0 mt-1" />
                         <p className="text-sm">{item.address}</p>
                       </div>
+
+                      {/* ✅ Dinamik telefon numarası */}
                       <div className="flex items-center">
-                        <a href="tel:+902122228780" >
+                        <a href={`tel:${getPhoneNumber(item.address).replace(/\s+/g, '')}`}>
                           <Phone className="mr-2 h-5 w-5 text-muted-foreground" />
-                          <p className="text-sm">{phoneNumber}</p>
+                          <p className="text-sm">{getPhoneNumber(item.address)}</p>
                         </a>
                       </div>
+
                       <div className="flex items-center">
                         <Mail className="mr-2 h-5 w-5 text-muted-foreground" />
                         <p className="text-sm">{sirketMail}</p>
                       </div>
+
                       <a
                         href={generateMapUrl(item.addressMaps)}
                         target="_blank"
